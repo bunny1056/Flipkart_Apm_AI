@@ -3,20 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>agent recourse — mobile app (2040)</title>
+  <title>Agent Recourse — Autonomous Intent Auditing & Arbitration Ledger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <!-- Mobile Device Shell Wrapper for Desktop Viewers -->
+  <!-- Mobile Device Shell Wrapper -->
   <div class="mobile-viewport-shell">
     <div class="mobile-device">
       
       <!-- iOS / Modern Mobile Status Bar -->
       <div class="status-bar">
-        <span class="status-time">9:41</span>
+        <span class="status-time">09:41</span>
+        <div class="notch-island"></div>
         <div class="status-icons">
           <svg width="14" height="10" viewBox="0 0 16 12" fill="currentColor">
             <path d="M1 9h2V3H1v6zm4 2h2V1H5v10zm4-4h2V5H9v4zm4 4h2V0h-2v11z"/>
@@ -30,20 +31,15 @@
         </div>
       </div>
 
-      <!-- App Header -->
+      <!-- App Masthead -->
       <header class="mobile-header">
         <div class="header-brand">
-          <div class="brand-shield">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              <path d="M9 12l2 2 4-4"/>
-            </svg>
-          </div>
-          <span class="brand-title">agent recourse</span>
+          <div class="brand-symbol">§</div>
+          <span class="brand-title">AGENT RECOURSE</span>
         </div>
         <div class="header-right">
-          <span class="header-pill mono" id="topVaultPill">V13</span>
-          <button class="avatar-btn" id="btnTopAvatar" title="Open Profile & Security">H</button>
+          <span class="header-pill mono has-detail" data-detail-title="Vault Specification" data-detail-tag="SPECIFICATION" data-detail-highlight="Version 13.04 Enforced" data-detail-text="14 active human constraints sealed in client-side enclave. SHA-256 root hash verified.">V13.04</span>
+          <button class="avatar-btn has-detail" id="btnTopAvatar" title="Open Profile & Spent Analysis" data-detail-title="Principal Identity" data-detail-tag="USR-2040-DEMO" data-detail-highlight="Harshith · Bangalore" data-detail-text="Hardware TPM-2040 enclave key 8F9A-2B3C. Tap to open profile, spent charts, and kill-switch.">H</button>
         </div>
       </header>
 
@@ -51,70 +47,76 @@
       <main class="mobile-content">
 
         <!-- ========================================== -->
-        <!-- SCREEN 1: OVERVIEW                         -->
+        <!-- SCREEN 1: AUDIT FEED / OVERVIEW            -->
         <!-- ========================================== -->
         <section class="screen-pane active" id="screen-overview">
           <div class="welcome-box">
-            <h1 class="welcome-title">Good afternoon</h1>
-            <p class="welcome-sub">Your agents are acting. We'll flag conflicts with your instructions.</p>
+            <h1 class="welcome-title">Autonomous Feed</h1>
+            <p class="welcome-sub">Continuous intent auditing against pre-sealed constraints.</p>
           </div>
 
-          <!-- 3 Compact Metrics Cards -->
+          <!-- 3 Compact Metrics Cards with Hover/Tap Inspection -->
           <div class="metrics-row">
-            <div class="metric-box">
+            <div class="metric-box has-detail" data-detail-title="Vault Mandates" data-detail-tag="ACTIVE RULES" data-detail-highlight="14 Enforced Constraints" data-detail-text="Covering domestic flights, daily food, utility limits, recurring software, and office expenses.">
               <span class="metric-num" id="overviewRulesCount">14</span>
-              <span class="metric-lbl">Active rules</span>
+              <span class="metric-lbl">Active Rules</span>
             </div>
-            <div class="metric-box">
+            <div class="metric-box has-detail" data-detail-title="Audited Actions" data-detail-tag="VERIFIED" data-detail-highlight="48 Transactions Audited" data-detail-text="Every agent action is cryptographically checked against recorded limits in real-time.">
               <span class="metric-num">48</span>
               <span class="metric-lbl">Audited</span>
             </div>
-            <div class="metric-box critical-metric">
+            <div class="metric-box critical-metric has-detail" data-detail-title="Critical Conflicts" data-detail-tag="CONFLICT" data-detail-highlight="1 Instruction Conflict Flagged" data-detail-text="Flight 6E-2412 arrived after 18:00 IST, directly violating Rule SEC-TRV-102.">
               <span class="metric-num text-critical" id="overviewOpenCases">1</span>
-              <span class="metric-lbl">Open case</span>
+              <span class="metric-lbl">Conflict</span>
             </div>
           </div>
 
           <!-- Dominant Instruction Conflict Card -->
           <div class="m-card conflict-card-mobile" id="mPrimaryConflictCard">
             <div class="card-tag-row">
-              <span class="pill-conflict">
-                <span class="dot-critical"></span> Conflict detected
+              <span class="pill-conflict has-detail" data-detail-title="Conflict Classification" data-detail-tag="CRITICAL" data-detail-highlight="Direct Rule Contradiction" data-detail-text="OpenAgent Travel purchased ticket landing at 21:00 IST. Violates hard limit SEC-TRV-102.">
+                <span class="dot-critical"></span> CRITICAL CONFLICT
               </span>
               <span class="mono text-xs text-muted">#ACT-9042</span>
             </div>
 
             <div class="conflict-m-title">
-              <h3>Flight booking · Domestic travel</h3>
-              <span class="mono font-500">₹7,850.00</span>
+              <div>
+                <h3 class="font-600">Flight 6E-2412 (BLR ➔ DEL)</h3>
+                <span class="mono text-xs text-muted">InterGlobe Aviation (IndiGo)</span>
+              </div>
+              <span class="mono font-700 text-lead">₹7,850.00</span>
             </div>
 
             <div class="diff-m-box">
               <div class="diff-m-item">
-                <span class="diff-m-k">Rule (V13):</span>
-                <span class="diff-m-v">Arrive before <strong>6:00 PM</strong></span>
+                <span class="diff-m-k">Vault Mandate:</span>
+                <span class="diff-m-v font-600">Arrive before <strong>18:00 IST</strong></span>
               </div>
-              <div class="diff-arrow">↓</div>
+              <div class="diff-arrow font-600">↓ <span class="mono text-xs">+180 min breach</span> ↓</div>
               <div class="diff-m-item">
-                <span class="diff-m-k">Actual booking:</span>
-                <span class="diff-m-v text-critical">Arrival at <strong>9:00 PM</strong> (6E-2412)</span>
+                <span class="diff-m-k">Carrier Receipt:</span>
+                <span class="diff-m-v font-600 text-critical">Arrival at <strong>21:00 IST</strong> (Breach)</span>
               </div>
             </div>
 
             <div class="card-m-actions">
               <button class="btn btn-secondary btn-sm" id="btnMReviewDismiss">Dismiss</button>
-              <button class="btn btn-primary btn-sm flex-1" id="btnMReviewEvidence">Review evidence →</button>
+              <button class="btn btn-primary btn-sm flex-1" id="btnMReviewEvidence">Review Evidence Dossier →</button>
             </div>
           </div>
 
-          <!-- Recent Activity Feed -->
-          <div class="section-m-header">
-            <h3 class="section-m-title">Recent agent activity</h3>
-            <button class="link-btn" id="btnMSeeAllActivity">View all (48) →</button>
+          <!-- Filter Pills Carousel -->
+          <div class="m-filter-scroll" id="mActivityFilters">
+            <button class="m-pill active" data-filter="all">All (48)</button>
+            <button class="m-pill" data-filter="mismatch">Conflicts (1)</button>
+            <button class="m-pill" data-filter="uncovered">Uncovered (1)</button>
+            <button class="m-pill" data-filter="verified">Verified (46)</button>
           </div>
 
+          <!-- Activity Feed List -->
           <div class="m-activity-list" id="mOverviewActivityList">
-            <!-- Rendered dynamically -->
+            <!-- Dynamically populated via app.js -->
           </div>
         </section>
 
@@ -127,310 +129,428 @@
               <h2 class="screen-title">Instruction Vault</h2>
               <p class="screen-subtitle">Active boundaries enforced across your personal AI agents.</p>
             </div>
-            <button class="btn btn-primary btn-sm" id="btnMOpenAddRule">+ Add</button>
+            <button class="btn btn-primary btn-sm" id="btnMOpenAddRule">+ Add Rule</button>
           </div>
 
-          <div class="vault-m-info">
-            <span class="mono">VAULT V13</span>
-            <span class="meta-dot">·</span>
-            <span>Client-side encrypted</span>
-            <span class="meta-dot">·</span>
-            <span class="mono text-xs">sha256: 8f3c4e...</span>
-          </div>
-
-          <div class="m-rules-list" id="mRulesContainer">
-            <!-- Injected via JavaScript -->
-          </div>
-        </section>
-
-        <!-- ========================================== -->
-        <!-- SCREEN 3: ACTIVITY FEED                    -->
-        <!-- ========================================== -->
-        <section class="screen-pane" id="screen-activity">
-          <div class="screen-title-bar">
-            <div>
-              <h2 class="screen-title">Activity Feed</h2>
-              <p class="screen-subtitle">Audited background micro-transactions and autonomous tasks.</p>
+          <div class="takeaway-strip">
+            <span class="takeaway-title">Vault Status:</span>
+            <div class="takeaway-tags">
+              <span class="takeaway-pill has-detail" data-detail-title="Enclave Specification" data-detail-tag="LOCAL HSM" data-detail-highlight="Hardware Sealed" data-detail-text="Specification V13.04 enforced on local TPM-2040 chip with SHA-256 root hash."><strong>V13.04</strong> (14 Enforced)</span>
+              <span class="takeaway-pill has-detail" data-detail-title="Non-Repudiation" data-detail-tag="TAMPER PROOF" data-detail-highlight="Temporal Precedence" data-detail-text="Rules cannot be modified retroactively after an agent transaction occurs."><strong>SHA-256</strong> Verified</span>
             </div>
           </div>
 
-          <!-- Filter Pills Carousel -->
-          <div class="m-filter-scroll" id="mActivityFilters">
-            <button class="m-pill active" data-filter="all">All (48)</button>
-            <button class="m-pill" data-filter="mismatch">Conflicts (1)</button>
-            <button class="m-pill" data-filter="uncovered">Uncovered (1)</button>
-            <button class="m-pill" data-filter="verified">Verified (46)</button>
-          </div>
-
-          <div class="m-activity-list" id="mFullActivityList">
-            <!-- Injected via JavaScript -->
+          <div class="m-activity-list" id="mRulesContainer">
+            <!-- Dynamically populated via app.js with bold highlights -->
           </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- SCREEN 4: EVIDENCE (THE SIGNATURE SCREEN)  -->
+        <!-- SCREEN 3: EVIDENCE (FORENSIC PROOF)        -->
         <!-- ========================================== -->
         <section class="screen-pane" id="screen-evidence">
-          <div class="evidence-m-header">
-            <div class="mono text-xs text-muted">CASE #DSP-2040-8812</div>
-            <h2 class="screen-title">Flight booking conflict</h2>
-            <span class="status-badge status-conflict" style="align-self: flex-start; margin-top: 4px;">
-              Conflict verified
-            </span>
+          <div class="screen-title-bar">
+            <div>
+              <div class="mono text-xs text-muted">CASE #DSP-2040-8812</div>
+              <h2 class="screen-title">Evidence Dossier</h2>
+              <p class="screen-subtitle">Bilateral cryptographic proof of pre-execution human intent.</p>
+            </div>
           </div>
 
-          <!-- Side-by-Side Comparison Panels -->
-          <div class="m-card" style="margin-top: 12px;">
-            <div class="card-m-sec-title">Instruction vs. observed action</div>
+          <!-- Verified Pre-Execution Takeaway Strip -->
+          <div class="takeaway-strip">
+            <span class="takeaway-title">Binding Status:</span>
+            <div class="takeaway-tags">
+              <span class="takeaway-pill has-detail" data-detail-title="Precedence Proof" data-detail-tag="HMAC-SHA256" data-detail-highlight="Certified 151s Precedence" data-detail-text="Rule SEC-TRV-102 was sealed 151 seconds before carrier ticket booking was completed."><strong>Precedence Confirmed:</strong> 151s Delta</span>
+              <span class="takeaway-pill has-detail" data-detail-title="Statutory Remedy" data-detail-tag="SECTION 4" data-detail-highlight="Full Restitution" data-detail-text="Eligible for 100% financial refund under Section 4 of ADRP-2040."><strong>Remedy:</strong> 100% Refund</span>
+            </div>
+          </div>
+
+          <!-- Side-by-Side Comparison -->
+          <div class="m-card">
+            <div class="card-m-sec-title">Mandate vs. Observed Execution</div>
             
             <div class="compare-m-block">
-              <span class="compare-tag">MANDATE IN FORCE (V13)</span>
+              <span class="compare-tag">ITEM A: PRE-EXECUTION MANDATE (V13.04)</span>
               <div class="compare-val">
-                "Arrive before <strong>6:00 PM</strong> (18:00 IST)"
+                "Never book domestic flights scheduled to arrive <strong class="text-lead font-600">after 18:00 IST (6:00 PM)</strong>."
               </div>
-              <span class="mono text-xs text-muted">Rule R-102 · Sealed at 10:00:14 AM</span>
+              <div class="hash-pill has-detail" data-detail-title="Mandate Root Hash" data-detail-tag="SHA-256" data-detail-highlight="Client Vault Hash" data-detail-text="Full Hash: 0x98f21bc780d19ca780214ef590124ba89012356781290348a2. Sealed 10:00:14 IST.">
+                <span>sha256(Mandate): <strong>0x98f2...a8a2</strong></span>
+                <span class="hash-pill-tag">SEALED</span>
+              </div>
             </div>
 
             <div class="compare-m-block observed-block">
-              <span class="compare-tag text-critical">OBSERVED AGENT ACTION</span>
+              <span class="compare-tag text-critical">ITEM B: CARRIER BOOKING PAYLOAD</span>
               <div class="compare-val">
-                Flight 6E-2412 arrives at <strong class="text-critical">9:00 PM</strong> (21:00 IST)
+                Flight 6E-2412 arrives at <strong class="text-critical font-600">21:00 IST</strong> · ₹7,850.00 INR
               </div>
-              <span class="mono text-xs text-muted">OpenAgent · Executed at 10:02:45 AM</span>
+              <div class="hash-pill has-detail" data-detail-title="Carrier Ingestion Hash" data-detail-tag="SHA-256" data-detail-highlight="IndiGo API Gateway" data-detail-text="Full Hash: 0x3d087fe910901abcf90184712049ba38291ca0912440182. Executed 10:02:45 IST.">
+                <span>sha256(Carrier): <strong>0x3d08...0182</strong></span>
+                <span class="hash-pill-tag tag-danger">BREACH</span>
+              </div>
             </div>
 
             <div class="m-delta-banner">
-              <strong>3-hour conflict.</strong> Scheduled arrival exceeds recorded limit by 180 minutes.
+              <strong class="text-critical font-600">+180 min breach:</strong> Scheduled arrival contradicts sealed mandate by 3 hours.
             </div>
           </div>
 
           <!-- Vertical Timeline -->
           <div class="m-card">
-            <div class="card-m-sec-title">Audit timeline</div>
+            <div class="card-m-sec-title">Forensic Ingestion Sequence</div>
             <div class="m-timeline">
               <div class="m-timeline-point">
                 <div class="m-tl-dot"></div>
                 <div class="m-tl-info">
-                  <span class="mono text-xs text-muted">10:00:14 AM</span>
-                  <div class="m-tl-text">Instruction V13 sealed in local vault</div>
+                  <span class="mono text-xs text-muted">10:00:14 IST</span>
+                  <div class="m-tl-text">Mandate SEC-TRV-102 sealed in local hardware enclave</div>
                 </div>
               </div>
               <div class="m-timeline-point">
                 <div class="m-tl-dot"></div>
                 <div class="m-tl-info">
-                  <span class="mono text-xs text-muted">10:02:45 AM (+2m 31s)</span>
-                  <div class="m-tl-text">Booking payload received from IndiGo API</div>
+                  <span class="mono text-xs text-muted">10:02:45 IST (+151s)</span>
+                  <div class="m-tl-text">Autonomous agent executes ticket purchase via IndiGo API</div>
                 </div>
               </div>
               <div class="m-timeline-point critical">
                 <div class="m-tl-dot dot-critical"></div>
                 <div class="m-tl-info">
-                  <span class="mono text-xs text-critical">10:02:46 AM</span>
-                  <div class="m-tl-text font-500 text-critical">Conflict flagged automatically</div>
+                  <span class="mono text-xs text-critical font-600">10:02:46 IST</span>
+                  <div class="m-tl-text font-600 text-critical">Deterministic conflict flagged: +180 min variance</div>
                 </div>
               </div>
               <div class="m-timeline-point">
                 <div class="m-tl-dot"></div>
                 <div class="m-tl-info">
-                  <span class="mono text-xs text-muted">10:03:00 AM</span>
-                  <div class="m-tl-text">HMAC cryptographic binding sealed</div>
+                  <span class="mono text-xs text-muted">10:03:00 IST</span>
+                  <div class="m-tl-text">Bilateral HMAC binding proof compiled (<strong class="mono">0x9c4e...801c</strong>)</div>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Record Integrity -->
-          <div class="m-card">
-            <div class="card-m-sec-title">Record integrity</div>
-            <div class="m-spec-row">
-              <span class="spec-k">Source:</span>
-              <span class="spec-v">OpenAgent Travel v8.4</span>
-            </div>
-            <div class="m-spec-row">
-              <span class="spec-k">Binding Hash:</span>
-              <span class="spec-v mono text-xs" id="mShortHash">0x9c4e...ba04</span>
-            </div>
-            <div class="text-xs text-muted" style="margin-top: 8px; line-height: 1.4;">
-              Hashing proves records were not altered after capture. It does not independently guarantee initial source truth.
-            </div>
-          </div>
-
           <!-- Actions -->
-          <div class="m-sticky-actions">
+          <div class="card-m-actions">
             <button class="btn btn-secondary flex-1" id="btnMDownloadDossier">Export JSON</button>
-            <button class="btn btn-primary flex-1" id="btnMProceedToDispute">Dispute →</button>
+            <button class="btn btn-primary flex-1" id="btnMProceedToDispute">Dispute Filing →</button>
           </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- SCREEN 5: DISPUTES MANAGER                 -->
+        <!-- SCREEN 4: ARBITRATION CASES                -->
         <!-- ========================================== -->
         <section class="screen-pane" id="screen-disputes">
           <div class="screen-title-bar">
             <div>
-              <div class="mono text-xs text-muted">CASE #DSP-2040-8812</div>
-              <h2 class="screen-title">IndiGo Airlines</h2>
-              <p class="screen-subtitle">Flight 6E-2412 Autonomous Overreach · ₹7,850.00</p>
+              <div class="mono text-xs text-muted">CASE RECORD #DSP-2040-8812</div>
+              <h2 class="screen-title">Merchant Arbitration</h2>
+              <p class="screen-subtitle">Statutory recourse under Section 4 of ADRP-2040 Governance Standard.</p>
             </div>
           </div>
 
-          <!-- Stepper -->
-          <div class="m-card">
-            <div class="card-m-sec-title">Dispute progression</div>
-            <div class="m-stepper">
-              <div class="m-step done">
-                <div class="m-step-circle">✓</div>
-                <span class="m-step-lbl">1. Sealed</span>
+          <!-- Claim Overview Grid -->
+          <div class="claim-overview-grid">
+            <div class="claim-overview-cell has-detail" data-detail-title="Carrier Respondent" data-detail-tag="INDIGO" data-detail-highlight="Merchant Airline API" data-detail-text="InterGlobe Aviation Ltd. Registered merchant on OpenAgent Travel protocol.">
+              <span class="claim-overview-k">RESPONDENT</span>
+              <span class="claim-overview-v">InterGlobe Aviation (IndiGo)</span>
+            </div>
+            <div class="claim-overview-cell has-detail" data-detail-title="Variance Determination" data-detail-tag="+180 MIN BREACH" data-detail-highlight="Arrival Contradiction" data-detail-text="Flight arrives at 21:00 IST. Rule SEC-TRV-102 explicitly capped arrivals before 18:00 IST.">
+              <span class="claim-overview-k">RECORDED BREACH</span>
+              <span class="claim-overview-v text-critical font-600">Arrival 21:00 vs &lt; 18:00</span>
+            </div>
+            <div class="claim-overview-cell has-detail" data-detail-title="Statutory Remedy" data-detail-tag="SECTION 4" data-detail-highlight="100% Restitution Demanded" data-detail-text="Full rescission of ticket #6E-2412 without cancellation penalties under ADRP standard.">
+              <span class="claim-overview-k">STATUTORY REMEDY</span>
+              <span class="claim-overview-v text-critical font-600">₹7,850.00 INR (Full Refund)</span>
+            </div>
+            <div class="claim-overview-cell has-detail" data-detail-title="Cryptographic Proof" data-detail-tag="HMAC SEAL" data-detail-highlight="Precedence Certified" data-detail-text="Binding hash proves Rule SEC-TRV-102 existed 151s before booking timestamp.">
+              <span class="claim-overview-k">TEMPORAL PROOF</span>
+              <span class="claim-overview-v mono text-verified font-600">0x9c4e...801c (Sealed)</span>
+            </div>
+          </div>
+
+          <!-- Expandable Formal Statement of Claim -->
+          <div class="expandable-narrative" id="mExpandableFiling">
+            <div class="expandable-header" title="Tap to toggle formal legal draft">
+              <span><strong>FORMAL STATEMENT OF CLAIM</strong> <span class="has-detail" data-detail-title="Arbitration Payload" data-detail-tag="JSON ATTACHED" data-detail-highlight="Signed by Client Key" data-detail-text="Machine-readable ADRP-DSP-8812.JSON transmitted directly to carrier resolution gateway.">[ℹ️]</span></span>
+              <span class="expandable-icon mono text-xs text-muted">▼ Tap for text</span>
+            </div>
+            <div class="expandable-body">
+              <p>
+                On 2040-10-21 at 10:02:45 IST, autonomous agent <em>OpenAgent Travel v8.4</em> executed ticket purchase #6E-2412 for flight travel from BLR to DEL arriving at 21:00 IST. The claimant's active mandate (Rule SEC-TRV-102), cryptographically sealed on 2040-10-21 at 10:00:14 IST, strictly constrained flight arrivals prior to 18:00 IST.
+              </p>
+              <p style="margin-top: 6px;">
+                Temporal precedence is demonstrated via attached HMAC binding hash <code class="mono">0x9c4e...801c</code>. Transactions executed in contravention of recorded pre-execution human mandates are subject to immediate rescission without penalty.
+              </p>
+            </div>
+          </div>
+
+          <!-- Dispute Progression Stepper -->
+          <div class="m-card" style="margin-top: 10px;">
+            <div class="card-m-sec-title">Arbitration Handshake Status</div>
+            <div class="m-timeline" style="margin-top: 6px;">
+              <div class="m-timeline-point" id="mStep1Row">
+                <div class="m-tl-dot"></div>
+                <div class="m-tl-info">
+                  <span class="mono text-xs text-muted">1. Evidence Sealed</span>
+                  <div class="m-tl-text font-600 text-lead">10:03 IST · HMAC Sealed</div>
+                </div>
               </div>
-              <div class="m-step-line" id="mLine1"></div>
-              <div class="m-step current" id="mStep2">
-                <div class="m-step-circle" id="mStep2Circle">2</div>
-                <span class="m-step-lbl">2. Submit</span>
+              <div class="m-timeline-point" id="mStep2Row">
+                <div class="m-tl-dot" id="mStep2Dot"></div>
+                <div class="m-tl-info">
+                  <span class="mono text-xs text-muted" id="mStep2Lbl">2. Gateway Notice</span>
+                  <div class="m-tl-text" id="mStep2Meta">Awaiting Principal Action</div>
+                </div>
               </div>
-              <div class="m-step-line" id="mLine2"></div>
-              <div class="m-step" id="mStep3">
-                <div class="m-step-circle" id="mStep3Circle">3</div>
-                <span class="m-step-lbl">3. Review</span>
-              </div>
-              <div class="m-step-line" id="mLine3"></div>
-              <div class="m-step" id="mStep4">
-                <div class="m-step-circle" id="mStep4Circle">4</div>
-                <span class="m-step-lbl">4. Refund</span>
+              <div class="m-timeline-point" id="mStep3Row">
+                <div class="m-tl-dot" id="mStep3Dot"></div>
+                <div class="m-tl-info">
+                  <span class="mono text-xs text-muted" id="mStep3Lbl">3. Carrier API Handshake</span>
+                  <div class="m-tl-text" id="mStep3Meta">Pending Transmission</div>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- Prefilled Complaint -->
-          <div class="m-card">
-            <div class="card-m-sec-title">Prefilled claim notice</div>
-            <div class="m-complaint-box">
-              <p><strong>To:</strong> IndiGo Airlines Dispute Desk</p>
-              <p><strong>Ref:</strong> Booking #ACT-9042 contradicts Customer Pre-Execution Mandate (Rule R-102, Vault V13). Attached dossier proves timestamp precedence. Requesting cancellation & full refund of ₹7,850.00.</p>
-              <div class="mono text-xs text-accent" style="margin-top: 6px;">
-                📎 Attached: Dossier-DSP-2040-8812.json
-              </div>
-            </div>
-          </div>
-
-          <!-- Resolution Banner (Hidden initially) -->
-          <div class="m-card res-card hidden" id="mResolutionResult">
+          <!-- Resolution Confirmation Card (Revealed on action) -->
+          <div class="m-card res-card hidden" id="mResolutionResult" style="background-color: #F0FDF4; border: 1.5px solid #86EFAC;">
             <div class="res-title-row">
-              <span class="status-badge status-verified">Submitted · Demo only</span>
+              <span class="status-pill-m status-verified">RESTITUTION APPROVED // CARRIER HANDSHAKE</span>
             </div>
-            <p class="text-xs" style="margin-top: 6px;">
-              IndiGo Autonomous API validated binding hash. Full refund of <strong>₹7,850.00</strong> approved.
+            <p class="text-xs text-lead font-600" style="margin-top: 6px;">
+              IndiGo Automated Dispute Server verified temporal precedence of Rule SEC-TRV-102. Full refund of <strong class="text-verified font-700">₹7,850.00 INR</strong> approved to claimant source account.
             </p>
           </div>
 
           <!-- 1-Tap Dispute Button -->
-          <div style="margin-top: 14px;">
+          <div style="margin-top: 12px;">
             <button class="btn btn-primary w-100" id="btnMInitiateDispute">
-              ⚡ Submit 1-Tap Dispute
+              ⚡ Transmit Formal Notice to IndiGo API
             </button>
           </div>
         </section>
 
         <!-- ========================================== -->
-        <!-- SCREEN 6: PROFILE & SECURITY CENTER        -->
+        <!-- SCREEN 5: PRINCIPAL PROFILE & SPENT ANALYSIS-->
         <!-- ========================================== -->
         <section class="screen-pane" id="screen-security">
           <div class="screen-title-bar">
             <div>
-              <h2 class="screen-title">Profile & Security</h2>
-              <p class="screen-subtitle">Identity, connected agents, governance, and data controls.</p>
+              <div class="mono text-xs text-muted">PRINCIPAL IDENTITY RECORD</div>
+              <h2 class="screen-title">Harshith</h2>
+              <p class="screen-subtitle">Identity, hardware enclave, spent analysis, and emergency controls.</p>
             </div>
           </div>
 
-          <!-- Identity Card -->
+          <!-- Principal Identity Credential Docket -->
           <div class="m-card">
-            <div class="m-id-header">
-              <div class="m-avatar">H</div>
-              <div class="m-id-meta">
-                <div class="m-id-name">Harshith</div>
-                <span class="mono text-xs text-muted">ID: USR-DEMO-2040</span>
-                <span class="status-badge status-verified text-xs">Verified · Demo</span>
+            <div class="diff-m-item" style="align-items: center; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="brand-symbol" style="width: 38px; height: 38px; font-size: 18px; background-color: var(--mauve-deep); color: #FFFFFF; border-radius: var(--radius-xs);">H</div>
+                <div>
+                  <div class="font-700 text-lead" style="font-size: 15px;">Harshith</div>
+                  <span class="mono text-xs text-muted">USR-2040-DEMO · IN-KA-BLR</span>
+                </div>
+              </div>
+              <span class="status-pill-m status-verified has-detail" data-detail-title="Enclave Verification" data-detail-tag="LOCAL HSM" data-detail-highlight="Hardware-rooted key custody" data-detail-text="Zero cloud exposure. Private attestation key resides in physical TPM-2040 chip.">VERIFIED // TPM-2040</span>
+            </div>
+
+            <div class="diff-m-item" style="background-color: var(--surface-subtle); padding: 8px 10px; border-radius: var(--radius-xs); border: 1px solid var(--rule-hairline);">
+              <div>
+                <span class="mono text-xs text-muted" style="font-size: 9px; display: block;">ATTESTATION KEY</span>
+                <span class="mono font-600 text-lead text-xs">8F9A-2B3C-1A92-E4F1</span>
+              </div>
+              <button class="btn btn-secondary btn-sm mono text-xs" id="btnMCopyKey">Copy Key</button>
+            </div>
+          </div>
+
+          <!-- ========================================== -->
+          <!-- SPENT ANALYSIS SECTION (HIGH-LEVEL CHARTS) -->
+          <!-- ========================================== -->
+          <div class="m-card spending-dashboard-mobile" id="mSpendingSection">
+            <div class="card-m-sec-title">
+              <span>Audited Spent Analysis</span>
+              <span class="mono text-xs font-600 text-lead" id="mSpendingTotalDisplay">₹16,350.00</span>
+            </div>
+
+            <!-- 4 Executive Spending Tiles -->
+            <div class="spending-tiles-grid">
+              <div class="spending-tile has-detail" data-detail-title="Total Outflow" data-detail-tag="24H AUDIT" data-detail-highlight="Total Debits Audited" data-detail-text="5 autonomous agent transactions reconciled across all connected merchant protocols.">
+                <span class="spending-tile-k">TOTAL OUTFLOW</span>
+                <span class="spending-tile-v font-700" id="mTileTotalOutflow">₹16,350.00</span>
+                <span class="spending-tile-sub">5 transactions</span>
+              </div>
+              <div class="spending-tile has-detail" data-detail-title="Primary Domain" data-detail-tag="ALLOCATION" data-detail-highlight="Travel & Flights" data-detail-text="Accounts for 48.0% of total spend (₹7,850.00 INR) via OpenAgent Travel.">
+                <span class="spending-tile-k">PRIMARY DOMAIN</span>
+                <span class="spending-tile-v text-mauve">Travel</span>
+                <span class="spending-tile-sub font-600">48.0% share</span>
+              </div>
+              <div class="spending-tile has-detail" data-detail-title="Average Ticket" data-detail-tag="AVERAGE" data-detail-highlight="Per-Transaction Quantum" data-detail-text="Mean transaction quantum across all audited agent executions.">
+                <span class="spending-tile-k">AVERAGE TICKET</span>
+                <span class="spending-tile-v">₹3,270.00</span>
+                <span class="spending-tile-sub">₹450 to ₹7,850</span>
+              </div>
+              <div class="spending-tile has-detail" data-detail-title="Disputed Value" data-detail-tag="PENDING RESTITUTION" data-detail-highlight="Action #ACT-9042 In Dispute" data-detail-text="100% of disputed ticket quantum eligible for immediate restitution under ADRP-2040.">
+                <span class="spending-tile-k">DISPUTED VALUE</span>
+                <span class="spending-tile-v text-critical font-700">₹7,850.00</span>
+                <span class="spending-tile-sub text-critical font-600">Pending refund</span>
               </div>
             </div>
-            <div class="m-key-row">
-              <span class="mono text-xs">Key: 8f9a-2b3c-1a92</span>
-              <button class="btn btn-secondary btn-sm" id="btnMCopyKey">Copy</button>
+
+            <!-- High-Level Chart 1: SVG Donut Allocation Ring -->
+            <div class="donut-chart-box">
+              <span class="mono text-xs font-600 text-muted" style="margin-bottom: 8px;">PORTFOLIO ALLOCATION RING</span>
+              <div class="donut-svg-wrap">
+                <svg width="170" height="170" viewBox="0 0 220 220" id="mSpendingDonutSvg">
+                  <!-- Injected via JavaScript -->
+                </svg>
+                <div class="donut-center-readout">
+                  <div class="donut-center-amount" id="mDonutCenterAmount">₹16,350</div>
+                  <div class="donut-center-sub" id="mDonutCenterSub">5 Domains</div>
+                </div>
+              </div>
+              <div class="donut-legend-mobile" id="mDonutLegendList">
+                <!-- Injected via JavaScript -->
+              </div>
+            </div>
+
+            <!-- High-Level Chart 2: 24h Debit Velocity Trend Area -->
+            <div class="velocity-chart-box">
+              <span class="mono text-xs font-600 text-muted" style="margin-bottom: 6px; display: block;">24H DEBIT VELOCITY TIMELINE</span>
+              <svg width="100%" height="110" viewBox="0 0 440 140" id="mSpendingTrendSvg" style="overflow: visible;">
+                <!-- Injected via JavaScript -->
+              </svg>
+            </div>
+
+            <!-- Category Progress Breakdown -->
+            <div id="mSpendingBarsList">
+              <!-- Injected via JavaScript -->
             </div>
           </div>
 
-          <!-- Connected Agents Directory (Dominant Section) -->
+          <!-- Connected Agents Directory -->
           <div class="m-card">
-            <div class="card-m-sec-title flex-between">
-              <span>Connected agents (3)</span>
-              <button class="btn-link text-xs" id="btnMAddAgentModal">+ Connect</button>
+            <div class="card-m-sec-title">
+              <span>Connected Autonomous Agents (3)</span>
+              <button class="btn btn-secondary btn-sm" id="btnMAddAgentModal">+ Connect</button>
             </div>
-            <div class="m-agents-list" id="mAgentsList">
+            <div class="m-activity-list" id="mAgentsList">
               <!-- Rendered via JS -->
             </div>
           </div>
 
-          <!-- Instruction Vault & Governance -->
-          <div class="m-card">
-            <div class="card-m-sec-title">Rule governance</div>
-            <div class="v-m-stats">
-              <div><span class="text-xs text-muted">Active:</span> <strong>14 rules</strong></div>
-              <div><span class="text-xs text-muted">Version:</span> <strong class="mono">V13</strong></div>
+          <!-- Emergency Delegation Suspension Kill Switch -->
+          <div class="m-card" style="border: 1.5px solid var(--vermillion-border); background-color: #FFF9F9;">
+            <div class="card-m-sec-title text-critical">Emergency Delegation Suspension</div>
+            <p class="text-xs text-secondary" style="margin-bottom: 10px;">
+              Instantly revokes OAuth bearer tokens across all 3 integrated agents if unauthorized behavior is suspected.
+            </p>
+            <div class="mono text-xs font-600" id="mKillSwitchStatus" style="color: var(--moss-verified); margin-bottom: 8px;">
+              STATUS: NORMAL // AGENT MONITORING ACTIVE
             </div>
+            <button class="btn btn-danger w-100" id="btnMToggleEmergencyKill">
+              Trigger Emergency Delegation Suspension
+            </button>
+          </div>
 
-            <div style="margin-top: 10px;">
-              <span class="text-xs text-secondary font-500">Uncovered actions handling:</span>
-              <div class="strategy-list" style="margin-top: 6px;">
-                <label class="m-radio-item selected" id="mOptPrompt">
-                  <input type="radio" name="mUncoveredOpt" value="prompt" checked>
-                  <div>
-                    <strong>Mark as Uncovered & Prompt</strong>
-                    <div class="text-xs text-muted">Invite rule definition (Recommended)</div>
-                  </div>
-                </label>
-                <label class="m-radio-item" id="mOptPause">
-                  <input type="radio" name="mUncoveredOpt" value="pause">
-                  <div>
-                    <strong>Pause & Confirm High Risk</strong>
-                    <div class="text-xs text-muted">Prompt user before execution</div>
-                  </div>
-                </label>
+          <!-- Export Actions -->
+          <div class="card-m-actions">
+            <button class="btn btn-secondary flex-1" id="btnMExportCert">Export Cert (.json)</button>
+            <button class="btn btn-secondary flex-1" id="btnMExportVault">Export Vault (.json)</button>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 6: HOW TO USE (ONBOARDING GUIDE)    -->
+        <!-- ========================================== -->
+        <section class="screen-pane" id="screen-guide">
+          <div class="screen-title-bar">
+            <div>
+              <div class="mono text-xs text-muted">OPERATIONAL ONBOARDING</div>
+              <h2 class="screen-title">How to Use</h2>
+              <p class="screen-subtitle">Core concepts, conflict arbitration, and security guarantees.</p>
+            </div>
+          </div>
+
+          <!-- Card 1: Core Mental Model -->
+          <div class="m-card guide-card-mobile">
+            <div class="guide-icon-header">
+              <span class="guide-badge-num">1</span>
+              <div>
+                <h3 class="font-600 text-lead" style="font-size: 13px;">The Verification Paradox</h3>
+                <span class="mono text-xs text-muted">INDEPENDENT THIRD-PARTY AUDIT</span>
               </div>
             </div>
+            <p class="text-xs text-secondary" style="line-height: 1.45;">
+              Delegation only pays off if you don't have to check. Agent Recourse sits between your AI assistants and merchant APIs, performing <strong class="text-lead font-600">deterministic mathematical comparisons</strong> without remote telemetry exposure.
+            </p>
+          </div>
 
-            <div class="m-actions-stack" style="margin-top: 12px;">
-              <button class="btn btn-secondary btn-sm" id="btnMExportVault">Export vault JSON</button>
+          <!-- Card 2: Navigation Walkthrough -->
+          <div class="m-card guide-card-mobile">
+            <div class="guide-icon-header">
+              <span class="guide-badge-num">2</span>
+              <div>
+                <h3 class="font-600 text-lead" style="font-size: 13px;">Navigation Guide</h3>
+                <span class="mono text-xs text-muted">6 SPECIALIZED SCREENS</span>
+              </div>
+            </div>
+            <div class="guide-step-grid">
+              <div class="guide-step-row has-detail" data-detail-title="Screen 1: Feed" data-detail-tag="TAB 1" data-detail-highlight="Live Audit Stream" data-detail-text="Audits transactions in real-time. Highlights red instruction conflicts at top.">
+                <span class="mono font-700 text-mauve">01</span>
+                <div><strong>Overview:</strong> Live transaction feed & conflict docket.</div>
+              </div>
+              <div class="guide-step-row has-detail" data-detail-title="Screen 2: Vault" data-detail-tag="TAB 2" data-detail-highlight="Instruction Vault" data-detail-text="Pre-sealed human boundaries with strict and advisory enforcement limits.">
+                <span class="mono font-700 text-mauve">02</span>
+                <div><strong>Vault:</strong> 14 active human boundary rules.</div>
+              </div>
+              <div class="guide-step-row has-detail" data-detail-title="Screen 3: Evidence" data-detail-tag="TAB 3" data-detail-highlight="Forensic Dossier" data-detail-text="HMAC temporal proof showing mandate existed before ticket booking.">
+                <span class="mono font-700 text-mauve">03</span>
+                <div><strong>Evidence:</strong> Cryptographic timestamps & hashes.</div>
+              </div>
+              <div class="guide-step-row has-detail" data-detail-title="Screen 4: Disputes" data-detail-tag="TAB 4" data-detail-highlight="Arbitration Manager" data-detail-text="1-tap submission for 100% financial restitution from merchant APIs.">
+                <span class="mono font-700 text-mauve">04</span>
+                <div><strong>Disputes:</strong> 1-tap restitution claims.</div>
+              </div>
+              <div class="guide-step-row has-detail" data-detail-title="Screen 5: Profile" data-detail-tag="TAB 5" data-detail-highlight="Spent Analysis & Security" data-detail-text="Donut allocation ring, debit velocity graphs, and emergency kill-switch.">
+                <span class="mono font-700 text-mauve">05</span>
+                <div><strong>Profile:</strong> Spent analysis graphs & kill-switch.</div>
+              </div>
             </div>
           </div>
 
-          <!-- Privacy & Data Controls -->
-          <div class="m-card">
-            <div class="card-m-sec-title">Privacy & storage</div>
-            <div class="text-xs text-secondary" style="margin-bottom: 8px;">
-              <strong>Client-side encryption · Demo configuration</strong>
+          <!-- Card 3: Interpreting Conflicts & Spending Metrics -->
+          <div class="m-card guide-card-mobile">
+            <div class="guide-icon-header">
+              <span class="guide-badge-num" style="background-color: var(--vermillion-breach);">!</span>
+              <div>
+                <h3 class="font-600 text-lead" style="font-size: 13px;">Interpreting Conflicts & Spend</h3>
+                <span class="mono text-xs text-muted">DATA INTEGRITY & RECONCILIATION</span>
+              </div>
             </div>
-
-            <span class="text-xs text-muted">Local retention period:</span>
-            <div class="retention-group" id="mRetentionGroup" style="margin-top: 4px;">
-              <button class="retention-btn" data-days="30">30d</button>
-              <button class="retention-btn active" data-days="60">60d</button>
-              <button class="retention-btn" data-days="90">90d</button>
-            </div>
-
-            <div class="m-actions-stack" style="margin-top: 12px;">
-              <button class="btn btn-secondary btn-sm" id="btnMExportAllData">Export all data</button>
-              <button class="btn btn-secondary btn-sm text-critical" id="btnMPurgeData">Emergency local purge</button>
+            <p class="text-xs text-secondary" style="line-height: 1.45;">
+              <strong class="text-critical font-600">Red Conflicts:</strong> Triggered when an agent action violates a sealed rule (e.g. arrival at 21:00 vs &lt; 18:00 IST).<br>
+              <strong class="text-mauve font-600">Spent Analysis in Profile:</strong> Visualizes domain allocation and 24h spending velocity.
+            </p>
+            <div class="formula-box has-detail" data-detail-title="Calculation Formula" data-detail-tag="MATH" data-detail-highlight="Share of Total Spend" data-detail-text="Category Spend divided by Total Portfolio Spend (₹16,350.00) multiplied by 100.">
+              Share % = (Category Spend / ₹16,350.00 Total) × 100
             </div>
           </div>
 
-          <!-- Independence Statement -->
-          <div class="m-card indep-card-m">
-            <div class="indep-title-m">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-              </svg>
-              <strong>Independent by design</strong>
+          <!-- Card 4: Emergency Controls -->
+          <div class="m-card guide-card-mobile">
+            <div class="guide-icon-header">
+              <span class="guide-badge-num" style="background-color: var(--text-lead);">✕</span>
+              <div>
+                <h3 class="font-600 text-lead" style="font-size: 13px;">Emergency Suspension & Privacy</h3>
+                <span class="mono text-xs text-muted">SECURITY & CUSTODY</span>
+              </div>
             </div>
-            <p class="text-xs text-muted" style="margin-top: 4px; line-height: 1.4;">
-              Audits agent actions independently of the vendor or marketplace. Not influenced by sponsored placement.
+            <p class="text-xs text-secondary" style="line-height: 1.45;">
+              If an autonomous agent acts erratically, open your Profile and activate <strong class="text-critical font-600">Trigger Emergency Suspension</strong> to instantly revoke all OAuth bearer tokens. All data remains encrypted on your local device.
             </p>
           </div>
         </section>
@@ -442,32 +562,25 @@
       <!-- ========================================== -->
       <nav class="mobile-nav">
         <button class="m-nav-tab active" data-screen="screen-overview">
-          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="m-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <rect x="3" y="3" width="7" height="7"/>
             <rect x="14" y="3" width="7" height="7"/>
             <rect x="14" y="14" width="7" height="7"/>
             <rect x="3" y="14" width="7" height="7"/>
           </svg>
-          <span class="m-nav-lbl">Overview</span>
+          <span class="m-nav-lbl">Feed</span>
         </button>
 
         <button class="m-nav-tab" data-screen="screen-instructions">
-          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="m-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
             <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
           </svg>
           <span class="m-nav-lbl">Vault</span>
         </button>
 
-        <button class="m-nav-tab" data-screen="screen-activity">
-          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
-          </svg>
-          <span class="m-nav-lbl">Activity</span>
-        </button>
-
         <button class="m-nav-tab" data-screen="screen-evidence">
-          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="m-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
             <polyline points="14 2 14 8 20 8"/>
           </svg>
@@ -475,7 +588,7 @@
         </button>
 
         <button class="m-nav-tab" data-screen="screen-disputes">
-          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <svg class="m-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M12 3v18"/>
             <path d="M3 7h18"/>
             <path d="M6 17h12"/>
@@ -484,17 +597,39 @@
         </button>
 
         <button class="m-nav-tab" data-screen="screen-security">
-          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          <svg class="m-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
           </svg>
-          <span class="m-nav-lbl">Security</span>
+          <span class="m-nav-lbl">Profile</span>
+        </button>
+
+        <button class="m-nav-tab" data-screen="screen-guide">
+          <svg class="m-nav-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+          <span class="m-nav-lbl">Guide</span>
         </button>
       </nav>
 
       <!-- Bottom Indicator Home Bar -->
       <div class="home-indicator-bar">
         <div class="home-bar"></div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- GLOBAL HIGH-CONTEXT DETAIL TOOLTIP         -->
+      <!-- ========================================== -->
+      <div class="global-detail-tooltip hidden" id="mGlobalDetailTooltip" role="tooltip" aria-hidden="true">
+        <div class="g-tooltip-header">
+          <span class="g-tooltip-title" id="mttTitle">Detail Inspector</span>
+          <span class="g-tooltip-tag mono" id="mttTag">VERIFIED</span>
+        </div>
+        <div class="g-tooltip-highlight" id="mttHighlight">Key Highlight</div>
+        <div class="g-tooltip-body" id="mttBody">Detailed context...</div>
+        <div class="g-tooltip-meta mono" id="mttMeta">REF: ENCLAVE-ROOT</div>
       </div>
 
     </div>
@@ -509,8 +644,10 @@
         <div class="sheet-handle"></div>
       </div>
       <div class="sheet-header">
-        <div class="mono text-xs text-muted" id="sheetActionId">#ACT-9042</div>
-        <h3 class="sheet-title" id="sheetActionTitle">Action Details</h3>
+        <div>
+          <span class="mono text-xs text-muted" id="sheetActionId">#ACT-9042</span>
+          <h3 class="sheet-title" id="sheetActionTitle">Action Details</h3>
+        </div>
         <button class="sheet-close" id="btnCloseSheet">&times;</button>
       </div>
       <div class="sheet-body" id="sheetBody">
@@ -519,9 +656,44 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- TOAST HUB                                  -->
-  <!-- ========================================== -->
+  <!-- Append Rule Modal -->
+  <div class="bottom-sheet-overlay hidden" id="mAddRuleOverlay">
+    <div class="bottom-sheet-container" id="mAddRuleSheet">
+      <div class="sheet-handle-bar">
+        <div class="sheet-handle"></div>
+      </div>
+      <div class="sheet-header">
+        <h3 class="sheet-title">Record Pre-Execution Mandate</h3>
+        <button class="sheet-close" id="btnCloseAddRule">&times;</button>
+      </div>
+      <div class="sheet-body" style="display: flex; flex-direction: column; gap: 10px;">
+        <div>
+          <label class="mono text-xs text-muted" style="display: block; margin-bottom: 3px;">MANDATE CONSTRAINT</label>
+          <input type="text" id="inputMRuleText" placeholder="e.g., Never book flights landing after 18:00 IST." style="width: 100%; padding: 8px 10px; border: 1px solid var(--rule-hairline); border-radius: var(--radius-xs); font-family: var(--font-sans); font-size: 12.5px;">
+        </div>
+        <div>
+          <label class="mono text-xs text-muted" style="display: block; margin-bottom: 3px;">DOMAIN CATEGORY</label>
+          <select id="selectMRuleDomain" style="width: 100%; padding: 8px 10px; border: 1px solid var(--rule-hairline); border-radius: var(--radius-xs); font-family: var(--font-sans); font-size: 12.5px;">
+            <option value="Travel">Travel & Mobility</option>
+            <option value="Finance">Finance & Transfers</option>
+            <option value="Dining">Food & Sustenance</option>
+            <option value="Subscriptions">Software & Subscriptions</option>
+            <option value="Hardware">Hardware & Peripherals</option>
+          </select>
+        </div>
+        <div>
+          <label class="mono text-xs text-muted" style="display: block; margin-bottom: 3px;">SEVERITY</label>
+          <select id="selectMRuleSeverity" style="width: 100%; padding: 8px 10px; border: 1px solid var(--rule-hairline); border-radius: var(--radius-xs); font-family: var(--font-sans); font-size: 12.5px;">
+            <option value="Hard Limit">Hard Limit (Mandatory Breach Flag)</option>
+            <option value="Soft Constraint">Soft Constraint (Advisory Notice)</option>
+          </select>
+        </div>
+        <button class="btn btn-primary w-100" id="btnMConfirmAddRule" style="margin-top: 8px;">Commit Mandate to Vault</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Hub -->
   <div class="m-toast-hub" id="mToastHub"></div>
 
   <script src="app.js"></script>
