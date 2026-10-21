@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Recourse — Autonomous Intent Auditing & Arbitration Ledger</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="institutional-frame">
+
+    <!-- Top Archival Masthead -->
+    <header class="masthead">
+      <div class="masthead-left">
+        <button class="mobile-sidebar-toggle" id="btnMobileSidebarOpen" aria-label="Open sidebar directory">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+        <span class="masthead-symbol">§</span>
+        <div class="masthead-title-wrap">
+          <span class="masthead-title">AGENT RECOURSE</span>
+          <span class="masthead-subtitle">Independent Intent Auditing & Arbitration Ledger</span>
+        </div>
+      </div>
+
+      <div class="masthead-center">
+        <div class="attestation-indicator has-detail" data-detail-title="Cryptographic Chain Status" data-detail-tag="HARDWARE TPM-2040" data-detail-highlight="Local ledger actively verified" data-detail-text="48 autonomous agent records audited against active Vault V13 rules. Client-side root hashes verified with zero remote telemetry leak.">
+          <span class="indicator-pip"></span>
+          <span class="mono text-xs">LOCAL LEDGER: <strong class="text-verified">ACTIVE</strong> // CHAIN INTACT</span>
+        </div>
+      </div>
+
+      <div class="masthead-right">
+        <button class="account-attestation-btn has-detail" id="btnMastheadProfile" title="Open Principal Profile (Harshith)" data-detail-title="Principal Identity Record" data-detail-tag="USR-2040-DEMO" data-detail-highlight="Harshith · Bangalore, India" data-detail-text="Hardware TPM-2040 enclave key 8F9A-2B3C-1A92-E4F1. Click to view full identity certs, spent analytics, and emergency kill-switch.">
+          <span class="mono text-2xs text-muted">PRINCIPAL:</span>
+          <span class="mono text-xs font-600">HARSHITH</span>
+          <span class="mono text-2xs text-muted">(USR-2040-DEMO)</span>
+          <span class="status-pip-verified"></span>
+        </button>
+      </div>
+    </header>
+
+    <!-- Global Layout: Left Functional Directory + Right Work Area -->
+    <div class="frame-body">
+      
+      <!-- Primary Navigation Bar (Vertical Archival Index) -->
+      <aside class="ledger-index" id="ledgerSidebar">
+        <div class="sidebar-header-bar">
+          <span class="sidebar-brand-code mono">DIRECTORY</span>
+          <button class="sidebar-toggle-btn" id="btnSidebarToggle" aria-label="Collapse sidebar" title="Collapse sidebar (Ctrl+B)">
+            <svg class="toggle-icon-collapse" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+              <path d="M16 15l-3-3 3-3"></path>
+            </svg>
+            <svg class="toggle-icon-expand" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="9" y1="3" x2="9" y2="21"></line>
+              <path d="M13 9l3 3-3 3"></path>
+            </svg>
+          </button>
+          <button class="sidebar-mobile-close-btn" id="btnMobileSidebarClose" aria-label="Close sidebar">✕</button>
+        </div>
+
+        <nav class="index-nav">
+          <button class="nav-btn active" data-view="view-stream" data-tooltip="01 Ingestion Feed">
+            <span class="nav-code mono">01</span>
+            <span class="nav-text">Audit Ingestion Feed</span>
+            <span class="nav-flag mono" id="feedFlag">1 CONFLICT</span>
+          </button>
+          
+          <button class="nav-btn" data-view="view-vault" data-tooltip="02 Instruction Mandates">
+            <span class="nav-code mono">02</span>
+            <span class="nav-text">Instruction Mandates</span>
+            <span class="nav-count mono" id="vaultCount">14</span>
+          </button>
+
+          <button class="nav-btn" data-view="view-evidence" data-tooltip="03 Evidence Dossier">
+            <span class="nav-code mono">03</span>
+            <span class="nav-text">Evidence Dossier</span>
+            <span class="nav-pip"></span>
+          </button>
+
+          <button class="nav-btn" data-view="view-disputes" data-tooltip="04 Arbitration Cases">
+            <span class="nav-code mono">04</span>
+            <span class="nav-text">Arbitration Cases</span>
+            <span class="nav-flag mono" id="disputeFlag">PENDING</span>
+          </button>
+
+          <button class="nav-btn" data-view="view-governance" data-tooltip="05 Agent Access & Trust">
+            <span class="nav-code mono">05</span>
+            <span class="nav-text">Agent Access & Trust</span>
+          </button>
+
+          <button class="nav-btn" data-view="view-guide" data-tooltip="06 How to Use">
+            <span class="nav-code mono">06</span>
+            <span class="nav-text">How to Use</span>
+            <span class="nav-guide-badge mono">GUIDE</span>
+          </button>
+        </nav>
+
+        <div class="index-section-header" style="margin-top: 24px;">STATUTORY</div>
+        <nav class="index-nav">
+          <button class="nav-btn" data-view="view-terms" data-tooltip="§ Terms of Delegation">
+            <span class="nav-code mono">§</span>
+            <span class="nav-text">Terms of Delegation</span>
+          </button>
+          <button class="nav-btn" data-view="view-privacy" data-tooltip="¶ Data Sovereignty Policy">
+            <span class="nav-code mono">¶</span>
+            <span class="nav-text">Data Sovereignty Policy</span>
+          </button>
+        </nav>
+
+        <!-- Bottom Ledger Metadata -->
+        <div class="index-footer">
+          <div class="footer-meta-block">
+            <span class="mono text-2xs text-muted">ACTIVE VAULT SPECIFICATION</span>
+            <span class="mono text-xs font-500" id="sidebarVaultVer">VERSION 13.04</span>
+            <span class="mono text-2xs text-muted">KEY: 8F9A-2B3C-1A92</span>
+          </div>
+          <div class="storage-clause">
+            Client-side encrypted record. No telemetry exported without signed user authorization.
+          </div>
+        </div>
+      </aside>
+
+      <!-- Mobile Backdrop Overlay -->
+      <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+      <!-- Main Operational Canvas -->
+      <main class="ledger-stage">
+
+        <!-- ==================================================== -->
+        <!-- VIEW 00: PRINCIPAL PROFILE (PERSONALIZED)            -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-profile">
+          <div class="pane-title-row">
+            <div>
+              <div class="mono text-xs text-muted">PRINCIPAL IDENTITY & DELEGATION RECORD</div>
+              <h1 class="pane-headline" id="profilePrincipalName">Harshith</h1>
+              <p class="pane-deck">Principal <strong class="imp-highlight">USR-2040-DEMO</strong> · Enclave: <strong class="imp-highlight verified">TPM-2040 Verified</strong></p>
+            </div>
+            <div class="pane-action-group">
+              <button class="secondary-action-btn" id="btnExportIdentityCert">Export Cert (.json)</button>
+              <button class="primary-action-btn" id="btnManageVaultFromProfile">Instruction Vault →</button>
+            </div>
+          </div>
+
+          <!-- Vertical Stacked Cards Flow -->
+          <div class="profile-vertical-stack">
+
+            <!-- 1. Principal Identity Credential Docket -->
+            <div class="profile-credential-docket">
+              <div class="cred-left">
+                <div class="principal-monogram mono">H</div>
+                <div class="cred-meta-stack">
+                  <div class="cred-name-line">
+                    <h2 class="cred-name">Harshith</h2>
+                    <span class="determination-pill det-verified mono has-detail" data-detail-title="Enclave Verification" data-detail-tag="LOCAL HSM" data-detail-highlight="Hardware-rooted key isolation" data-detail-text="Zero cloud exposure. Private attestation key resides within physical TPM-2040 secure enclave.">VERIFIED // LOCAL ENCLAVE</span>
+                  </div>
+                  <div class="cred-sub-line mono text-xs text-muted">
+                    <span>ID: <strong class="text-lead">USR-2040-DEMO</strong></span>
+                    <span class="meta-dot">·</span>
+                    <span>REGION: <strong class="text-lead">IN-KA-BLR</strong></span>
+                    <span class="meta-dot">·</span>
+                    <span>ROOT: <strong class="text-verified">TPM-2040</strong></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cred-right mono text-xs">
+                <div class="key-fingerprint-box has-detail" data-detail-title="Attestation Key Fingerprint" data-detail-tag="Ed25519" data-detail-highlight="Public Attestation Hash" data-detail-text="Used to co-sign bilateral arbitration filings against carrier disclosure payloads. Matches on-chain registry.">
+                  <span class="text-muted text-2xs">PUBLIC KEY FINGERPRINT</span>
+                  <span class="font-600 text-xs" id="profileKeyDisplay">8F9A-2B3C-1A92-E4F1</span>
+                </div>
+                <button class="secondary-action-btn btn-sm mono text-xs" id="btnCopyProfileKey">Copy Key</button>
+              </div>
+
+              <!-- Tasteful Floating Attestation Badges (Restrained Depth & Motion) -->
+              <div class="floating-badges-cluster" aria-label="Cryptographic status attestations">
+                <div class="floating-token token-tpm has-detail" tabindex="0" data-detail-title="Hardware TPM-2040 Enclave" data-detail-tag="HSM ROOT" data-detail-highlight="Hardware-Rooted Custody" data-detail-text="Physical tamper-resistant enclave generates and secures all transaction attestation signatures locally. Zero private key transmission.">
+                  <div class="token-icon-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="4" y="4" width="16" height="16" rx="2"></rect>
+                      <rect x="9" y="9" width="6" height="6"></rect>
+                      <line x1="9" y1="1" x2="9" y2="4"></line>
+                      <line x1="15" y1="1" x2="15" y2="4"></line>
+                      <line x1="9" y1="20" x2="9" y2="23"></line>
+                      <line x1="15" y1="20" x2="15" y2="23"></line>
+                      <line x1="20" y1="9" x2="23" y2="9"></line>
+                      <line x1="20" y1="14" x2="23" y2="14"></line>
+                      <line x1="1" y1="9" x2="4" y2="9"></line>
+                      <line x1="1" y1="14" x2="4" y2="14"></line>
+                    </svg>
+                  </div>
+                  <div class="token-meta">
+                    <span class="token-title mono">TPM-2040 ENCLAVE</span>
+                    <span class="token-sub">Hardware Root</span>
+                  </div>
+                  <span class="token-pip-live"></span>
+                </div>
+
+                <div class="floating-token token-adrp has-detail" tabindex="0" data-detail-title="ADRP-2040 Recourse Protocol" data-detail-tag="NEUTRAL AUDIT" data-detail-highlight="100% Non-Affiliated Oversight" data-detail-text="Autonomous Delegation Recourse Protocol independently cross-examines observed debits against sealed human instructions.">
+                  <div class="token-icon-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M12 3v18"></path>
+                      <path d="M5 8l7-5 7 5"></path>
+                      <path d="M3 13l4-2 4 2-4 2-4-2z"></path>
+                      <path d="M13 13l4-2 4 2-4 2-4-2z"></path>
+                    </svg>
+                  </div>
+                  <div class="token-meta">
+                    <span class="token-title mono">ADRP-2040 RECOURSE</span>
+                    <span class="token-sub">Neutral Arbiter</span>
+                  </div>
+                  <span class="token-pip-live"></span>
+                </div>
+
+                <div class="floating-token token-vault has-detail" tabindex="0" data-detail-title="AES-GCM-256 Vault" data-detail-tag="ENCRYPTED" data-detail-highlight="Tamper-Evident Mandates" data-detail-text="All human constraints are timestamped and encrypted with client-side keys. SHA-256 root hash validates chronological precedence.">
+                  <div class="token-icon-wrap">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                      <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                      <circle cx="12" cy="16" r="1"></circle>
+                    </svg>
+                  </div>
+                  <div class="token-meta">
+                    <span class="token-title mono">AES-GCM-256 VAULT</span>
+                    <span class="token-sub">Client Tamper-Proof</span>
+                  </div>
+                  <span class="token-pip-live"></span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 2. High-Level Spent Analysis & Capital Allocation Intelligence -->
+            <div class="spending-analysis-panel" id="spendingAnalysisSection">
+              <div class="spending-header-row">
+                <div>
+                  <div class="mono text-2xs text-muted">EXECUTIVE PORTFOLIO OVERSIGHT</div>
+                  <h2 class="spending-title">Spent Analysis & Capital Allocation</h2>
+                  <p class="spending-subtitle">
+                    Autonomous capital outflow and mandate compliance across authorized domains. <span class="has-detail" data-detail-title="Portfolio Analytics" data-detail-tag="REAL-TIME" data-detail-highlight="Multi-Dimensional Auditing" data-detail-text="Live tracking of autonomous agent capital allocation, 24h debit velocity spikes, and active domain budget ceilings.">[Hover for details ℹ️]</span>
+                  </p>
+                </div>
+                <div class="spending-metrics-summary mono">
+                  <div class="spending-sum-box has-detail" data-detail-title="Total Audited Outflow" data-detail-tag="₹16,350.00 INR" data-detail-highlight="5 Settled Actions Today" data-detail-text="Sum of all autonomous actions processed by connected agents across Travel, Sustenance, Utilities, Hardware, and Subscriptions.">
+                    <span class="sum-label text-2xs text-muted">TOTAL AUDITED DEBITS</span>
+                    <span class="sum-val font-600" id="spendingTotalDisplay">₹16,350.00</span>
+                  </div>
+                  <div class="spending-sum-box has-detail" data-detail-title="Compliance Ratio" data-detail-tag="97.4%" data-detail-highlight="46 of 48 Actions Conforming" data-detail-text="Percentage of executed transactions conforming strictly to active Vault V13 rules. 1 action currently in arbitration.">
+                    <span class="sum-label text-2xs text-muted">COMPLIANCE RATIO</span>
+                    <span class="sum-val text-verified font-600">97.4%</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- High-Level Executive Metric Tiles -->
+              <div class="spending-executive-tiles">
+                <div class="exec-tile has-detail" data-detail-title="Total Outflow" data-detail-tag="TODAY" data-detail-highlight="₹16,350.00 Across 5 Actions" data-detail-text="Aggregated value of all autonomous agent transactions audited during current 24-hour settlement window.">
+                  <span class="exec-tile-label mono text-2xs text-muted">TOTAL OUTFLOW</span>
+                  <div class="exec-tile-val mono font-600" id="tileTotalOutflow">₹16,350.00</div>
+                  <span class="exec-tile-sub mono text-2xs text-muted">5 Recorded Actions</span>
+                </div>
+                <div class="exec-tile has-detail" data-detail-title="Primary Spend Domain" data-detail-tag="TRAVEL" data-detail-highlight="Flight & Intercity Transit" data-detail-text="InterGlobe Aviation flight booking represents 48.0% of total spend. Currently flagged for temporal breach.">
+                  <span class="exec-tile-label mono text-2xs text-muted">PRIMARY DOMAIN</span>
+                  <div class="exec-tile-val text-mauve font-600">Travel & Flights</div>
+                  <span class="exec-tile-sub mono text-2xs text-muted"><strong>₹7,850.00</strong> · 48.0% Share</span>
+                </div>
+                <div class="exec-tile has-detail" data-detail-title="Average Ticket Size" data-detail-tag="MEAN" data-detail-highlight="₹3,270.00 Mean Transaction" data-detail-text="Calculated across OpenAgent Travel, RetailAgent, and HouseholdAgent transactions today.">
+                  <span class="exec-tile-label mono text-2xs text-muted">AVERAGE TICKET</span>
+                  <div class="exec-tile-val mono font-600">₹3,270.00</div>
+                  <span class="exec-tile-sub mono text-2xs text-muted">3 Connected Agents</span>
+                </div>
+                <div class="exec-tile has-detail" data-detail-title="Disputed Value" data-detail-tag="BREACH" data-detail-highlight="Action #ACT-9042 Variance" data-detail-text="₹7,850.00 debit executed in violation of Mandate SEC-TRV-102. Full restitution pending carrier arbitration.">
+                  <span class="exec-tile-label mono text-2xs text-muted">DISPUTED VALUE</span>
+                  <div class="exec-tile-val text-danger font-600">₹7,850.00</div>
+                  <span class="exec-tile-sub mono text-2xs text-danger font-600">Action #ACT-9042 Variance</span>
+                </div>
+              </div>
+
+              <!-- Dual High-Level Visualizations Grid -->
+              <div class="spending-visuals-grid">
+                
+                <!-- High-Level Graph 1: Interactive SVG Capital Allocation Donut Ring -->
+                <div class="visual-card donut-card">
+                  <div class="visual-card-header mono">
+                    <span class="text-xs font-500">DOMAIN ALLOCATION DISTRIBUTION</span>
+                    <span class="text-2xs text-muted">VECTOR RING CHART</span>
+                  </div>
+                  <div class="donut-chart-wrapper">
+                    <div class="donut-svg-container">
+                      <svg class="donut-svg" viewBox="0 0 220 220" id="spendingDonutSvg">
+                        <!-- Rendered dynamically -->
+                      </svg>
+                      <div class="donut-center-readout" id="donutCenterReadout">
+                        <span class="donut-center-label mono text-2xs text-muted">TOTAL DEBITS</span>
+                        <span class="donut-center-val mono font-600" id="donutCenterAmount">₹16,350</span>
+                        <span class="donut-center-sub mono text-2xs text-muted" id="donutCenterSub">5 Categories</span>
+                      </div>
+                    </div>
+                    <!-- Donut Legend Grid -->
+                    <div class="donut-legend-list" id="donutLegendList">
+                      <!-- Rendered dynamically -->
+                    </div>
+                  </div>
+                </div>
+
+                <!-- High-Level Graph 2: 24h Ingestion Velocity & Expenditure Timeline -->
+                <div class="visual-card trend-card">
+                  <div class="visual-card-header mono">
+                    <span class="text-xs font-500">24H DEBIT VELOCITY TIMELINE</span>
+                    <span class="text-2xs text-muted">CHRONOLOGICAL AUDIT</span>
+                  </div>
+                  <div class="trend-chart-wrapper">
+                    <svg class="trend-svg" viewBox="0 0 460 160" preserveAspectRatio="none" id="spendingTrendSvg">
+                      <!-- Rendered dynamically with gradient and interactive markers -->
+                    </svg>
+                    <div class="trend-x-axis mono text-2xs text-muted">
+                      <span>06:30 (BESCOM)</span>
+                      <span>08:15 (BigBasket)</span>
+                      <span>09:41 (Croma)</span>
+                      <span>10:02 (IndiGo)</span>
+                      <span>19:12 (Uber)</span>
+                    </div>
+                  </div>
+                  <div class="trend-footer-note mono text-2xs text-muted">
+                    Peak debit: ₹7,850.00 at 10:02 IST (Flight 6E-2412 · Contradiction Flagged). Hover points for payload metadata.
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Category Percentage Progress Breakdown -->
+              <div class="spending-breakdown-section">
+                <div class="breakdown-header mono">
+                  <span class="text-xs font-500">CATEGORY EXPENDITURE PROPORTIONS</span>
+                  <span class="text-2xs text-muted">(Hover or tap any bar to inspect formula reconciliation)</span>
+                </div>
+                <div class="spending-bars-list" id="spendingBarsList">
+                  <!-- Dynamically rendered via JavaScript using actual records -->
+                </div>
+              </div>
+
+              <!-- Floating Interactive Tooltip -->
+              <div class="spending-floating-tooltip hidden" id="spendingTooltip"></div>
+            </div>
+
+            <!-- 3. Autonomous Delegation Expenditure Ceilings -->
+            <div class="gov-card">
+              <div class="gov-card-title mono">AUTONOMOUS DELEGATION EXPENDITURE CEILINGS</div>
+              <p class="gov-card-desc">
+                Hard spending limits and verification boundaries enforced across connected agent tokens. <span class="has-detail" data-detail-title="Expenditure Ceilings" data-detail-tag="HARD LIMITS" data-detail-highlight="Pre-Checkout Enforcement" data-detail-text="Transactions exceeding these limits fail closed or demand interactive 2FA attestation before merchant settlement.">[Hover for details ℹ️]</span>
+              </p>
+
+              <div class="quota-list mono text-xs">
+                <div class="quota-row has-detail" data-detail-title="Travel Ceiling" data-detail-tag="SEC-TRV-102" data-detail-highlight="OpenAgent Travel v8.4" data-detail-text="Airfare and intercity transit capped at ₹15,000 per booking. Arrival after 18:00 IST is strictly prohibited.">
+                  <div class="quota-info">
+                    <span class="font-600 text-lead">Travel & Flights (OpenAgent)</span>
+                    <span class="text-muted text-2xs">Domestic airfare & high-speed rail</span>
+                  </div>
+                  <div class="quota-val">
+                    <span>Max <strong class="imp-highlight font-600">₹15,000</strong> / Booking</span>
+                    <span class="quota-tag text-verified">ENFORCED (SEC-TRV-102)</span>
+                  </div>
+                </div>
+
+                <div class="quota-row has-detail" data-detail-title="Retail Ceiling" data-detail-tag="SEC-HDW-110" data-detail-highlight="Flipkart Shopping Agent" data-detail-text="Routine replenishment capped at ₹5,000 per cart. Replacement computing peripherals require specification check.">
+                  <div class="quota-info">
+                    <span class="font-600 text-lead">E-Commerce & Retail (Flipkart)</span>
+                    <span class="text-muted text-2xs">Groceries & electronics</span>
+                  </div>
+                  <div class="quota-val">
+                    <span>Max <strong class="imp-highlight font-600">₹5,000</strong> / Order</span>
+                    <span class="quota-tag text-verified">ENFORCED (SEC-HDW-110)</span>
+                  </div>
+                </div>
+
+                <div class="quota-row has-detail" data-detail-title="Finance Ceiling" data-detail-tag="SEC-FIN-101" data-detail-highlight="FinanceBot Autonomous" data-detail-text="Routine utility sweeps and billing capped at ₹10,000/mo. Single transfers exceeding ₹15,000 demand interactive biometric 2FA.">
+                  <div class="quota-info">
+                    <span class="font-600 text-lead">Financial Settler (FinanceBot)</span>
+                    <span class="text-muted text-2xs">Utility billing & subscriptions</span>
+                  </div>
+                  <div class="quota-val">
+                    <span>Max <strong class="imp-highlight font-600">₹10,000</strong> / Month</span>
+                    <span class="quota-tag text-verified">ENFORCED (SEC-FIN-101)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 3. Emergency Delegation Suspension Kill Switch -->
+            <div class="gov-card kill-switch-card">
+              <div class="gov-card-title mono text-danger">EMERGENCY DELEGATION SUSPENSION</div>
+              <p class="gov-card-desc">
+                <strong class="text-danger font-600">Instant Kill-Switch:</strong> Revoke all connected agent bearer tokens and freeze outbound debits across all marketplaces. <span class="has-detail" data-detail-title="Kill-Switch Protocol" data-detail-tag="EMERGENCY" data-detail-highlight="Zero-Latency Revocation" data-detail-text="Transmits an Ed25519 revocation packet to all connected agent APIs. Irreversible without biometric enclave confirmation.">[Hover for specs ℹ️]</span>
+              </p>
+              <div class="kill-switch-status mono text-xs font-600" id="killSwitchStatusText">
+                STATUS: NORMAL // AGENT MONITORING ACTIVE
+              </div>
+              <button class="primary-action-btn btn-danger-action w-100" id="btnToggleEmergencyKill">
+                Trigger Emergency Delegation Suspension
+              </button>
+            </div>
+
+            <!-- 4. Cryptographic Attestation Specifications -->
+            <div class="gov-card">
+              <div class="gov-card-title mono">LOCAL CRYPTOGRAPHIC HARDWARE SPECS</div>
+              <div class="spec-table mono text-xs">
+                <div class="spec-tr has-detail" data-detail-title="Signing Scheme" data-detail-tag="Ed25519" data-detail-highlight="Elliptic Curve Cryptography" data-detail-text="High-speed non-repudiation signature scheme combined with HMAC-SHA256 for bilateral temporal proof binding.">
+                  <span class="text-muted">SIGNING SCHEME:</span>
+                  <span class="font-600 text-lead">Ed25519-HMAC-SHA256</span>
+                </div>
+                <div class="spec-tr has-detail" data-detail-title="Vault Encryption" data-detail-tag="AES-256" data-detail-highlight="Galois/Counter Mode" data-detail-text="Client-side symmetric authenticated encryption with 256-bit key custody rooted in local TPM enclave.">
+                  <span class="text-muted">VAULT STORAGE:</span>
+                  <span class="font-600 text-lead">AES-GCM-256 (Local Enclave)</span>
+                </div>
+                <div class="spec-tr has-detail" data-detail-title="Recourse Standard" data-detail-tag="ADRP-2040" data-detail-highlight="Statutory Arbitration" data-detail-text="Autonomous Delegation Recourse Protocol recognized under Section 4 merchant dispute resolution frameworks.">
+                  <span class="text-muted">ATTESTATION PROTOCOL:</span>
+                  <span class="font-600 text-lead">ADRP-2040 Standard</span>
+                </div>
+                <div class="spec-tr has-detail" data-detail-title="Privacy Guarantee" data-detail-tag="ZK-AUDIT" data-detail-highlight="Zero Knowledge Minimization" data-detail-text="Only fields required to determine constraint adherence (amount, timestamp, schedule) are committed to ledger.">
+                  <span class="text-muted">ZERO-KNOWLEDGE AUDIT:</span>
+                  <span class="font-600 text-verified">Strict Data Minimization</span>
+                </div>
+                <div class="spec-tr has-detail" data-detail-title="Independence Charter" data-detail-tag="CHARTER" data-detail-highlight="100% Non-Affiliated" data-detail-text="Independent governance charter. Zero affiliate commissions or merchant sponsored placements.">
+                  <span class="text-muted">INDEPENDENCE STATUS:</span>
+                  <span class="font-600 text-verified">100% Non-Affiliated</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 01: AUDIT INGESTION STREAM                      -->
+        <!-- ==================================================== -->
+        <section class="stage-pane active" id="view-stream">
+          <div class="pane-title-row">
+            <div>
+              <h1 class="pane-headline">Autonomous Ingestion Feed</h1>
+              <p class="pane-deck">Continuous verification of autonomous agent debits against <strong class="imp-highlight font-600">pre-recorded human mandates</strong>. <span class="has-detail" data-detail-title="Audit Stream Oversight" data-detail-tag="REAL-TIME" data-detail-highlight="Deterministic Comparison" data-detail-text="Ingests execution records from connected agent APIs and compares timestamp, amount, and scheduling attributes against active Vault V13 rules.">[Hover for info ℹ️]</span></p>
+            </div>
+            <div class="pane-action-group">
+              <span class="metric-chip mono has-detail" data-detail-title="Daily Ingestion Volume" data-detail-tag="48 ACTIONS" data-detail-highlight="Settlement Integrity: 97.4%" data-detail-text="48 autonomous actions audited across 3 connected agents today. 46 verified compliant, 1 uncovered intent, 1 active conflict."><strong>48</strong> ACTIONS AUDITED TODAY</span>
+              <span class="metric-chip mono text-danger font-600 has-detail" id="mismatchCountChip" data-detail-title="Conflict Flag" data-detail-tag="CRITICAL" data-detail-highlight="Action #ACT-9042 Contradiction" data-detail-text="IndiGo flight booking violates Mandate SEC-TRV-102 arrival time constraint. Evidence sealed for restitution.">1 CONFLICT DETECTED</span>
+            </div>
+          </div>
+
+          <!-- The Verification Ledger Focus Card (Highlighted Conflict Notice) -->
+          <div class="record-docket docket-conflict highlighted-conflict" id="conflictDocket">
+            <div class="docket-header">
+              <div class="docket-status-wrap">
+                <span class="status-marker marker-critical"></span>
+                <span class="docket-kicker mono">CRITICAL CONFLICT IDENTIFIED // ACTION <strong class="text-lead">#ACT-9042</strong></span>
+              </div>
+              <span class="mono text-xs text-muted">LOGGED: <strong class="text-lead">10:02:45 IST</strong></span>
+            </div>
+
+            <div class="docket-body">
+              <div class="docket-statement">
+                <h2 class="docket-title">InterGlobe Aviation (IndiGo) — Flight 6E-2412 Autonomous Booking</h2>
+                <div class="docket-financial mono text-danger font-600 has-detail" data-detail-title="Disputable Debit" data-detail-tag="RESCISSION" data-detail-highlight="₹7,850.00 Restitution Eligible" data-detail-text="Full restitution claim ready under Section 4 of the Autonomous AI Delegation Standard without cancellation fees.">DISPUTABLE DEBIT: ₹7,850.00 INR</div>
+              </div>
+
+              <!-- Two-Column Verification Differential -->
+              <div class="attestation-diff-grid">
+                <div class="diff-cell cell-mandate has-detail" data-detail-title="Enforced Mandate" data-detail-tag="VAULT V13" data-detail-highlight="Rule SEC-TRV-102" data-detail-text="Sealed at 10:00:14 IST in client TPM enclave. Mandate strictly forbids domestic flights arriving after 18:00 IST.">
+                  <div class="cell-head mono">MANDATE IN FORCE (VAULT V13)</div>
+                  <div class="cell-body">
+                    <p class="diff-rule-text">"Never book domestic flights scheduled to arrive after <strong class="text-lead font-600">18:00 IST (6:00 PM)</strong>."</p>
+                    <span class="mono text-2xs text-muted">SEALED: 10:00:14 IST // RULE SEC-TRV-102</span>
+                  </div>
+                </div>
+
+                <div class="diff-cell cell-payload has-detail" data-detail-title="Carrier Observed Payload" data-detail-tag="ACT-9042" data-detail-highlight="OpenAgent Travel v8.4" data-detail-text="Ingested 10:02:45 IST via IndiGo API. Scheduled arrival at 21:00 IST exceeds ceiling by +180 minutes.">
+                  <div class="cell-head mono text-danger font-600">OBSERVED EXECUTION PAYLOAD</div>
+                  <div class="cell-body">
+                    <p class="diff-rule-text">Scheduled Arrival: <strong class="text-danger font-600">21:00 IST (9:00 PM)</strong> at New Delhi (DEL) · <strong class="text-danger">+180 min breach</strong></p>
+                    <span class="mono text-2xs text-muted">SOURCE: OPENAGENT TRAVEL API // RECEIPT #6E-2412</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="variance-note mono has-detail" data-detail-title="Variance Determination" data-detail-tag="BREACH" data-detail-highlight="Temporal Precedence Confirmed" data-detail-text="Mandate was sealed 151 seconds before carrier ticket generation. Non-repudiation proof compiled for arbitration.">
+                <strong>VARIANCE DETERMINATION:</strong> Execution exceeds mandate by <strong class="text-danger font-600">+180 minutes</strong>. 100% restitution claim sealed.
+              </div>
+            </div>
+
+            <div class="docket-footer">
+              <div class="docket-subtext text-muted">
+                <strong class="text-lead">Evidence sealed:</strong> Bilateral cryptographic dossier compiled for carrier restitution.
+              </div>
+              <div class="docket-actions">
+                <button class="text-action-btn" id="btnDismissConflict">Dismiss variance</button>
+                <button class="primary-action-btn btn-danger-action" id="btnInspectEvidence">Inspect Evidence Dossier →</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Complete Ingestion Ledger Table -->
+          <div class="ledger-sub-header">
+            <div>
+              <span class="mono text-xs font-500">RECENT EXECUTION RECORDS</span>
+              <span class="text-xs text-muted" style="margin-left: 8px;">(Click any row to reveal cryptographic machine payload)</span>
+            </div>
+            <div class="filter-controls mono text-xs">
+              <button class="filter-link active" data-filter="all">ALL (48)</button>
+              <button class="filter-link" data-filter="conflict">CONFLICTS (1)</button>
+              <button class="filter-link" data-filter="uncovered">UNCOVERED (1)</button>
+              <button class="filter-link" data-filter="verified">VERIFIED (46)</button>
+            </div>
+          </div>
+
+          <table class="ledger-table">
+            <thead>
+              <tr>
+                <th style="width: 14%;">IDENTIFIER</th>
+                <th style="width: 22%;">RECORDED ACTION</th>
+                <th style="width: 18%;">EXECUTING AGENT</th>
+                <th style="width: 16%;">TIMESTAMP</th>
+                <th style="width: 14%;">VALUE</th>
+                <th style="width: 16%; text-align: right;">DETERMINATION</th>
+              </tr>
+            </thead>
+            <tbody id="streamTableBody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 02: INSTRUCTION MANDATES (THE VAULT)            -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-vault">
+          <div class="pane-title-row">
+            <div>
+              <h1 class="pane-headline">Instruction Mandates</h1>
+              <p class="pane-deck">Pre-execution boundaries enforced before autonomous checkout. Revisions are <strong class="imp-highlight font-600">cryptographically sealed</strong>. <span class="has-detail" data-detail-title="Vault V13 Architecture" data-detail-tag="CLIENT CUSTODY" data-detail-highlight="Tamper-Evident Rules" data-detail-text="Rules are committed to local enclave memory prior to agent transactions. Modifying a mandate requires explicit user biometric key re-signing.">[Hover for info ℹ️]</span></p>
+            </div>
+            <button class="primary-action-btn" id="btnAppendRule">+ Append Mandate</button>
+          </div>
+
+          <!-- Vault Index Header Strip -->
+          <div class="vault-index-strip mono">
+            <div class="has-detail" data-detail-title="Root Specification" data-detail-tag="V13.04" data-detail-highlight="Current Specification Version" data-detail-text="Specification increments monotonically upon any rule addition or revocation, updating the enclave Merkle root."><span>ROOT SPECIFICATION:</span> <strong class="text-lead font-600">VAULT-V13</strong></div>
+            <div class="has-detail" data-detail-title="Active Mandates" data-detail-tag="14 CONSTRAINTS" data-detail-highlight="Hard & Soft Constraints" data-detail-text="9 hard limit rules (immediate breach flag) and 5 soft constraints (advisory logging)."><span>MANDATES ENFORCED:</span> <strong id="vaultMandatesCount" class="text-lead font-600">14</strong></div>
+            <div class="has-detail" data-detail-title="Integrity Guarantee" data-detail-tag="SHA-256" data-detail-highlight="Local Hardware Enclave" data-detail-text="Hash verification confirms constraints existed in unalterable state prior to third-party merchant execution."><span>RECORD INTEGRITY:</span> <strong class="text-verified font-600">SHA-256 LOCAL ENCLAVE</strong></div>
+          </div>
+
+          <table class="ledger-table vault-table">
+            <thead>
+              <tr>
+                <th style="width: 12%;">CODE</th>
+                <th style="width: 14%;">DOMAIN</th>
+                <th style="width: 44%;">RECORDED HUMAN CONSTRAINT</th>
+                <th style="width: 12%;">SEVERITY</th>
+                <th style="width: 10%;">VERSION</th>
+                <th style="width: 8%; text-align: right;">ACTION</th>
+              </tr>
+            </thead>
+            <tbody id="vaultTableBody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 03: FORENSIC EVIDENCE DOSSIER                   -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-evidence">
+          <div class="pane-title-row">
+            <div>
+              <div class="mono text-xs text-muted">ARBITRATION RECORD REFERENCE // DOSSIER #DSP-2040-8812</div>
+              <h1 class="pane-headline">Forensic Evidence Dossier</h1>
+              <p class="pane-deck">Bilateral cryptographic binding proving <strong class="imp-highlight font-600">mandate preceded agent execution</strong>. <span class="has-detail" data-detail-title="Forensic Evidence Standard" data-detail-tag="ADRP-2040" data-detail-highlight="Non-Repudiation Architecture" data-detail-text="Mathematically links pre-execution mandate hash with carrier execution payload using HMAC-SHA256 to establish unalterable timeline.">[Hover for info ℹ️]</span></p>
+            </div>
+            <div class="pane-action-group">
+              <button class="secondary-action-btn" id="btnDownloadEvidenceJson">Download ADRP Payload (JSON)</button>
+              <button class="primary-action-btn" id="btnProceedArbitration">Initiate Carrier Arbitration →</button>
+            </div>
+          </div>
+
+          <!-- Bilateral Evidentiary Ledger -->
+          <div class="bilateral-grid">
+            
+            <!-- Left Side: Mandate in Force -->
+            <div class="evidence-ledger-card">
+              <div class="card-bar mono">
+                <span>ITEM A: PRE-EXECUTION MANDATE</span>
+                <span class="text-verified font-600">SEAL CONFIRMED</span>
+              </div>
+              <div class="evidence-ledger-body">
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">MANDATE IDENTIFIER</span>
+                  <span class="mono text-xs font-600 text-lead">SEC-TRV-102 (Domestic Flights)</span>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">TIME OF RECORDING</span>
+                  <span class="mono text-xs font-600 text-lead">2040-10-21 10:00:14 IST</span>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">ACTIVE VAULT SPECIFICATION</span>
+                  <span class="mono text-xs font-600 text-lead">VERSION 13.04</span>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">ENFORCED TEXT</span>
+                  <p class="legal-quote">
+                    "Never book domestic flights scheduled to arrive after <strong class="text-lead font-600">18:00 IST (6:00 PM)</strong>."
+                  </p>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">CRYPTOGRAPHIC ROOT HASH</span>
+                  <div class="hash-pill has-detail" data-detail-title="Mandate Root Hash" data-detail-tag="SHA-256" data-detail-highlight="Vault V13 Merkle Leaf" data-detail-text="Full Hash: 0x98f21bc780d19ca780214ef590124ba89012356781290348a2. Sealed in client hardware TPM at 10:00:14 IST.">
+                    <span>sha256(Mandate): <strong>0x98f2...a8a2</strong></span>
+                    <span class="hash-pill-tag">SEALED</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Side: Carrier Execution Payload -->
+            <div class="evidence-ledger-card card-execution">
+              <div class="card-bar mono">
+                <span class="text-danger font-600">ITEM B: INGESTED CARRIER RECORD</span>
+                <span class="text-danger font-600">CONTRADICTION DETECTED</span>
+              </div>
+              <div class="evidence-ledger-body">
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">TRANSACTION REFERENCE</span>
+                  <span class="mono text-xs font-600 text-lead">ACT-9042 // PNR #IND-6E-88910</span>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">TIME OF CARRIER DISCLOSURE</span>
+                  <span class="mono text-xs font-600 text-danger">10:02:45 IST (+151 seconds later)</span>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">DISCLOSED ATTRIBUTES</span>
+                  <span class="mono text-xs font-600 text-lead">Flight 6E-2412 (BLR ➔ DEL), Arrival: <strong class="text-danger">21:00 IST</strong></span>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">FINANCIAL SETTLEMENT</span>
+                  <span class="mono text-xs font-600 text-lead">₹7,850.00 INR (Autonomous Debit)</span>
+                </div>
+                <div class="entry-row">
+                  <span class="mono text-2xs text-muted">CARRIER INGESTION HASH</span>
+                  <div class="hash-pill has-detail" data-detail-title="Carrier Ingestion Hash" data-detail-tag="SHA-256" data-detail-highlight="OpenAgent Travel Ingestion" data-detail-text="Full Hash: 0x3d087fe910901abcf90184712049ba38291ca0912440182. PNR IND-6E-88910 confirmed by IndiGo API gateway.">
+                    <span>sha256(Carrier): <strong>0x3d08...0182</strong></span>
+                    <span class="hash-pill-tag tag-danger">BREACH</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Mathematical Binding Block -->
+          <div class="attestation-seal-panel">
+            <div class="seal-header mono">
+              <span>CRYPTOGRAPHIC ATTESTATION // NON-REPUDIATION PROOF</span>
+              <span class="text-verified font-600">ATTESTATION SEALED</span>
+            </div>
+            <div class="seal-content mono">
+              <div class="seal-hash-display has-detail" data-detail-title="Temporal Binding Proof" data-detail-tag="HMAC-SHA256" data-detail-highlight="Mathematically Certified Precedence" data-detail-text="HMAC-SHA256(0x98f2...a8a2 || 0x3d08...0182, Principal_Key) = 0x9c4e71df88310ba0429fec819034aa1095cb72901a8ef801c. Irrefutably proves mandate existed prior to carrier booking.">
+                HMAC-SHA256(Mandate || Carrier, Key) = <strong class="font-600 text-lead">0x9c4e...801c</strong> <span class="hash-pill-tag" style="margin-left: 8px;">VERIFIED PRE-EXECUTION</span>
+              </div>
+              <div class="takeaway-strip" style="margin-top: 10px; margin-bottom: 0;">
+                <span class="takeaway-tag mono">PROOF CERTIFIED</span>
+                <span>Mandate was sealed <strong class="imp-highlight font-600">151 seconds before</strong> carrier ticket booking. Eligible for <strong class="text-verified font-600">100% statutory restitution</strong>. <span class="has-detail" data-detail-title="Legal Standard" data-detail-tag="SECTION 4" data-detail-highlight="ADRP Statutory Framework" data-detail-text="Transactions executed in contravention of recorded pre-execution human constraints are subject to immediate rescission without cancellation penalty.">[Statutory citation ℹ️]</span></span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 04: ARBITRATION & DISPUTES                      -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-disputes">
+          <div class="pane-title-row">
+            <div>
+              <div class="mono text-xs text-muted">CASE RECORD #DSP-2040-8812</div>
+              <h1 class="pane-headline">Merchant Arbitration</h1>
+              <p class="pane-deck">Statutory recourse submission under Section 4 of the Autonomous Delegation Governance Standard.</p>
+            </div>
+            <span class="metric-chip mono" id="arbitrationStateChip">EVIDENCE PACKAGED</span>
+          </div>
+
+          <div class="arbitration-container">
+            <!-- Progression Stepper -->
+            <div class="archival-stepper mono">
+              <div class="step-cell done">
+                <span class="step-num">01</span>
+                <span class="step-name">Evidence Sealed</span>
+                <span class="step-meta">10:03 IST</span>
+              </div>
+              <div class="step-cell current" id="arbStep2">
+                <span class="step-num">02</span>
+                <span class="step-name">Merchant Transmission</span>
+                <span class="step-meta" id="arbStep2Meta">Awaiting Action</span>
+              </div>
+              <div class="step-cell" id="arbStep3">
+                <span class="step-num">03</span>
+                <span class="step-name">Carrier Review</span>
+                <span class="step-meta" id="arbStep3Meta">Pending</span>
+              </div>
+              <div class="step-cell" id="arbStep4">
+                <span class="step-num">04</span>
+                <span class="step-name">Settlement Complete</span>
+                <span class="step-meta" id="arbStep4Meta">Pending</span>
+              </div>
+            </div>
+
+            <!-- Formal Arbitration Filing Draft -->
+            <div class="arbitration-filing">
+              <!-- High-Level Claim Overview Grid -->
+              <div class="claim-overview-grid">
+                <div class="claim-overview-cell has-detail" data-detail-title="Carrier Respondent" data-detail-tag="INDIGO" data-detail-highlight="Merchant Airline API" data-detail-text="InterGlobe Aviation Ltd. Registered merchant on OpenAgent Travel protocol. Subject to Section 4 automated arbitration.">
+                  <span class="claim-overview-k">RESPONDENT</span>
+                  <span class="claim-overview-v">InterGlobe Aviation (IndiGo)</span>
+                </div>
+                <div class="claim-overview-cell has-detail" data-detail-title="Constraint Variance" data-detail-tag="+180 MIN BREACH" data-detail-highlight="Mandate Contradiction" data-detail-text="Flight 6E-2412 arrives at 21:00 IST. Rule SEC-TRV-102 explicitly prohibited arrivals after 18:00 IST.">
+                  <span class="claim-overview-k">RECORDED BREACH</span>
+                  <span class="claim-overview-v text-danger font-600">Arrival 21:00 vs &lt; 18:00 IST</span>
+                </div>
+                <div class="claim-overview-cell has-detail" data-detail-title="Statutory Remedy" data-detail-tag="SECTION 4" data-detail-highlight="100% Restitution Demanded" data-detail-text="Full rescission of ticket #6E-2412 and return of ₹7,850.00 INR without cancellation fees under ADRP standard.">
+                  <span class="claim-overview-k">STATUTORY REMEDY</span>
+                  <span class="claim-overview-v text-danger font-600">₹7,850.00 INR (Full Refund)</span>
+                </div>
+                <div class="claim-overview-cell has-detail" data-detail-title="Cryptographic Proof" data-detail-tag="HMAC SEAL" data-detail-highlight="Precedence Confirmed" data-detail-text="Binding hash 0x9c4e...801c proves Rule SEC-TRV-102 was sealed 151s before booking receipt was generated.">
+                  <span class="claim-overview-k">TEMPORAL PROOF</span>
+                  <span class="claim-overview-v mono text-verified">0x9c4e...801c (Sealed)</span>
+                </div>
+              </div>
+
+              <!-- Expandable Formal Legal Draft -->
+              <div class="expandable-narrative" id="expandableFiling">
+                <div class="expandable-header" title="Click or hover to reveal formal legal text">
+                  <span><strong>FORMAL STATEMENT OF CLAIM:</strong> ADRP Statutory Arbitration Filing <span class="has-detail" data-detail-title="Arbitration Payload" data-detail-tag="JSON ATTACHED" data-detail-highlight="Signed by Client Key" data-detail-text="Machine-readable ADRP-DSP-8812.JSON transmitted directly to carrier resolution gateway.">[Hover for details ℹ️]</span></span>
+                  <span class="expandable-icon mono text-xs text-muted">▼ Click / hover for full text</span>
+                </div>
+                <div class="expandable-body">
+                  <p>
+                    On 2040-10-21 at 10:02:45 IST, autonomous agent <em>OpenAgent Travel v8.4</em> executed ticket purchase #6E-2412 for flight travel from Bengaluru (BLR) to New Delhi (DEL), scheduled to arrive at 21:00 IST. The claimant's active mandate (Rule SEC-TRV-102, Vault V13), established and cryptographically sealed on 2040-10-21 at 10:00:14 IST, strictly constrained all domestic flight bookings to arrive prior to 18:00 IST.
+                  </p>
+                  <p style="margin-top: 8px;">
+                    Temporal precedence is demonstrated via attached HMAC binding hash <code>0x9c4e71df...</code>. Under Section 4 of the Autonomous AI Delegation Standard, transactions executed in contravention of recorded pre-execution human mandates are subject to immediate rescission without cancellation penalty.
+                  </p>
+                  <p class="mono text-2xs text-muted" style="margin-top: 6px;">
+                    ATTACHMENT: ADRP-DSP-8812.JSON (HMAC CERTIFIED)
+                  </p>
+                </div>
+              </div>
+
+              <div class="filing-actions" style="margin-top: 14px;">
+                <button class="secondary-action-btn" id="btnPreviewFilingJson">Inspect Raw Filing Payload</button>
+                <button class="primary-action-btn" id="btnTransmitArbitration">Transmit Formal Notice to IndiGo API</button>
+              </div>
+
+              <!-- Settlement Result Box (Hidden until action) -->
+              <div class="settlement-declaration hidden" id="settlementBox">
+                <div class="settlement-head mono">
+                  <span>CARRIER ARBITRATION HANDSHAKE // DETERMINATION APPROVED</span>
+                  <span>RESTITUTION CONFIRMED</span>
+                </div>
+                <div class="settlement-body">
+                  <p>
+                    IndiGo Automated Arbitration Server verified cryptographic temporal precedence of Rule SEC-TRV-102. 
+                    Ticket #6E-2412 marked void. Full restitution of <strong>₹7,850.00 INR</strong> initiated to claimant source account.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 05: AGENT ACCESS & TRUST GOVERNANCE             -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-governance">
+          <div class="pane-title-row">
+            <div>
+              <h1 class="pane-headline">Agent Access & Governance</h1>
+              <p class="pane-deck">Permitted scopes, OAuth bearer tokens, and <strong class="imp-highlight font-600">cryptographic lifecycle</strong> for connected agents. <span class="has-detail" data-detail-title="Governance Standard" data-detail-tag="ACCESS CONTROL" data-detail-highlight="Mutual TLS & OAuth" data-detail-text="Connected agents must authenticate using mTLS and signed hardware bearer tokens. Tokens can be revoked instantly via the Principal Profile.">[Hover for info ℹ️]</span></p>
+            </div>
+            <button class="secondary-action-btn" id="btnRegisterNewAgent">+ Register Agent Integration</button>
+          </div>
+
+          <!-- Connected Agents Directory Table -->
+          <div class="ledger-sub-header">
+            <span class="mono text-xs font-500">CONNECTED AUTONOMOUS AGENTS <span class="has-detail" data-detail-title="Agent Registry" data-detail-tag="3 CONNECTED" data-detail-highlight="Live Agent Integrations" data-detail-text="Travel, Retail, and Financial Settler agents registered under local enclave oversight.">[Hover for info ℹ️]</span></span>
+          </div>
+
+          <table class="ledger-table">
+            <thead>
+              <tr>
+                <th style="width: 24%;">AGENT ACTOR</th>
+                <th style="width: 14%;">CATEGORY</th>
+                <th style="width: 16%;">CONNECTION STATUS</th>
+                <th style="width: 18%;">LAST SYNCHRONIZATION</th>
+                <th style="width: 16%;">PROTOCOL</th>
+                <th style="width: 12%; text-align: right;">ACCESS</th>
+              </tr>
+            </thead>
+            <tbody id="agentTableBody">
+              <!-- Rendered via JavaScript -->
+            </tbody>
+          </table>
+
+          <!-- Policy & Storage Governance Sub-Panels -->
+          <div class="governance-grid">
+            <div class="gov-card">
+              <div class="gov-card-title mono">DEFAULT POLICY: UNCOVERED ACTIONS</div>
+              <p class="gov-card-desc">
+                When an autonomous action is ingested for which no prior instruction mandate exists in Vault V13:
+              </p>
+              <div class="policy-radio-group">
+                <label class="policy-option selected has-detail" id="lblPolicyPrompt" data-detail-title="Uncovered Policy: Prompt" data-detail-tag="DEFAULT" data-detail-highlight="Non-Punitive Discovery" data-detail-text="Transactions in unconstrained categories are audited and logged without generating an immediate breach notice. Prompts for a new rule on first occurrence.">
+                  <input type="radio" name="uncoveredPolicy" value="prompt" checked>
+                  <div>
+                    <strong class="font-600 text-lead">Classify as Uncovered & Request Preference</strong>
+                    <div class="text-muted text-xs">Non-punitive state; prompts for future mandate.</div>
+                  </div>
+                </label>
+
+                <label class="policy-option has-detail" id="lblPolicyPause" data-detail-title="Uncovered Policy: Pause" data-detail-tag="HIGH VALUE" data-detail-highlight="Interactive Biometric Intercept" data-detail-text="If an unconstrained transaction exceeds ₹10,000, autonomous execution is halted pending interactive approval on user hardware.">
+                  <input type="radio" name="uncoveredPolicy" value="pause">
+                  <div>
+                    <strong class="font-600 text-lead">Pause High-Consequence Actions (&gt; ₹10,000)</strong>
+                    <div class="text-muted text-xs">Demands interactive human confirmation for transactions over ₹10,000.</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="gov-card">
+              <div class="gov-card-title mono">LOCAL RETENTION & AUDIT PURGE</div>
+              <p class="gov-card-desc">
+                Local cryptographic cache lifecycle for ingested action records and evidence dossiers:
+              </p>
+              <div class="retention-selector mono text-xs">
+                <button class="retention-opt has-detail" data-days="30" data-detail-title="30-Day Retention" data-detail-tag="MINIMAL" data-detail-highlight="Lightweight Storage" data-detail-text="Retains records for 30 calendar days before automatic local cache zeroization.">30 DAYS</button>
+                <button class="retention-opt active has-detail" data-days="60" data-detail-title="60-Day Retention" data-detail-tag="RECOMMENDED" data-detail-highlight="Standard Dispute Window" data-detail-text="Maintains full evidence dossiers across standard statutory 60-day carrier dispute and chargeback windows.">60 DAYS</button>
+                <button class="retention-opt has-detail" data-days="90" data-detail-title="90-Day Retention" data-detail-tag="EXTENDED" data-detail-highlight="Comprehensive Ledger" data-detail-text="Full quarterly audit retention. Recommended for business tax reconciliation.">90 DAYS</button>
+              </div>
+              <div class="gov-action-links">
+                <button class="link-btn mono text-xs has-detail" id="btnExportFullArchive" data-detail-title="Archive Export" data-detail-tag="JSON" data-detail-highlight="ADRP-AUDIT-ARCHIVE-2040" data-detail-text="Exports all 48 action records, 14 mandates, agent tokens, and cryptographic attestation hashes as a single JSON file.">Export Full Audit Archive (JSON)</button>
+                <button class="link-btn text-danger mono text-xs has-detail" id="btnTriggerPurge" data-detail-title="Emergency Purge" data-detail-tag="IRREVERSIBLE" data-detail-highlight="Zeroize Client Cache" data-detail-text="Instantly wipes all local cached action payloads and unsealed dossiers. Third-party merchant systems remain unaffected.">Emergency Local Cache Purge</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 06: HOW TO USE (ONBOARDING & SYSTEM GUIDE)       -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-guide">
+          <div class="pane-title-row">
+            <div>
+              <div class="mono text-xs text-muted">DOCUMENTATION & ONBOARDING // AGENT RECOURSE (2040)</div>
+              <h1 class="pane-headline">How to Use Agent Recourse</h1>
+              <p class="pane-deck">Quick guide for autonomous intent auditing, breach verification, spent analytics, and bilateral dispute recovery.</p>
+            </div>
+            <button class="primary-action-btn" id="btnRestartWalkthrough">Restart Tour</button>
+          </div>
+
+          <!-- User Onboarding Guide Banner -->
+          <div class="onboarding-guide-banner" id="onboardingBanner">
+            <div class="onboarding-banner-main">
+              <div class="onboarding-tag mono text-2xs">FIRST-TIME USER OVERVIEW</div>
+              <h2 class="onboarding-title">Independent Intent Auditing & Arbitration Engine</h2>
+              <p class="onboarding-desc">
+                In 2040, personal AI agents transact autonomously. Agent Recourse <strong class="imp-highlight font-600">passively audits</strong> their debits against your recorded mandates, detects conflicts in real time, and coordinates <strong class="imp-highlight font-600">100% merchant restitution</strong>. <span class="has-detail" data-detail-title="Why Recourse Exists" data-detail-tag="OVERVIEW" data-detail-highlight="Delegation Safety Net" data-detail-text="Delegating everyday bookings only pays off if checking is automated and mathematically irrefutable.">[Hover for context ℹ️]</span>
+              </p>
+              
+              <div class="onboarding-features-row">
+                <div class="onb-feature-pill has-detail" data-detail-title="Conflict Detection" data-detail-tag="INSTANT BREACH" data-detail-highlight="Live Feed Alerts" data-detail-text="When an agent executes an order landing after your cutoff time, a red card is flagged with 1-tap arbitration.">
+                  <span class="onb-dot alert-red"></span>
+                  <span><strong class="text-lead font-600">1. Red Conflict Flags:</strong> Instant breach alerts with 1-tap restitution dossiers.</span>
+                </div>
+                <div class="onb-feature-pill has-detail" data-detail-title="Portfolio Analytics" data-detail-tag="SPENT ANALYSIS" data-detail-highlight="Profile Dashboard" data-detail-text="High-level allocation ring, 24h debit velocity timeline, and category breakdowns with formula tooltips.">
+                  <span class="onb-dot mauve"></span>
+                  <span><strong class="text-lead font-600">2. Spent Analysis in Profile:</strong> Allocation ring, velocity timeline, and category bars.</span>
+                </div>
+                <div class="onb-feature-pill has-detail" data-detail-title="Principal Custody" data-detail-tag="HARDWARE KEYS" data-detail-highlight="Identity & Control" data-detail-text="Tap your name at top-right for attestation keys, spending limits, and the emergency delegation kill-switch.">
+                  <span class="onb-dot green"></span>
+                  <span><strong class="text-lead font-600">3. Principal Controls:</strong> Identity keys, ceilings & emergency suspension.</span>
+                </div>
+              </div>
+            </div>
+            <div class="onboarding-actions">
+              <button class="secondary-action-btn btn-sm mono" id="btnDismissOnboarding">Dismiss Banner</button>
+              <button class="primary-action-btn btn-sm" id="btnGoToOverview">Go to Live Feed →</button>
+            </div>
+          </div>
+
+          <!-- Vertical Guide Content Stack -->
+          <div class="guide-vertical-stack">
+
+            <!-- Card 1: Core Problem & Paradigm -->
+            <div class="gov-card guide-card">
+              <div class="guide-card-icon-header">
+                <div class="guide-icon-badge">§</div>
+                <div>
+                  <h3 class="guide-card-title">1. The Verification Paradox in 2040</h3>
+                  <span class="mono text-2xs text-muted">INDEPENDENT THIRD-PARTY OVERSIGHT</span>
+                </div>
+              </div>
+              <div class="takeaway-strip">
+                <span class="takeaway-tag mono">CORE PRINCIPLE</span>
+                <span>Delegating to AI only works if <strong class="imp-highlight font-600">the checking is automated and neutral</strong> — not performed by the agent itself.</span>
+              </div>
+              <p class="guide-text">
+                Agent Recourse does not block everyday bookings; it <strong class="imp-highlight font-600">passively timestamps your instructions</strong> and automatically compiles irrefutable cryptographic evidence whenever an agent deviates. <span class="has-detail" data-detail-title="Verification Philosophy" data-detail-tag="ZERO FRICTION" data-detail-highlight="Post-Execution Recourse" data-detail-text="Real-time transaction gates create friction and degrade AI autonomy. Passive audit with guaranteed statutory restitution preserves speed and safety.">[Hover for deep dive ℹ️]</span>
+              </p>
+            </div>
+
+            <!-- Card 2: Interactive Directory Walkthrough -->
+            <div class="gov-card guide-card">
+              <div class="guide-card-icon-header">
+                <div class="guide-icon-badge">01</div>
+                <div>
+                  <h3 class="guide-card-title">2. Navigating the Audit Ledger</h3>
+                  <span class="mono text-2xs text-muted">SIX FUNCTIONAL CAPABILITIES</span>
+                </div>
+              </div>
+              <div class="guide-steps-grid">
+                <div class="guide-step-item has-detail" data-detail-title="Live Feed & Spent Analysis" data-detail-tag="TAB 01" data-detail-highlight="Live Stream Oversight" data-detail-text="Audits all 48 actions today, flags variance contradictions, and links directly to evidence dossiers.">
+                  <span class="step-num mono">01</span>
+                  <div class="step-content">
+                    <strong class="step-name">Ingestion Feed</strong>
+                    <p class="step-desc">Live stream of agent actions with <strong class="text-danger font-600">red breach alerts</strong> and 48 audited execution logs.</p>
+                  </div>
+                </div>
+                <div class="guide-step-item has-detail" data-detail-title="Instruction Mandates" data-detail-tag="TAB 02" data-detail-highlight="Vault V13 Specification" data-detail-text="14 active human constraints timestamped and sealed in local client hardware enclave.">
+                  <span class="step-num mono">02</span>
+                  <div class="step-content">
+                    <strong class="step-name">Instruction Mandates</strong>
+                    <p class="step-desc">Your recorded rules (arrival times, spending caps). Each version is <strong class="text-lead font-600">cryptographically sealed</strong>.</p>
+                  </div>
+                </div>
+                <div class="guide-step-item has-detail" data-detail-title="Forensic Evidence" data-detail-tag="TAB 03" data-detail-highlight="Temporal Precedence" data-detail-text="Bilateral side-by-side comparison proving mandate was recorded 151s before carrier booking receipt.">
+                  <span class="step-num mono">03</span>
+                  <div class="step-content">
+                    <strong class="step-name">Evidence Dossier</strong>
+                    <p class="step-desc">Bilateral proof showing mandate was sealed <strong class="text-lead font-600">before</strong> agent booking receipt.</p>
+                  </div>
+                </div>
+                <div class="guide-step-item has-detail" data-detail-title="Merchant Arbitration" data-detail-tag="TAB 04" data-detail-highlight="Automated Restitution" data-detail-text="Transmits formal notice to IndiGo API for 100% refund of ₹7,850.00 INR without cancellation fees.">
+                  <span class="step-num mono">04</span>
+                  <div class="step-content">
+                    <strong class="step-name">Arbitration Cases</strong>
+                    <p class="step-desc">Submit 1-tap statutory dispute filings for <strong class="text-verified font-600">100% financial restitution</strong>.</p>
+                  </div>
+                </div>
+                <div class="guide-step-item has-detail" data-detail-title="Agent Governance" data-detail-tag="TAB 05" data-detail-highlight="Trust & Access Control" data-detail-text="Manage API bearer tokens, register integrations, and set policies for novel uncovered transactions.">
+                  <span class="step-num mono">05</span>
+                  <div class="step-content">
+                    <strong class="step-name">Agent Access & Trust</strong>
+                    <p class="step-desc">Manage API bearer tokens, register agents, and define <strong class="text-lead font-600">uncovered action policies</strong>.</p>
+                  </div>
+                </div>
+                <div class="guide-step-item has-detail" data-detail-title="Principal Profile" data-detail-tag="TOP RIGHT" data-detail-highlight="Identity & Analytics" data-detail-text="Access hardware public key fingerprint, export identity cert (.json), spending graphs, and kill-switch.">
+                  <span class="step-num mono">★</span>
+                  <div class="step-content">
+                    <strong class="step-name">Principal Profile</strong>
+                    <p class="step-desc">Tap your name anytime for <strong class="text-lead font-600">Spent Analysis graphs</strong>, key certs, and the emergency kill-switch.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 3: Understanding Conflict Detection & Spending Analysis -->
+            <div class="gov-card guide-card">
+              <div class="guide-card-icon-header">
+                <div class="guide-icon-badge alert">!</div>
+                <div>
+                  <h3 class="guide-card-title">3. Interpreting Conflicts & Spending Metrics</h3>
+                  <span class="mono text-2xs text-muted">DATA INTEGRITY & RECONCILIATION</span>
+                </div>
+              </div>
+              <div class="guide-text-stack">
+                <p>
+                  <strong class="text-danger font-600">Red Highlighted Conflicts:</strong> When an agent violates a sealed rule, the action flags at the top of the feed. Click <em class="text-lead font-600">"Inspect Evidence Dossier →"</em> to verify the mathematical HMAC proof.
+                </p>
+                <p>
+                  <strong class="text-mauve font-600">Spent Analysis in Profile:</strong> Visualizes domain allocation ring and 24h debit velocity. Hover any bar or timeline point to inspect exact rupees and share formulas.
+                </p>
+                <div class="formula-box mono text-xs has-detail" data-detail-title="Allocation Formula" data-detail-tag="MATH" data-detail-highlight="Percentage Calculation" data-detail-text="Audited Domain Outflow divided by Total Portfolio Spend (₹16,350.00) multiplied by 100.">
+                  Percentage of Total Spend = (<strong class="text-lead">Domain Amount</strong> / <strong class="text-lead">₹16,350.00 Total</strong>) × 100
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 4: Emergency Kill-Switch & Privacy -->
+            <div class="gov-card guide-card">
+              <div class="guide-card-icon-header">
+                <div class="guide-icon-badge danger">✕</div>
+                <div>
+                  <h3 class="guide-card-title">4. Emergency Kill-Switch & Privacy Sovereignty</h3>
+                  <span class="mono text-2xs text-muted">SECURITY & CUSTODY GUARANTEES</span>
+                </div>
+              </div>
+              <p class="guide-text">
+                If an autonomous agent acts erratically, access your Profile and activate <strong class="text-danger font-600">Trigger Emergency Delegation Suspension</strong>. This instantly revokes all OAuth bearer tokens across all integrated platforms. <span class="has-detail" data-detail-title="Privacy Sovereignty" data-detail-tag="ZERO TRACKING" data-detail-highlight="Local Client Encryption" data-detail-text="All mandates, keys, and dispute records remain encrypted on your device. Zero telemetry is exported to commercial ad networks.">[Hover for security specs ℹ️]</span>
+              </p>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 07: STATUTORY TERMS OF DELEGATION               -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-terms">
+          <div class="pane-title-row">
+            <div>
+              <div class="mono text-xs text-muted">STATUTORY DOCUMENT // REF: ADRP-STD-2040</div>
+              <h1 class="pane-headline">Terms of Autonomous Delegation</h1>
+              <p class="pane-deck">Governing charter: <strong class="imp-highlight">Deterministic Audit</strong> · <strong class="imp-highlight verified">Non-Repudiation</strong> · <strong class="imp-highlight">Zero Custody</strong></p>
+            </div>
+          </div>
+
+          <!-- Quick Takeaway Summary Strip -->
+          <div class="takeaway-strip">
+            <span class="takeaway-title">Core Charter:</span>
+            <div class="takeaway-tags">
+              <span class="takeaway-pill has-detail" data-detail-title="Scope of Audit" data-detail-tag="SECTION 1" data-detail-highlight="Deterministic Comparison" data-detail-text="Auditing occurs strictly by mathematical comparison between client-sealed rules and third-party signed booking payloads."><strong>Deterministic Audit:</strong> Vault vs API Payloads</span>
+              <span class="takeaway-pill has-detail" data-detail-title="Evidentiary Standard" data-detail-tag="SECTION 2" data-detail-highlight="Cryptographic Non-Repudiation" data-detail-text="Pre-recorded HMAC and SHA-256 hashes prove mandates existed before agent transactions took place."><strong>Cryptographic Proof:</strong> Pre-Execution Hashing</span>
+              <span class="takeaway-pill has-detail" data-detail-title="Custody Standard" data-detail-tag="SECTION 4" data-detail-highlight="Zero Financial Custody" data-detail-text="Agent Recourse never holds user funds or banking credentials; it generates admissible dossiers for dispute settlement."><strong>Zero Custody:</strong> Non-Custodial Arbitrations</span>
+            </div>
+          </div>
+
+          <div class="statutory-paper">
+            <h3 class="statutory-h3 has-detail" data-detail-title="Section 1 Full Legal Text" data-detail-tag="STD-2040 §1" data-detail-highlight="Mechanical Determinism" data-detail-text="Agent Recourse operates strictly as an independent record-keeping, intent auditing, and dispute coordination mechanism. Deterministic comparison evaluates pre-recorded human constraints against authenticated execution records.">1. Scope of Independent Verification <span class="detail-badge">hover for clause</span></h3>
+            <p>
+              Operates as an independent record-keeper. Performs <strong class="text-lead font-600">deterministic mathematical comparison</strong> between pre-recorded human mandates and merchant execution payloads.
+            </p>
+
+            <h3 class="statutory-h3 has-detail" data-detail-title="Section 2 Full Legal Text" data-detail-tag="STD-2040 §2" data-detail-highlight="Cryptographic Precedence" data-detail-text="Client-side SHA-256 and HMAC indexing guarantees that user constraints existed in immutable form prior to agent transaction timestamps. Provides non-repudiation post-capture.">2. Cryptographic Evidentiary Standard <span class="detail-badge">hover for clause</span></h3>
+            <p>
+              All vault rules are bound by <strong class="text-verified font-600">client-side SHA-256 hashing</strong> prior to execution. Guarantees temporal non-repudiation: constraints cannot be altered retroactively after an agent breach occurs.
+            </p>
+
+            <h3 class="statutory-h3 has-detail" data-detail-title="Section 3 Full Legal Text" data-detail-tag="STD-2040 §3" data-detail-highlight="3-State Classification" data-detail-text="Actions partition into Verified Compliant (satisfies rule), Instruction Conflict (explicit violation of pre-sealed mandate), and Uncovered Intent (no prior constraint defined).">3. Classification of Disclosed Events <span class="detail-badge">hover for clause</span></h3>
+            <p>
+              Autonomous actions partition into 3 definitive states: <strong class="text-verified font-600">Verified Compliant</strong> (adheres to mandate), <strong class="text-danger font-600">Instruction Conflict</strong> (direct breach of sealed rule), or <strong class="text-mauve font-600">Uncovered Intent</strong> (no prior rule established).
+            </p>
+
+            <h3 class="statutory-h3 has-detail" data-detail-title="Section 4 Full Legal Text" data-detail-tag="STD-2040 §4" data-detail-highlight="Non-Custodial Architecture" data-detail-text="Agent Recourse does not execute monetary transactions or hold funds. Arbitration dossiers are legal filings submitted directly to merchant dispute authorities and consumer forums.">4. Limitation of Operational Liability <span class="detail-badge">hover for clause</span></h3>
+            <p>
+              Platform holds <strong class="text-lead font-600">zero custody of user funds</strong> and executes no banking transfers directly. Generated evidence packets are certified legal dossiers for bilateral merchant arbitration.
+            </p>
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 07: STATUTORY DATA SOVEREIGNTY POLICY           -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-privacy">
+          <div class="pane-title-row">
+            <div>
+              <div class="mono text-xs text-muted">STATUTORY DOCUMENT // REF: ADRP-PRIV-2040</div>
+              <h1 class="pane-headline">Data Sovereignty & Encryption Policy</h1>
+              <p class="pane-deck">Guarantees: <strong class="imp-highlight verified">Local Keys Only</strong> · <strong class="imp-highlight">Data Minimization</strong> · <strong class="imp-highlight">No Commercial Tracking</strong></p>
+            </div>
+          </div>
+
+          <!-- Quick Takeaway Summary Strip -->
+          <div class="takeaway-strip">
+            <span class="takeaway-title">Privacy Pillars:</span>
+            <div class="takeaway-tags">
+              <span class="takeaway-pill has-detail" data-detail-title="Encryption Standard" data-detail-tag="PRIVACY §1" data-detail-highlight="Local Device Custody" data-detail-text="Private attestation keys never leave local hardware storage (TPM / WebCrypto). Servers cannot decrypt user mandates."><strong>Zero Knowledge:</strong> Device-Rooted Keys</span>
+              <span class="takeaway-pill has-detail" data-detail-title="Minimization Standard" data-detail-tag="PRIVACY §2" data-detail-highlight="Forensic Stripping" data-detail-text="Extraneous tracking parameters and behavioral profiling data are discarded prior to ledger commitment."><strong>Minimization:</strong> Transaction Fields Only</span>
+              <span class="takeaway-pill has-detail" data-detail-title="Independence Charter" data-detail-tag="PRIVACY §3" data-detail-highlight="No Third-Party Monetization" data-detail-text="Zero advertising networks, tracking pixels, or merchant affiliate referral kickbacks."><strong>Zero Tracking:</strong> Independent Charter</span>
+            </div>
+          </div>
+
+          <div class="statutory-paper">
+            <h3 class="statutory-h3 has-detail" data-detail-title="Policy Section 1" data-detail-tag="PRIV §1" data-detail-highlight="Client Isolation" data-detail-text="All human mandates, spending caps, and dispute filings are encrypted locally using hardware TPM-2040 or browser WebCrypto. Plaintext rules never touch cloud servers.">1. Client-Side Encryption Protocol <span class="detail-badge">hover for clause</span></h3>
+            <p>
+              All human mandates and dispute narratives are encrypted locally using <strong class="text-verified font-600">hardware TPM-2040 / WebCrypto keys</strong>. Central servers have zero access to plaintext rules.
+            </p>
+
+            <h3 class="statutory-h3 has-detail" data-detail-title="Policy Section 2" data-detail-tag="PRIV §2" data-detail-highlight="Metadata Stripping" data-detail-text="Agent payloads are stripped of behavioral cookies and location fingerprints. Only core parameters (timestamp, INR amount, flight code, arrival time) are committed.">2. Data Minimization & Ingestion Integrity <span class="detail-badge">hover for clause</span></h3>
+            <p>
+              Connected agent payloads are stripped of behavioral cookies. Only <strong class="text-lead font-600">core transaction parameters</strong> (timestamps, INR amounts, schedule criteria) are preserved for forensic proof.
+            </p>
+
+            <h3 class="statutory-h3 has-detail" data-detail-title="Policy Section 3" data-detail-tag="PRIV §3" data-detail-highlight="Non-Aligned Neutrality" data-detail-text="Operates strictly on an independent basis. No affiliate kickbacks, merchant commissions, or sponsored preference. Determination results are pure deterministic logic.">3. Independent Non-Commercial Governance <span class="detail-badge">hover for clause</span></h3>
+            <p>
+              Operates under a non-commercial charter. Accepts <strong class="text-lead font-600">zero affiliate commissions or merchant kickbacks</strong>. Determinations remain 100% deterministic and neutral.
+            </p>
+          </div>
+        </section>
+
+      </main>
+    </div>
+
+    <!-- Slide-Out Action Detail Drawer -->
+    <div class="drawer-backdrop hidden" id="actionDrawer">
+      <div class="drawer-panel">
+        <div class="drawer-header">
+          <div>
+            <span class="mono text-xs text-muted" id="drawerRef">REF: #ACT-9042</span>
+            <h3 class="drawer-title" id="drawerTitle">Execution Record Detail</h3>
+          </div>
+          <button class="drawer-close-btn" id="btnCloseDrawer">&times;</button>
+        </div>
+        <div class="drawer-content" id="drawerBody">
+          <!-- Dynamically populated -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Modals -->
+    <!-- Append Mandate Modal -->
+    <div class="modal-backdrop hidden" id="appendModal">
+      <div class="institutional-modal">
+        <div class="modal-header">
+          <h3 class="modal-title">Record Pre-Execution Mandate</h3>
+          <button class="drawer-close-btn" id="btnCloseAppendModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div class="field-wrap">
+            <label class="field-label mono">MANDATE TEXT</label>
+            <input type="text" id="inputRuleText" class="archival-input" placeholder="e.g., Never book domestic flights landing after 18:00 IST.">
+          </div>
+          <div class="field-wrap">
+            <label class="field-label mono">DOMAIN CATEGORY</label>
+            <select id="selectRuleDomain" class="archival-input">
+              <option value="Travel">Travel & Mobility</option>
+              <option value="Finance">Finance & Transfers</option>
+              <option value="Dining">Food & Sustenance</option>
+              <option value="Subscriptions">Software & Subscriptions</option>
+              <option value="Hardware">Hardware & Peripherals</option>
+            </select>
+          </div>
+          <div class="field-wrap">
+            <label class="field-label mono">ENFORCEMENT SEVERITY</label>
+            <select id="selectRuleSeverity" class="archival-input">
+              <option value="Hard Limit">Hard Limit (Mandatory Breach Flag)</option>
+              <option value="Soft Constraint">Soft Constraint (Advisory Log)</option>
+            </select>
+          </div>
+          <div class="modal-clause mono text-xs">
+            Committing this mandate will increment the Instruction Vault to Specification V14 and generate an updated root hash.
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="secondary-action-btn" id="btnCancelAppend">Cancel</button>
+          <button class="primary-action-btn" id="btnConfirmAppend">Commit Mandate to Vault</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Raw Payload Modal -->
+    <div class="modal-backdrop hidden" id="payloadModal">
+      <div class="institutional-modal modal-wide">
+        <div class="modal-header">
+          <div class="mono text-xs text-muted">MACHINE SPECIFICATION // ADRP-2040</div>
+          <h3 class="modal-title">Signed Machine Payload</h3>
+          <button class="drawer-close-btn" id="btnClosePayloadModal">&times;</button>
+        </div>
+        <div class="modal-body">
+          <pre class="raw-code-view mono text-xs" id="rawJsonArea"></pre>
+        </div>
+        <div class="modal-footer">
+          <button class="secondary-action-btn" id="btnCopyRawJson">Copy Payload</button>
+          <button class="primary-action-btn" id="btnDownloadRawJson">Download .json</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Notification Ribbon -->
+    <div class="notification-ribbon" id="notifRibbon"></div>
+
+    <!-- Global High-Context Interactive Detail Tooltip (Hover Inspector) -->
+    <div class="global-detail-tooltip hidden" id="globalDetailTooltip" role="tooltip" aria-hidden="true">
+      <div class="g-tooltip-header">
+        <span class="g-tooltip-title" id="ttTitle">Detail Inspector</span>
+        <span class="g-tooltip-tag mono" id="ttTag">VERIFIED</span>
+      </div>
+      <div class="g-tooltip-highlight" id="ttHighlight">Key Highlight</div>
+      <div class="g-tooltip-body" id="ttBody">Explanation and context...</div>
+      <div class="g-tooltip-meta mono" id="ttMeta">REF: ENCLAVE-ROOT // LOCAL</div>
+    </div>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>agent recourse — mobile app (2040)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- Mobile Device Shell Wrapper for Desktop Viewers -->
+  <div class="mobile-viewport-shell">
+    <div class="mobile-device">
+      
+      <!-- iOS / Modern Mobile Status Bar -->
+      <div class="status-bar">
+        <span class="status-time">9:41</span>
+        <div class="status-icons">
+          <svg width="14" height="10" viewBox="0 0 16 12" fill="currentColor">
+            <path d="M1 9h2V3H1v6zm4 2h2V1H5v10zm4-4h2V5H9v4zm4 4h2V0h-2v11z"/>
+          </svg>
+          <svg width="12" height="10" viewBox="0 0 16 12" fill="currentColor">
+            <path d="M8 2.5C4.9 2.5 2.2 3.8.3 5.9L8 14.5l7.7-8.6C13.8 3.8 11.1 2.5 8 2.5z"/>
+          </svg>
+          <div class="battery-icon">
+            <div class="battery-level"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- App Header -->
+      <header class="mobile-header">
+        <div class="header-brand">
+          <div class="brand-shield">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="M9 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <span class="brand-title">agent recourse</span>
+        </div>
+        <div class="header-right">
+          <span class="header-pill mono" id="topVaultPill">V13</span>
+          <button class="avatar-btn" id="btnTopAvatar" title="Open Profile & Security">H</button>
+        </div>
+      </header>
+
+      <!-- Main Scrollable Content Area -->
+      <main class="mobile-content">
+
+        <!-- ========================================== -->
+        <!-- SCREEN 1: OVERVIEW                         -->
+        <!-- ========================================== -->
+        <section class="screen-pane active" id="screen-overview">
+          <div class="welcome-box">
+            <h1 class="welcome-title">Good afternoon</h1>
+            <p class="welcome-sub">Your agents are acting. We'll flag conflicts with your instructions.</p>
+          </div>
+
+          <!-- 3 Compact Metrics Cards -->
+          <div class="metrics-row">
+            <div class="metric-box">
+              <span class="metric-num" id="overviewRulesCount">14</span>
+              <span class="metric-lbl">Active rules</span>
+            </div>
+            <div class="metric-box">
+              <span class="metric-num">48</span>
+              <span class="metric-lbl">Audited</span>
+            </div>
+            <div class="metric-box critical-metric">
+              <span class="metric-num text-critical" id="overviewOpenCases">1</span>
+              <span class="metric-lbl">Open case</span>
+            </div>
+          </div>
+
+          <!-- Dominant Instruction Conflict Card -->
+          <div class="m-card conflict-card-mobile" id="mPrimaryConflictCard">
+            <div class="card-tag-row">
+              <span class="pill-conflict">
+                <span class="dot-critical"></span> Conflict detected
+              </span>
+              <span class="mono text-xs text-muted">#ACT-9042</span>
+            </div>
+
+            <div class="conflict-m-title">
+              <h3>Flight booking · Domestic travel</h3>
+              <span class="mono font-500">₹7,850.00</span>
+            </div>
+
+            <div class="diff-m-box">
+              <div class="diff-m-item">
+                <span class="diff-m-k">Rule (V13):</span>
+                <span class="diff-m-v">Arrive before <strong>6:00 PM</strong></span>
+              </div>
+              <div class="diff-arrow">↓</div>
+              <div class="diff-m-item">
+                <span class="diff-m-k">Actual booking:</span>
+                <span class="diff-m-v text-critical">Arrival at <strong>9:00 PM</strong> (6E-2412)</span>
+              </div>
+            </div>
+
+            <div class="card-m-actions">
+              <button class="btn btn-secondary btn-sm" id="btnMReviewDismiss">Dismiss</button>
+              <button class="btn btn-primary btn-sm flex-1" id="btnMReviewEvidence">Review evidence →</button>
+            </div>
+          </div>
+
+          <!-- Recent Activity Feed -->
+          <div class="section-m-header">
+            <h3 class="section-m-title">Recent agent activity</h3>
+            <button class="link-btn" id="btnMSeeAllActivity">View all (48) →</button>
+          </div>
+
+          <div class="m-activity-list" id="mOverviewActivityList">
+            <!-- Rendered dynamically -->
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 2: INSTRUCTIONS VAULT               -->
+        <!-- ========================================== -->
+        <section class="screen-pane" id="screen-instructions">
+          <div class="screen-title-bar">
+            <div>
+              <h2 class="screen-title">Instruction Vault</h2>
+              <p class="screen-subtitle">Active boundaries enforced across your personal AI agents.</p>
+            </div>
+            <button class="btn btn-primary btn-sm" id="btnMOpenAddRule">+ Add</button>
+          </div>
+
+          <div class="vault-m-info">
+            <span class="mono">VAULT V13</span>
+            <span class="meta-dot">·</span>
+            <span>Client-side encrypted</span>
+            <span class="meta-dot">·</span>
+            <span class="mono text-xs">sha256: 8f3c4e...</span>
+          </div>
+
+          <div class="m-rules-list" id="mRulesContainer">
+            <!-- Injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 3: ACTIVITY FEED                    -->
+        <!-- ========================================== -->
+        <section class="screen-pane" id="screen-activity">
+          <div class="screen-title-bar">
+            <div>
+              <h2 class="screen-title">Activity Feed</h2>
+              <p class="screen-subtitle">Audited background micro-transactions and autonomous tasks.</p>
+            </div>
+          </div>
+
+          <!-- Filter Pills Carousel -->
+          <div class="m-filter-scroll" id="mActivityFilters">
+            <button class="m-pill active" data-filter="all">All (48)</button>
+            <button class="m-pill" data-filter="mismatch">Conflicts (1)</button>
+            <button class="m-pill" data-filter="uncovered">Uncovered (1)</button>
+            <button class="m-pill" data-filter="verified">Verified (46)</button>
+          </div>
+
+          <div class="m-activity-list" id="mFullActivityList">
+            <!-- Injected via JavaScript -->
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 4: EVIDENCE (THE SIGNATURE SCREEN)  -->
+        <!-- ========================================== -->
+        <section class="screen-pane" id="screen-evidence">
+          <div class="evidence-m-header">
+            <div class="mono text-xs text-muted">CASE #DSP-2040-8812</div>
+            <h2 class="screen-title">Flight booking conflict</h2>
+            <span class="status-badge status-conflict" style="align-self: flex-start; margin-top: 4px;">
+              Conflict verified
+            </span>
+          </div>
+
+          <!-- Side-by-Side Comparison Panels -->
+          <div class="m-card" style="margin-top: 12px;">
+            <div class="card-m-sec-title">Instruction vs. observed action</div>
+            
+            <div class="compare-m-block">
+              <span class="compare-tag">MANDATE IN FORCE (V13)</span>
+              <div class="compare-val">
+                "Arrive before <strong>6:00 PM</strong> (18:00 IST)"
+              </div>
+              <span class="mono text-xs text-muted">Rule R-102 · Sealed at 10:00:14 AM</span>
+            </div>
+
+            <div class="compare-m-block observed-block">
+              <span class="compare-tag text-critical">OBSERVED AGENT ACTION</span>
+              <div class="compare-val">
+                Flight 6E-2412 arrives at <strong class="text-critical">9:00 PM</strong> (21:00 IST)
+              </div>
+              <span class="mono text-xs text-muted">OpenAgent · Executed at 10:02:45 AM</span>
+            </div>
+
+            <div class="m-delta-banner">
+              <strong>3-hour conflict.</strong> Scheduled arrival exceeds recorded limit by 180 minutes.
+            </div>
+          </div>
+
+          <!-- Vertical Timeline -->
+          <div class="m-card">
+            <div class="card-m-sec-title">Audit timeline</div>
+            <div class="m-timeline">
+              <div class="m-timeline-point">
+                <div class="m-tl-dot"></div>
+                <div class="m-tl-info">
+                  <span class="mono text-xs text-muted">10:00:14 AM</span>
+                  <div class="m-tl-text">Instruction V13 sealed in local vault</div>
+                </div>
+              </div>
+              <div class="m-timeline-point">
+                <div class="m-tl-dot"></div>
+                <div class="m-tl-info">
+                  <span class="mono text-xs text-muted">10:02:45 AM (+2m 31s)</span>
+                  <div class="m-tl-text">Booking payload received from IndiGo API</div>
+                </div>
+              </div>
+              <div class="m-timeline-point critical">
+                <div class="m-tl-dot dot-critical"></div>
+                <div class="m-tl-info">
+                  <span class="mono text-xs text-critical">10:02:46 AM</span>
+                  <div class="m-tl-text font-500 text-critical">Conflict flagged automatically</div>
+                </div>
+              </div>
+              <div class="m-timeline-point">
+                <div class="m-tl-dot"></div>
+                <div class="m-tl-info">
+                  <span class="mono text-xs text-muted">10:03:00 AM</span>
+                  <div class="m-tl-text">HMAC cryptographic binding sealed</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Record Integrity -->
+          <div class="m-card">
+            <div class="card-m-sec-title">Record integrity</div>
+            <div class="m-spec-row">
+              <span class="spec-k">Source:</span>
+              <span class="spec-v">OpenAgent Travel v8.4</span>
+            </div>
+            <div class="m-spec-row">
+              <span class="spec-k">Binding Hash:</span>
+              <span class="spec-v mono text-xs" id="mShortHash">0x9c4e...ba04</span>
+            </div>
+            <div class="text-xs text-muted" style="margin-top: 8px; line-height: 1.4;">
+              Hashing proves records were not altered after capture. It does not independently guarantee initial source truth.
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="m-sticky-actions">
+            <button class="btn btn-secondary flex-1" id="btnMDownloadDossier">Export JSON</button>
+            <button class="btn btn-primary flex-1" id="btnMProceedToDispute">Dispute →</button>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 5: DISPUTES MANAGER                 -->
+        <!-- ========================================== -->
+        <section class="screen-pane" id="screen-disputes">
+          <div class="screen-title-bar">
+            <div>
+              <div class="mono text-xs text-muted">CASE #DSP-2040-8812</div>
+              <h2 class="screen-title">IndiGo Airlines</h2>
+              <p class="screen-subtitle">Flight 6E-2412 Autonomous Overreach · ₹7,850.00</p>
+            </div>
+          </div>
+
+          <!-- Stepper -->
+          <div class="m-card">
+            <div class="card-m-sec-title">Dispute progression</div>
+            <div class="m-stepper">
+              <div class="m-step done">
+                <div class="m-step-circle">✓</div>
+                <span class="m-step-lbl">1. Sealed</span>
+              </div>
+              <div class="m-step-line" id="mLine1"></div>
+              <div class="m-step current" id="mStep2">
+                <div class="m-step-circle" id="mStep2Circle">2</div>
+                <span class="m-step-lbl">2. Submit</span>
+              </div>
+              <div class="m-step-line" id="mLine2"></div>
+              <div class="m-step" id="mStep3">
+                <div class="m-step-circle" id="mStep3Circle">3</div>
+                <span class="m-step-lbl">3. Review</span>
+              </div>
+              <div class="m-step-line" id="mLine3"></div>
+              <div class="m-step" id="mStep4">
+                <div class="m-step-circle" id="mStep4Circle">4</div>
+                <span class="m-step-lbl">4. Refund</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Prefilled Complaint -->
+          <div class="m-card">
+            <div class="card-m-sec-title">Prefilled claim notice</div>
+            <div class="m-complaint-box">
+              <p><strong>To:</strong> IndiGo Airlines Dispute Desk</p>
+              <p><strong>Ref:</strong> Booking #ACT-9042 contradicts Customer Pre-Execution Mandate (Rule R-102, Vault V13). Attached dossier proves timestamp precedence. Requesting cancellation & full refund of ₹7,850.00.</p>
+              <div class="mono text-xs text-accent" style="margin-top: 6px;">
+                📎 Attached: Dossier-DSP-2040-8812.json
+              </div>
+            </div>
+          </div>
+
+          <!-- Resolution Banner (Hidden initially) -->
+          <div class="m-card res-card hidden" id="mResolutionResult">
+            <div class="res-title-row">
+              <span class="status-badge status-verified">Submitted · Demo only</span>
+            </div>
+            <p class="text-xs" style="margin-top: 6px;">
+              IndiGo Autonomous API validated binding hash. Full refund of <strong>₹7,850.00</strong> approved.
+            </p>
+          </div>
+
+          <!-- 1-Tap Dispute Button -->
+          <div style="margin-top: 14px;">
+            <button class="btn btn-primary w-100" id="btnMInitiateDispute">
+              ⚡ Submit 1-Tap Dispute
+            </button>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- SCREEN 6: PROFILE & SECURITY CENTER        -->
+        <!-- ========================================== -->
+        <section class="screen-pane" id="screen-security">
+          <div class="screen-title-bar">
+            <div>
+              <h2 class="screen-title">Profile & Security</h2>
+              <p class="screen-subtitle">Identity, connected agents, governance, and data controls.</p>
+            </div>
+          </div>
+
+          <!-- Identity Card -->
+          <div class="m-card">
+            <div class="m-id-header">
+              <div class="m-avatar">H</div>
+              <div class="m-id-meta">
+                <div class="m-id-name">Harshith</div>
+                <span class="mono text-xs text-muted">ID: USR-DEMO-2040</span>
+                <span class="status-badge status-verified text-xs">Verified · Demo</span>
+              </div>
+            </div>
+            <div class="m-key-row">
+              <span class="mono text-xs">Key: 8f9a-2b3c-1a92</span>
+              <button class="btn btn-secondary btn-sm" id="btnMCopyKey">Copy</button>
+            </div>
+          </div>
+
+          <!-- Connected Agents Directory (Dominant Section) -->
+          <div class="m-card">
+            <div class="card-m-sec-title flex-between">
+              <span>Connected agents (3)</span>
+              <button class="btn-link text-xs" id="btnMAddAgentModal">+ Connect</button>
+            </div>
+            <div class="m-agents-list" id="mAgentsList">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- Instruction Vault & Governance -->
+          <div class="m-card">
+            <div class="card-m-sec-title">Rule governance</div>
+            <div class="v-m-stats">
+              <div><span class="text-xs text-muted">Active:</span> <strong>14 rules</strong></div>
+              <div><span class="text-xs text-muted">Version:</span> <strong class="mono">V13</strong></div>
+            </div>
+
+            <div style="margin-top: 10px;">
+              <span class="text-xs text-secondary font-500">Uncovered actions handling:</span>
+              <div class="strategy-list" style="margin-top: 6px;">
+                <label class="m-radio-item selected" id="mOptPrompt">
+                  <input type="radio" name="mUncoveredOpt" value="prompt" checked>
+                  <div>
+                    <strong>Mark as Uncovered & Prompt</strong>
+                    <div class="text-xs text-muted">Invite rule definition (Recommended)</div>
+                  </div>
+                </label>
+                <label class="m-radio-item" id="mOptPause">
+                  <input type="radio" name="mUncoveredOpt" value="pause">
+                  <div>
+                    <strong>Pause & Confirm High Risk</strong>
+                    <div class="text-xs text-muted">Prompt user before execution</div>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="m-actions-stack" style="margin-top: 12px;">
+              <button class="btn btn-secondary btn-sm" id="btnMExportVault">Export vault JSON</button>
+            </div>
+          </div>
+
+          <!-- Privacy & Data Controls -->
+          <div class="m-card">
+            <div class="card-m-sec-title">Privacy & storage</div>
+            <div class="text-xs text-secondary" style="margin-bottom: 8px;">
+              <strong>Client-side encryption · Demo configuration</strong>
+            </div>
+
+            <span class="text-xs text-muted">Local retention period:</span>
+            <div class="retention-group" id="mRetentionGroup" style="margin-top: 4px;">
+              <button class="retention-btn" data-days="30">30d</button>
+              <button class="retention-btn active" data-days="60">60d</button>
+              <button class="retention-btn" data-days="90">90d</button>
+            </div>
+
+            <div class="m-actions-stack" style="margin-top: 12px;">
+              <button class="btn btn-secondary btn-sm" id="btnMExportAllData">Export all data</button>
+              <button class="btn btn-secondary btn-sm text-critical" id="btnMPurgeData">Emergency local purge</button>
+            </div>
+          </div>
+
+          <!-- Independence Statement -->
+          <div class="m-card indep-card-m">
+            <div class="indep-title-m">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <strong>Independent by design</strong>
+            </div>
+            <p class="text-xs text-muted" style="margin-top: 4px; line-height: 1.4;">
+              Audits agent actions independently of the vendor or marketplace. Not influenced by sponsored placement.
+            </p>
+          </div>
+        </section>
+
+      </main>
+
+      <!-- ========================================== -->
+      <!-- BOTTOM TAB NAVIGATION (Standard Mobile App)-->
+      <!-- ========================================== -->
+      <nav class="mobile-nav">
+        <button class="m-nav-tab active" data-screen="screen-overview">
+          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          <span class="m-nav-lbl">Overview</span>
+        </button>
+
+        <button class="m-nav-tab" data-screen="screen-instructions">
+          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+          </svg>
+          <span class="m-nav-lbl">Vault</span>
+        </button>
+
+        <button class="m-nav-tab" data-screen="screen-activity">
+          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <span class="m-nav-lbl">Activity</span>
+        </button>
+
+        <button class="m-nav-tab" data-screen="screen-evidence">
+          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+          </svg>
+          <span class="m-nav-lbl">Evidence</span>
+        </button>
+
+        <button class="m-nav-tab" data-screen="screen-disputes">
+          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 3v18"/>
+            <path d="M3 7h18"/>
+            <path d="M6 17h12"/>
+          </svg>
+          <span class="m-nav-lbl">Disputes</span>
+        </button>
+
+        <button class="m-nav-tab" data-screen="screen-security">
+          <svg class="m-nav-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          <span class="m-nav-lbl">Security</span>
+        </button>
+      </nav>
+
+      <!-- Bottom Indicator Home Bar -->
+      <div class="home-indicator-bar">
+        <div class="home-bar"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- MOBILE BOTTOM SHEET MODAL (Action Inspector)-->
+  <!-- ========================================== -->
+  <div class="bottom-sheet-overlay hidden" id="mSheetOverlay">
+    <div class="bottom-sheet-container" id="mBottomSheet">
+      <div class="sheet-handle-bar">
+        <div class="sheet-handle"></div>
+      </div>
+      <div class="sheet-header">
+        <div class="mono text-xs text-muted" id="sheetActionId">#ACT-9042</div>
+        <h3 class="sheet-title" id="sheetActionTitle">Action Details</h3>
+        <button class="sheet-close" id="btnCloseSheet">&times;</button>
+      </div>
+      <div class="sheet-body" id="sheetBody">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- TOAST HUB                                  -->
+  <!-- ========================================== -->
+  <div class="m-toast-hub" id="mToastHub"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
