@@ -13,7 +13,7 @@ This mobile prototype translates the full Swiss-inspired minimalism and high-con
   * `#6B5B95` — Brand titles, headings, and lead text accents
   * `#C53030` — Vermillion breach accent (for explicit instruction conflicts)
   * `#2D6A4F` — Forest moss accent (for verified cryptographic compliance)
-* **Typography:** `Geist`, `Geist Mono`, and `Space Grotesk`.
+* **Typography:** Modern sans-serif typography system (`Inter`, with `Arial, Helvetica, sans-serif` fallbacks).
 * **Bottom Navigation Bar (Standard Mobile Pattern):**
   1. **Feed (`screen-overview`)** — Real-time transaction feed, 3 summary metrics, dominant flight conflict card with **+180 min breach**, and quick filter pills.
   2. **Vault (`screen-instructions`)** — 14 active human constraints with bolded thresholds, severity badges, and "+ Add Rule" modal.

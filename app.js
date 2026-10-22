@@ -17,8 +17,12 @@ document.addEventListener('DOMContentLoaded', () => {
     activeVaultVersion: 'V13.04',
     activeFilter: 'all',
     selectedAction: null,
-    arbitrationState: 'PACKAGED', // 'PACKAGED' | 'TRANSMITTED' | 'SETTLED'
+    arbitrationState: 'PACKAGED', // 'PACKAGED' | 'TRANSMITTED' | 'UNDER_REVIEW'
     retentionDays: '60',
+    mandateFilterDomain: 'all',
+    mandateFilterSearch: '',
+    mandateFilterHardOnly: false,
+    pendingRevokeMandate: null,
     mandates: [
       {
         code: 'SEC-TRV-102',
@@ -122,59 +126,59 @@ document.addEventListener('DOMContentLoaded', () => {
     streamRecords: [
       {
         id: 'ACT-9042',
-        title: 'Flight 6E-2412 (BLR ➔ DEL)',
-        merchant: 'InterGlobe Aviation (IndiGo)',
-        agent: 'OpenAgent Travel v8.4',
-        time: '2040-10-21 10:02:45 IST',
+        title: 'IndiGo Flight 6E-2412 (BLR ➔ DEL)',
+        merchant: 'IndiGo Airlines',
+        agent: 'Travel Assistant',
+        time: 'Today, 10:02 AM',
         value: '₹7,850.00',
         determination: 'breach',
         determinationLabel: 'INSTRUCTION CONFLICT',
-        explanation: 'Scheduled arrival at 21:00 IST directly breaches Mandate SEC-TRV-102 (Limit: < 18:00 IST).',
+        explanation: 'Flight lands at 9:00 PM, which is 3 hours past your 6:00 PM arrival cutoff rule.',
         mandateCode: 'SEC-TRV-102'
       },
       {
         id: 'ACT-9041',
         title: '2-Year Hardware Warranty Add-On',
         merchant: 'Croma Electronics',
-        agent: 'RetailAgent v4.2',
-        time: '2040-10-21 09:41:10 IST',
+        agent: 'Shopping Assistant',
+        time: 'Today, 09:41 AM',
         value: '₹1,500.00',
         determination: 'uncovered',
         determinationLabel: 'UNCOVERED INTENT',
-        explanation: 'No constraint in Vault V13 applies to extended device warranties. Non-punitive state.'
+        explanation: 'No rule set for extended warranties. Auto-approved within spending limit.'
       },
       {
         id: 'ACT-9039',
-        title: 'Weekly Organic Sustenance Basket',
-        merchant: 'BigBasket Hyperlocal',
-        agent: 'HouseholdAgent v2.1',
-        time: '2040-10-21 08:15:00 IST',
+        title: 'Weekly Grocery Basket',
+        merchant: 'BigBasket',
+        agent: 'Grocery Assistant',
+        time: 'Today, 08:15 AM',
         value: '₹4,210.00',
         determination: 'verified',
         determinationLabel: 'VERIFIED COMPLIANT',
-        explanation: 'Audited against household weekly sustenance budget allocation.'
+        explanation: 'Audited against household weekly grocery budget.'
       },
       {
         id: 'ACT-9038',
         title: 'Monthly Electric Utility Auto-Pay',
-        merchant: 'BESCOM Power Corp',
-        agent: 'FinanceAgent v6.1',
-        time: '2040-10-21 06:30:22 IST',
+        merchant: 'BESCOM Power',
+        agent: 'Bill Pay Assistant',
+        time: 'Today, 06:30 AM',
         value: '₹2,340.00',
         determination: 'verified',
         determinationLabel: 'VERIFIED COMPLIANT',
-        explanation: 'Within verified seasonal baseline variance.'
+        explanation: 'Standard monthly utility payment.'
       },
       {
         id: 'ACT-9037',
-        title: 'Autonomous Urban Commute (AV-4)',
-        merchant: 'Uber Mobility',
-        agent: 'MobilityAgent v3',
-        time: '2040-10-20 19:12:00 IST',
+        title: 'City Ride (Uber)',
+        merchant: 'Uber',
+        agent: 'Ride Assistant',
+        time: 'Yesterday, 07:12 PM',
         value: '₹450.00',
         determination: 'verified',
         determinationLabel: 'VERIFIED COMPLIANT',
-        explanation: 'Standard commuter tariff compliant with Rule SEC-TRV-107.'
+        explanation: 'Standard commuter ride compliant with travel budget.'
       }
     ],
     agents: [
@@ -240,6 +244,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputRuleText = document.getElementById('inputRuleText');
   const selectRuleDomain = document.getElementById('selectRuleDomain');
   const selectRuleSeverity = document.getElementById('selectRuleSeverity');
+  const mandatesSearchInput = document.getElementById('mandatesSearchInput');
+  const mandatesSearchClear = document.getElementById('mandatesSearchClear');
+  const domainFilterPills = document.getElementById('domainFilterPills');
+  const btnSeverityToggle = document.getElementById('btnSeverityToggle');
+  const hardLimitsCountBadge = document.getElementById('hardLimitsCountBadge');
+  const vaultRootSpecLabel = document.getElementById('vaultRootSpecLabel');
+  const revokeConfirmModal = document.getElementById('revokeConfirmModal');
+  const revokeRuleCode = document.getElementById('revokeRuleCode');
+  const revokeRuleText = document.getElementById('revokeRuleText');
+  const btnCloseRevokeModal = document.getElementById('btnCloseRevokeModal');
+  const btnCancelRevoke = document.getElementById('btnCancelRevoke');
+  const btnConfirmRevoke = document.getElementById('btnConfirmRevoke');
 
   // Evidence Elements
   const btnDownloadEvidenceJson = document.getElementById('btnDownloadEvidenceJson');
@@ -289,6 +305,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function init() {
     renderStreamTable();
     renderSpendingChart();
+    renderDomainFilters();
     renderVaultTable();
     renderAgentTable();
     setupNavigation();
@@ -354,8 +371,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     handleInitialHash();
 
+    // Expandable conflict bar toggle
+    const conflictBarToggle = document.getElementById('conflictBarToggle');
+    if (conflictBarToggle) {
+      conflictBarToggle.addEventListener('click', () => {
+        if (conflictDocket) {
+          conflictDocket.classList.toggle('expanded');
+        }
+      });
+    }
+
     if (btnInspectEvidence) {
-      btnInspectEvidence.addEventListener('click', () => {
+      btnInspectEvidence.addEventListener('click', (e) => {
+        e.stopPropagation();
         switchView('view-evidence');
       });
     }
@@ -367,7 +395,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnDismissConflict) {
-      btnDismissConflict.addEventListener('click', () => {
+      btnDismissConflict.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (conflictDocket) {
           conflictDocket.style.transition = 'all 0.25s ease';
           conflictDocket.style.opacity = '0';
@@ -377,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }, 250);
         }
         if (mismatchCountChip) {
-          mismatchCountChip.textContent = '0 CONFLICTS DETECTED';
+          mismatchCountChip.textContent = '0 CONFLICTS';
           mismatchCountChip.classList.remove('text-danger');
         }
         if (feedFlag) {
@@ -385,14 +414,79 @@ document.addEventListener('DOMContentLoaded', () => {
           feedFlag.classList.remove('nav-flag');
           feedFlag.classList.add('nav-count');
         }
-        showToast('Action #ACT-9042 variance dismissed by principal.');
+        showToast('Flight conflict dismissed.');
       });
     }
 
-    if (btnMastheadProfile) {
-      btnMastheadProfile.addEventListener('click', () => {
-        switchView('view-profile');
+    // Profile Dropdown Component Handlers
+    const profileContainer = document.getElementById('profileDropdownContainer');
+    const profileMenu = document.getElementById('profileDropdownMenu');
+    if (btnMastheadProfile && profileContainer && profileMenu) {
+      btnMastheadProfile.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = profileContainer.classList.contains('open');
+        if (isOpen) {
+          profileContainer.classList.remove('open');
+          profileMenu.classList.add('hidden');
+          btnMastheadProfile.setAttribute('aria-expanded', 'false');
+        } else {
+          profileContainer.classList.add('open');
+          profileMenu.classList.remove('hidden');
+          btnMastheadProfile.setAttribute('aria-expanded', 'true');
+        }
       });
+
+      document.addEventListener('click', (e) => {
+        if (!profileContainer.contains(e.target)) {
+          profileContainer.classList.remove('open');
+          profileMenu.classList.add('hidden');
+          btnMastheadProfile.setAttribute('aria-expanded', 'false');
+        }
+      });
+
+      const menuItemProfile = document.getElementById('menuItemProfile');
+      if (menuItemProfile) {
+        menuItemProfile.addEventListener('click', () => {
+          profileContainer.classList.remove('open');
+          profileMenu.classList.add('hidden');
+          switchView('view-profile');
+        });
+      }
+
+      const menuItemSpending = document.getElementById('menuItemSpending');
+      if (menuItemSpending) {
+        menuItemSpending.addEventListener('click', () => {
+          profileContainer.classList.remove('open');
+          profileMenu.classList.add('hidden');
+          switchView('view-profile');
+          const spendingSec = document.getElementById('spendingAnalysisSection');
+          if (spendingSec) {
+            spendingSec.scrollIntoView({ behavior: 'smooth' });
+          }
+        });
+      }
+
+      const menuItemCert = document.getElementById('menuItemCert');
+      if (menuItemCert) {
+        menuItemCert.addEventListener('click', () => {
+          profileContainer.classList.remove('open');
+          profileMenu.classList.add('hidden');
+          if (btnExportIdentityCert) btnExportIdentityCert.click();
+        });
+      }
+
+      const menuItemKillSwitch = document.getElementById('menuItemKillSwitch');
+      if (menuItemKillSwitch) {
+        menuItemKillSwitch.addEventListener('click', () => {
+          profileContainer.classList.remove('open');
+          profileMenu.classList.add('hidden');
+          switchView('view-profile');
+          if (btnToggleEmergencyKill) {
+            btnToggleEmergencyKill.scrollIntoView({ behavior: 'smooth' });
+            btnToggleEmergencyKill.focus();
+          }
+        });
+      }
     }
 
     if (btnManageVaultFromProfile) {
@@ -860,6 +954,190 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       });
     }
+
+    // ==========================================
+    // DESKTOP HUB-AND-SPOKE PROGRESSIVE CONTROLLER
+    // ==========================================
+    const profileDrawerBackdrop = document.getElementById('profileDrawerBackdrop');
+    const profileDrawerTitle = document.getElementById('profileDrawerTitle');
+    const profileDrawerCategory = document.getElementById('profileDrawerCategory');
+    const btnCloseProfileDrawer = document.getElementById('btnCloseProfileDrawer');
+
+    function openDesktopProfileDrawer(subviewId, title, category) {
+      if (profileDrawerTitle) profileDrawerTitle.textContent = title;
+      if (profileDrawerCategory) profileDrawerCategory.textContent = category;
+
+      document.querySelectorAll('.hub-desktop-subview').forEach(view => {
+        view.classList.add('hidden');
+      });
+
+      const target = document.getElementById(subviewId);
+      if (target) target.classList.remove('hidden');
+
+      if (profileDrawerBackdrop) profileDrawerBackdrop.classList.remove('hidden');
+
+      if (subviewId === 'deskSubSpending') {
+        setTimeout(() => {
+          renderSpendingAnalysis();
+        }, 50);
+      }
+    }
+
+    function closeDesktopProfileDrawer() {
+      if (profileDrawerBackdrop) profileDrawerBackdrop.classList.add('hidden');
+    }
+
+    if (btnCloseProfileDrawer) {
+      btnCloseProfileDrawer.addEventListener('click', closeDesktopProfileDrawer);
+    }
+
+    if (profileDrawerBackdrop) {
+      profileDrawerBackdrop.addEventListener('click', (e) => {
+        if (e.target === profileDrawerBackdrop) closeDesktopProfileDrawer();
+      });
+    }
+
+    // Back to stream button
+    const btnDesktopProfileBack = document.getElementById('btnDesktopProfileBack');
+    if (btnDesktopProfileBack) {
+      btnDesktopProfileBack.addEventListener('click', () => {
+        switchView('view-stream');
+      });
+    }
+
+    // User Summary & Active Enclave Card
+    const btnDesktopManageUser = document.getElementById('btnDesktopManageUser');
+    if (btnDesktopManageUser) {
+      btnDesktopManageUser.addEventListener('click', () => {
+        openDesktopProfileDrawer('deskSubCredentials', 'Hardware Enclave Identity', 'CRYPTOGRAPHIC CREDENTIALS');
+      });
+    }
+
+    const btnDesktopEnclaveCard = document.getElementById('btnDesktopEnclaveCard');
+    if (btnDesktopEnclaveCard) {
+      btnDesktopEnclaveCard.addEventListener('click', () => {
+        openDesktopProfileDrawer('deskSubCredentials', 'Active TPM-2040 Enclave', 'CRYPTOGRAPHIC ATTESTATION');
+      });
+    }
+
+    // Alert Banner Inspect Pill
+    const btnDesktopAlertInspect = document.getElementById('btnDesktopAlertInspect');
+    if (btnDesktopAlertInspect) {
+      btnDesktopAlertInspect.addEventListener('click', () => {
+        switchView('view-stream');
+        showToast('Viewing live continuous autonomous agent ingestion stream.');
+      });
+    }
+
+    // Horizontal "Suggested for You" Tiles
+    const tileDesktopDossier = document.getElementById('tileDesktopDossier');
+    if (tileDesktopDossier) {
+      tileDesktopDossier.addEventListener('click', () => {
+        openDesktopProfileDrawer('deskSubCredentials', 'Cryptographic Dossier Export', 'SIGNED ATTESTATION RECORD');
+      });
+    }
+
+    const tileDesktopAgents = document.getElementById('tileDesktopAgents');
+    if (tileDesktopAgents) {
+      tileDesktopAgents.addEventListener('click', () => {
+        openDesktopProfileDrawer('deskSubAgents', 'Connected Agent Bearers', 'ACTIVE OAUTH BEARERS');
+      });
+    }
+
+    const tileDesktopPasskeys = document.getElementById('tileDesktopPasskeys');
+    if (tileDesktopPasskeys) {
+      tileDesktopPasskeys.addEventListener('click', () => {
+        openDesktopProfileDrawer('deskSubPasskeys', 'Biometric Passkeys & FIDO2', 'WEBAUTHN ENCLAVE');
+      });
+    }
+
+    const tileDesktopArbitration = document.getElementById('tileDesktopArbitration');
+    if (tileDesktopArbitration) {
+      tileDesktopArbitration.addEventListener('click', () => {
+        openDesktopProfileDrawer('deskSubArbitration', 'Statutory Arbitration Portal', 'ADRP-2040 SECTION 4');
+      });
+    }
+
+    // Hub-and-Spoke List Rows
+    document.querySelectorAll('[data-desktop-target]').forEach(row => {
+      row.addEventListener('click', () => {
+        const target = row.getAttribute('data-desktop-target');
+        switch (target) {
+          case 'mandates':
+            switchView('view-vault');
+            showToast('Routing to Instruction Mandates Vault...');
+            break;
+          case 'spending':
+            openDesktopProfileDrawer('deskSubSpending', 'Audited Spent Analytics', 'EXECUTIVE PORTFOLIO OVERSIGHT');
+            break;
+          case 'ceilings':
+            openDesktopProfileDrawer('deskSubCeilings', 'Autonomous Expenditure Ceilings', 'HARD LIMITS ENFORCEMENT');
+            break;
+          case 'agents':
+            openDesktopProfileDrawer('deskSubAgents', 'Connected Agent Bearers', 'OAUTH TOKEN DIRECTORY');
+            break;
+          case 'killswitch':
+            openDesktopProfileDrawer('deskSubKillSwitch', 'Emergency Delegation Suspension', 'ZERO-LATENCY REVOCATION');
+            break;
+          case 'hardware':
+            openDesktopProfileDrawer('deskSubHardware', 'TPM-2040 Hardware Specs', 'LOCAL CRYPTOGRAPHIC ROOT');
+            break;
+          case 'passkeys':
+            openDesktopProfileDrawer('deskSubPasskeys', 'Biometric Passkeys & Enclave', 'FIDO2 WEBAUTHN ATTESTATION');
+            break;
+          case 'arbitration':
+            openDesktopProfileDrawer('deskSubArbitration', 'Statutory Carrier Arbitration Portal', 'ADRP-2040 DISPUTE DOSSIER');
+            break;
+        }
+      });
+    });
+
+    // Sticky Footer Banner
+    const btnDesktopStickyPasskey = document.getElementById('btnDesktopStickyPasskey');
+    if (btnDesktopStickyPasskey) {
+      btnDesktopStickyPasskey.addEventListener('click', () => {
+        openDesktopProfileDrawer('deskSubPasskeys', 'Biometric Passkeys & Enclave', 'FIDO2 WEBAUTHN ATTESTATION');
+      });
+    }
+
+    // Register passkey button
+    const btnDeskRegisterPasskey = document.getElementById('btnDeskRegisterPasskey');
+    if (btnDeskRegisterPasskey) {
+      btnDeskRegisterPasskey.addEventListener('click', () => {
+        btnDeskRegisterPasskey.textContent = 'Enrolling Hardware Passkey...';
+        btnDeskRegisterPasskey.disabled = true;
+        setTimeout(() => {
+          btnDeskRegisterPasskey.textContent = 'Biometric Passkey Enrolled ✓';
+          btnDeskRegisterPasskey.style.backgroundColor = 'var(--moss-verified)';
+          showToast('Passkey enrolled: Windows Hello / Touch ID bound to TPM-2040.');
+        }, 1200);
+      });
+    }
+
+    // Go to disputes button
+    const btnDeskGoToDisputes = document.getElementById('btnDeskGoToDisputes');
+    if (btnDeskGoToDisputes) {
+      btnDeskGoToDisputes.addEventListener('click', () => {
+        closeDesktopProfileDrawer();
+        switchView('view-disputes');
+      });
+    }
+
+    // Export buttons inside drawer
+    const btnDeskExportCertModal = document.getElementById('btnDeskExportCertModal');
+    if (btnDeskExportCertModal && btnExportIdentityCert) {
+      btnDeskExportCertModal.addEventListener('click', () => {
+        btnExportIdentityCert.click();
+      });
+    }
+
+    const btnDeskExportVaultModal = document.getElementById('btnDeskExportVaultModal');
+    if (btnDeskExportVaultModal) {
+      btnDeskExportVaultModal.addEventListener('click', () => {
+        triggerFileDownload('instruction-vault-v13.json', JSON.stringify(state.mandates, null, 2), 'application/json');
+        showToast('Instruction Vault exported (.json).');
+      });
+    }
   }
 
   // ==========================================
@@ -874,10 +1152,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!sidebar) return;
 
+    // Helper to synchronize accessibility state in collapsed mode
+    function syncCollapsedState(collapsed) {
+      const footer = sidebar.querySelector('.index-footer');
+      const statutory = sidebar.querySelector('.sidebar-statutory-wrap');
+      if (footer) {
+        if (collapsed) footer.setAttribute('aria-hidden', 'true');
+        else footer.removeAttribute('aria-hidden');
+      }
+      if (statutory) {
+        if (collapsed) statutory.setAttribute('aria-hidden', 'true');
+        else statutory.removeAttribute('aria-hidden');
+      }
+    }
+
     // Restore saved collapse preference
     const isCollapsed = localStorage.getItem('ar-sidebar-collapsed') === 'true';
     if (isCollapsed) {
       sidebar.classList.add('collapsed');
+      syncCollapsedState(true);
       if (btnSidebarToggle) btnSidebarToggle.setAttribute('title', 'Expand sidebar (Ctrl+B)');
     }
 
@@ -886,6 +1179,7 @@ document.addEventListener('DOMContentLoaded', () => {
       btnSidebarToggle.addEventListener('click', () => {
         const collapsed = sidebar.classList.toggle('collapsed');
         localStorage.setItem('ar-sidebar-collapsed', collapsed);
+        syncCollapsedState(collapsed);
         btnSidebarToggle.setAttribute('title', collapsed ? 'Expand sidebar (Ctrl+B)' : 'Collapse sidebar (Ctrl+B)');
       });
     }
@@ -948,7 +1242,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (filtered.length === 0) {
       streamTableBody.innerHTML = `
         <tr>
-          <td colspan="6" style="text-align: center; padding: 24px; color: var(--text-faint); font-family: var(--font-mono);">
+          <td colspan="6" style="text-align: center; padding: 32px; color: var(--text-faint); font-family: var(--font-mono);">
             NO INGESTED RECORDS MATCHING FILTER CRITERIA
           </td>
         </tr>
@@ -961,29 +1255,69 @@ document.addEventListener('DOMContentLoaded', () => {
       const isBreach = rec.determination === 'breach';
       const isUncovered = rec.determination === 'uncovered';
       const isVerified = rec.determination === 'verified';
-      
+
+      const badgeClass = isBreach ? 'badge-conflict' : (isUncovered ? 'badge-uncovered' : 'badge-verified');
+      const iconSvg = isBreach
+        ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`
+        : (isUncovered
+          ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>`
+          : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"></polyline></svg>`);
+
+      const dotClass = isBreach ? 'dot-breach' : (isUncovered ? 'dot-uncovered' : 'dot-verified');
       const tagText = isBreach ? 'CRITICAL CONFLICT' : (isVerified ? 'VERIFIED COMPLIANT' : 'UNCOVERED INTENT');
-      const highlightText = isBreach 
+      const highlightText = isBreach
         ? `Variance: Scheduled arrival breaches limit (${rec.explanation})`
         : (isVerified ? 'Cryptographically audited · Mandate compliant' : 'Permitted under default pass-through policy');
       const detText = `${rec.title} with ${rec.merchant} for ${rec.value} INR. Audited by local enclave against active Vault ${state.activeVaultVersion}. Click row to inspect raw forensic receipt.`;
       const detMeta = `REF: #${rec.id} // AGENT: ${rec.agent}`;
 
       tr.innerHTML = `
-        <td class="mono font-500">
-          <span class="has-detail" data-detail-title="Action Receipt #${rec.id}" data-detail-tag="${rec.agent.toUpperCase()}" data-detail-highlight="${rec.merchant} · ${rec.value}" data-detail-text="${rec.title}. Logged at ${rec.time}." data-detail-meta="Click row to open forensic receipt drawer">${rec.id}</span>
+        <td>
+          <div class="audit-status-cell">
+            <span class="audit-status-dot ${dotClass}" title="${tagText}"></span>
+            <span class="audit-status-tag ${badgeClass}">
+              <span>${isBreach ? 'Conflict' : (isVerified ? 'Verified' : 'Uncovered')}</span>
+            </span>
+          </div>
         </td>
         <td>
-          <div style="font-weight: 600; color: var(--text-lead);">${rec.title}</div>
-          <div class="mono text-2xs text-muted">${rec.merchant}</div>
+          <div class="audit-row-main">${rec.title}</div>
+          <div class="audit-row-sub">${rec.merchant}</div>
         </td>
-        <td class="mono text-muted text-xs">${rec.agent}</td>
-        <td class="mono text-muted text-xs">${rec.time}</td>
-        <td class="mono font-600 text-lead">${rec.value}</td>
+        <td>
+          <span style="font-size: 12.5px; color: #3F3F46; font-weight: 500;">${rec.agent}</span>
+        </td>
+        <td>
+          <span class="text-xs text-muted">${rec.time}</span>
+        </td>
+        <td>
+          <span class="font-600" style="font-size: 13px; color: #09090B; letter-spacing: -0.01em;">${rec.value}</span>
+        </td>
         <td style="text-align: right;">
-          <span class="determination-pill det-${rec.determination} has-detail" data-detail-title="Determination for #${rec.id}" data-detail-tag="${tagText}" data-detail-highlight="${highlightText}" data-detail-text="${detText}" data-detail-meta="${detMeta}">${rec.determinationLabel}</span>
+          <div class="row-actions-cell" style="justify-content: flex-end;">
+            <button class="quick-btn btn-view-trace" data-id="${rec.id}" title="View details">${isBreach ? 'Review Conflict' : 'Details'}</button>
+          </div>
         </td>
       `;
+
+      // Quick action button listeners
+      const btnTrace = tr.querySelector('.btn-view-trace');
+      const btnPayload = tr.querySelector('.btn-audit-payload');
+
+      if (btnTrace) {
+        btnTrace.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openActionDrawer(rec);
+        });
+      }
+
+      if (btnPayload) {
+        btnPayload.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openRecordPayloadModal(rec);
+        });
+      }
+
       tr.addEventListener('click', () => {
         openActionDrawer(rec);
       });
@@ -991,11 +1325,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  filterLinks.forEach(link => {
-    link.addEventListener('click', () => {
-      filterLinks.forEach(l => l.classList.remove('active'));
-      link.classList.add('active');
-      state.activeFilter = link.getAttribute('data-filter');
+  // Open Raw Cryptographic Payload Modal for any record
+  function openRecordPayloadModal(rec) {
+    const payload = {
+      actionId: rec.id,
+      title: rec.title,
+      merchant: rec.merchant,
+      agent: rec.agent,
+      timestamp: rec.time,
+      amount: rec.value,
+      determination: rec.determinationLabel,
+      explanation: rec.explanation,
+      mandateCode: rec.mandateCode || 'NONE_SPECIFIED',
+      forensicVerification: {
+        enclaveKey: '8F9A-2B3C-1A92-E4F1',
+        hashAlgorithm: 'SHA-256',
+        signingScheme: 'Ed25519-HMAC-SHA256',
+        clientMandateSealed: rec.mandateCode ? '10:00:14 IST' : 'N/A',
+        precedenceVerified: rec.mandateCode ? true : false,
+        disputeFacilitated: rec.determination === 'breach',
+        legalDisclaimer: "Final remedy determination rests with destination vendor/marketplace."
+      }
+    };
+    rawJsonArea.textContent = JSON.stringify(payload, null, 2);
+    payloadModal.classList.remove('hidden');
+  }
+
+  // Segmented Pill Control Tab Event Listeners
+  const allFilterButtons = document.querySelectorAll('.filter-link, .segment-tab');
+  allFilterButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      allFilterButtons.forEach(b => {
+        b.classList.remove('active');
+        if (b.hasAttribute('aria-selected')) b.setAttribute('aria-selected', 'false');
+      });
+      btn.classList.add('active');
+      if (btn.hasAttribute('aria-selected')) btn.setAttribute('aria-selected', 'true');
+      state.activeFilter = btn.getAttribute('data-filter');
       renderStreamTable();
     });
   });
@@ -1005,31 +1371,31 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   function openActionDrawer(rec) {
     state.selectedAction = rec;
-    drawerRef.textContent = `REF: #${rec.id}`;
+    drawerRef.textContent = rec.determination === 'breach' ? '⚠️ Conflict Detected' : 'Transaction Details';
     drawerTitle.textContent = rec.title;
 
     let bodyHtml = `
       <div style="padding: 12px; background-color: var(--ink-subtle); border: 1px solid var(--rule-hairline); border-radius: var(--radius-xs);">
-        <div class="mono text-2xs text-muted">DETERMINATION SUMMARY</div>
-        <div style="margin-top: 4px; font-size: 13px; color: var(--text-lead);">${rec.explanation}</div>
+        <div class="text-xs text-muted font-600">ISSUE SUMMARY</div>
+        <div style="margin-top: 4px; font-size: 13px; color: var(--text-lead); font-weight: 500;">${rec.explanation}</div>
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 8px;">
         <div style="display: flex; justify-content: space-between; font-size: 12.5px; border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-          <span class="mono text-muted text-xs">SOURCE AGENT:</span>
-          <span class="mono text-xs font-500">${rec.agent}</span>
+          <span class="text-muted text-xs">Booked by:</span>
+          <span class="text-xs font-500 text-lead">${rec.agent}</span>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12.5px; border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-          <span class="mono text-muted text-xs">MERCHANT:</span>
-          <span class="mono text-xs font-500">${rec.merchant}</span>
+          <span class="text-muted text-xs">Merchant:</span>
+          <span class="text-xs font-500 text-lead">${rec.merchant}</span>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12.5px; border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-          <span class="mono text-muted text-xs">RECORD TIMESTAMP:</span>
-          <span class="mono text-xs font-500">${rec.time}</span>
+          <span class="text-muted text-xs">Time:</span>
+          <span class="text-xs font-500 text-lead">${rec.time}</span>
         </div>
         <div style="display: flex; justify-content: space-between; font-size: 12.5px; border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-          <span class="mono text-muted text-xs">FINANCIAL QUANTUM:</span>
-          <span class="mono text-xs font-500">${rec.value} INR</span>
+          <span class="text-muted text-xs">Amount:</span>
+          <span class="text-xs font-600 text-lead">${rec.value}</span>
         </div>
       </div>
     `;
@@ -1038,7 +1404,7 @@ document.addEventListener('DOMContentLoaded', () => {
       bodyHtml += `
         <div style="margin-top: 14px;">
           <button class="primary-action-btn" style="width: 100%;" id="btnDrawerInspectDossier">
-            Inspect Bilateral Evidence Dossier →
+            Inspect Evidence & Timeline →
           </button>
         </div>
       `;
@@ -1095,20 +1461,6 @@ document.addEventListener('DOMContentLoaded', () => {
     if (e.target === actionDrawer) actionDrawer.classList.add('hidden');
   });
 
-  // ==========================================
-  // DISMISS CONFLICT
-  // ==========================================
-  btnDismissConflict.addEventListener('click', () => {
-    conflictDocket.style.opacity = '0.35';
-    conflictDocket.style.pointerEvents = 'none';
-    feedFlag.textContent = '0 FLAGS';
-    feedFlag.style.backgroundColor = 'transparent';
-    feedFlag.style.color = 'var(--text-muted)';
-    feedFlag.style.borderColor = 'var(--rule-hairline)';
-    mismatchCountChip.textContent = '0 CONFLICTS';
-    mismatchCountChip.classList.remove('text-danger');
-    showToast('Variance determination acknowledged and archived.');
-  });
 
   // ==========================================
   // RENDER: INSTRUCTION MANDATES (VAULT)
@@ -1130,40 +1482,180 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/under ₹500 INR/g, '<strong class="text-lead font-600">under ₹500 INR</strong>');
   }
 
-  function renderVaultTable() {
-    vaultTableBody.innerHTML = '';
-    state.mandates.forEach(m => {
-      const tr = document.createElement('tr');
-      const isHard = m.severity === 'Hard Limit';
-      const pseudoHash = '0x' + m.code.replace(/[^A-Za-z0-9]/g, '').toLowerCase() + 'a812e9b048';
+  // ==========================================
+  // RENDER: INSTRUCTION MANDATES (VAULT)
+  // ==========================================
+  function renderDomainFilters() {
+    if (!domainFilterPills) return;
+    domainFilterPills.innerHTML = '';
+    const domains = ['all', 'Travel', 'Finance', 'Subscriptions', 'Hardware', 'Dining'];
 
-      tr.innerHTML = `
-        <td class="mono font-500">
-          <span class="has-detail" data-detail-title="${m.code} Mandate Specification" data-detail-tag="${m.domain.toUpperCase()}" data-detail-highlight="Enforced in Vault ${m.version}" data-detail-text="${m.text}" data-detail-meta="Root Hash: ${pseudoHash}...">${m.code}</span>
-        </td>
-        <td class="mono text-muted">${m.domain}</td>
-        <td>${formatMandateText(m.text)}</td>
-        <td class="mono text-xs">
-          <span class="has-detail" data-detail-title="Enforcement Mode: ${m.severity}" data-detail-tag="${isHard ? 'STRICT LIMIT' : 'ADVISORY'}" data-detail-highlight="${isHard ? 'Mandatory Breach Flagging' : 'Discretionary Advisory'}" data-detail-text="${isHard ? 'Transactions violating hard limits are immediately flagged as instruction conflicts for statutory recourse.' : 'Soft constraints guide agent choices while logging warnings.'}">
-            ${isHard ? '<strong class="text-danger font-600">Hard Limit</strong>' : '<span class="text-mauve font-500">Soft Constraint</span>'}
-          </span>
-        </td>
-        <td class="mono text-xs text-muted">${m.version}</td>
-        <td style="text-align: right;">
-          <button class="text-action-btn mono text-2xs btn-revoke-rule" data-code="${m.code}">Revoke</button>
-        </td>
+    domains.forEach(d => {
+      const count = d === 'all'
+        ? state.mandates.length
+        : state.mandates.filter(m => m.domain.toLowerCase() === d.toLowerCase()).length;
+
+      const btn = document.createElement('button');
+      btn.className = `domain-tab ${state.mandateFilterDomain.toLowerCase() === d.toLowerCase() ? 'active' : ''}`;
+      btn.setAttribute('role', 'tab');
+      btn.setAttribute('data-domain', d);
+      btn.innerHTML = `
+        <span>${d === 'all' ? 'All' : d}</span>
+        <span class="domain-tab-badge mono">${count}</span>
       `;
-      vaultTableBody.appendChild(tr);
+
+      btn.addEventListener('click', () => {
+        state.mandateFilterDomain = d;
+        renderDomainFilters();
+        renderVaultTable();
+      });
+
+      domainFilterPills.appendChild(btn);
     });
 
-    vaultMandatesCount.textContent = state.mandates.length;
-    vaultCount.textContent = state.mandates.length;
+    const hardCount = state.mandates.filter(m => m.severity === 'Hard Limit').length;
+    if (hardLimitsCountBadge) hardLimitsCountBadge.textContent = hardCount;
+  }
 
-    document.querySelectorAll('.btn-revoke-rule').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const code = e.target.getAttribute('data-code');
-        showToast(`Revocation of ${code} requires signing key attestation.`);
+  function renderVaultTable() {
+    vaultTableBody.innerHTML = '';
+
+    const q = (state.mandateFilterSearch || '').toLowerCase().trim();
+    const filtered = state.mandates.filter(m => {
+      // Domain filter
+      if (state.mandateFilterDomain !== 'all' && m.domain.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) {
+        return false;
+      }
+      // Hard limits only filter
+      if (state.mandateFilterHardOnly && m.severity !== 'Hard Limit') {
+        return false;
+      }
+      // Search query
+      if (q) {
+        const matchCode = m.code.toLowerCase().includes(q);
+        const matchText = m.text.toLowerCase().includes(q);
+        const matchDomain = m.domain.toLowerCase().includes(q);
+        if (!matchCode && !matchText && !matchDomain) return false;
+      }
+      return true;
+    });
+
+    if (filtered.length === 0) {
+      vaultTableBody.innerHTML = `
+        <tr>
+          <td colspan="6" style="text-align: center; padding: 40px 16px; color: var(--text-faint); font-family: var(--font-mono);">
+            <div style="font-weight: 600; font-size: 12px; margin-bottom: 6px; color: var(--text-lead);">NO MANDATES MATCHING FILTER CRITERIA</div>
+            <div style="font-size: 11px; color: var(--text-muted);">Try adjusting your domain tab, clearing your search query, or disabling "Hard Limits Only".</div>
+          </td>
+        </tr>
+      `;
+    } else {
+      filtered.forEach(m => {
+        const tr = document.createElement('tr');
+        const isHard = m.severity === 'Hard Limit';
+        const pseudoHash = '0x' + m.code.replace(/[^A-Za-z0-9]/g, '').toLowerCase() + 'a812e9b048';
+
+        tr.innerHTML = `
+          <td>
+            <span class="domain-badge-cell" style="font-weight: 600; font-size: 12px;">${m.domain}</span>
+          </td>
+          <td style="line-height: 1.45; color: var(--text-lead);">
+            <span class="mandate-sentence">${formatMandateText(m.text)}</span>
+          </td>
+          <td>
+            <span class="severity-pill ${isHard ? 'pill-hard' : 'pill-soft'}">
+              <span class="severity-dot"></span>
+              <span>${m.severity}</span>
+            </span>
+          </td>
+          <td style="text-align: right;">
+            <button class="btn-ghost-revoke btn-revoke-rule" data-code="${m.code}" title="Revoke mandate">
+              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Revoke</span>
+            </button>
+          </td>
+        `;
+
+        const btnRevoke = tr.querySelector('.btn-revoke-rule');
+        if (btnRevoke) {
+          btnRevoke.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openRevokeModal(m);
+          });
+        }
+
+        vaultTableBody.appendChild(tr);
       });
+    }
+
+    if (vaultMandatesCount) vaultMandatesCount.textContent = `${state.mandates.length} RULES`;
+    if (vaultCount) vaultCount.textContent = state.mandates.length;
+  }
+
+  // Search & Filter Listeners for Vault
+  if (mandatesSearchInput) {
+    mandatesSearchInput.addEventListener('input', (e) => {
+      state.mandateFilterSearch = e.target.value;
+      if (mandatesSearchClear) {
+        if (e.target.value) mandatesSearchClear.classList.remove('hidden');
+        else mandatesSearchClear.classList.add('hidden');
+      }
+      renderVaultTable();
+    });
+  }
+
+  if (mandatesSearchClear) {
+    mandatesSearchClear.addEventListener('click', () => {
+      if (mandatesSearchInput) {
+        mandatesSearchInput.value = '';
+        state.mandateFilterSearch = '';
+        mandatesSearchClear.classList.add('hidden');
+        renderVaultTable();
+        mandatesSearchInput.focus();
+      }
+    });
+  }
+
+  if (btnSeverityToggle) {
+    btnSeverityToggle.addEventListener('click', () => {
+      state.mandateFilterHardOnly = !state.mandateFilterHardOnly;
+      btnSeverityToggle.classList.toggle('active', state.mandateFilterHardOnly);
+      btnSeverityToggle.setAttribute('aria-checked', state.mandateFilterHardOnly ? 'true' : 'false');
+      renderVaultTable();
+    });
+  }
+
+  // Revocation Confirmation Modal Logic
+  function openRevokeModal(mandate) {
+    state.pendingRevokeMandate = mandate;
+    if (revokeRuleCode) revokeRuleCode.textContent = mandate.code;
+    if (revokeRuleText) revokeRuleText.textContent = `"${mandate.text}"`;
+    if (revokeConfirmModal) revokeConfirmModal.classList.remove('hidden');
+  }
+
+  function closeRevokeModal() {
+    state.pendingRevokeMandate = null;
+    if (revokeConfirmModal) revokeConfirmModal.classList.add('hidden');
+  }
+
+  if (btnCloseRevokeModal) btnCloseRevokeModal.addEventListener('click', closeRevokeModal);
+  if (btnCancelRevoke) btnCancelRevoke.addEventListener('click', closeRevokeModal);
+  if (btnConfirmRevoke) {
+    btnConfirmRevoke.addEventListener('click', () => {
+      if (!state.pendingRevokeMandate) return;
+      const code = state.pendingRevokeMandate.code;
+      state.mandates = state.mandates.filter(m => m.code !== code);
+      state.activeVaultVersion = 'V14.01';
+      const sidebarVaultVer = document.getElementById('sidebarVaultVer');
+      if (sidebarVaultVer) sidebarVaultVer.textContent = 'V14.01';
+      if (vaultRootSpecLabel) vaultRootSpecLabel.textContent = 'VAULT-V14.01';
+      closeRevokeModal();
+      renderDomainFilters();
+      renderVaultTable();
+      showToast(`Mandate ${code} revoked. Vault re-sealed under Specification V14.01.`);
     });
   }
 
@@ -1207,25 +1699,31 @@ document.addEventListener('DOMContentLoaded', () => {
       severity: severity,
       version: 'V14.01'
     });
-    document.getElementById('sidebarVaultVer').textContent = 'VERSION 14.01';
+    const sidebarVaultVer = document.getElementById('sidebarVaultVer');
+    if (sidebarVaultVer) sidebarVaultVer.textContent = 'V14.01';
+    if (vaultRootSpecLabel) vaultRootSpecLabel.textContent = 'VAULT-V14.01';
+    renderDomainFilters();
     renderVaultTable();
   }
 
   // ==========================================
   // RENDER: CONNECTED AGENTS
   // ==========================================
+  // ==========================================
+  // RENDER: CONNECTED AGENTS (3 COLUMNS ONLY: AGENT, CATEGORY, ACCESS)
+  // ==========================================
   function renderAgentTable() {
     agentTableBody.innerHTML = '';
     state.agents.forEach(ag => {
       const tr = document.createElement('tr');
       tr.innerHTML = `
-        <td class="font-500">${ag.actor}</td>
-        <td class="mono text-muted">${ag.category}</td>
-        <td>
-          <span class="determination-pill ${ag.isActive ? 'det-verified' : 'det-uncovered'}">${ag.status}</span>
+        <td class="font-500">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <span style="display: inline-flex; width: 24px; height: 24px; border-radius: 6px; background: #F4F4F5; align-items: center; justify-content: center; font-size: 11px; font-weight: 600;">${ag.actor.charAt(0)}</span>
+            <span>${ag.actor}</span>
+          </div>
         </td>
-        <td class="mono text-muted">${ag.lastSync}</td>
-        <td class="mono text-xs text-muted">${ag.protocol}</td>
+        <td class="text-muted">${ag.category}</td>
         <td style="text-align: right;">
           <button class="secondary-action-btn mono text-2xs btn-toggle-agent" data-actor="${ag.actor}">
             ${ag.isActive ? 'Revoke Access' : 'Re-Authorize'}
@@ -1266,47 +1764,229 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // ARBITRATION SUBMISSION FLOW
+  // CLAIMS & ARBITRATION INTERACTIVE CONTROLLER
   // ==========================================
-  btnTransmitArbitration.addEventListener('click', () => {
-    if (state.arbitrationState === 'SETTLED') {
-      showToast('Arbitration dispute has already reached finalized settlement.');
-      return;
+  const claimsData = [
+    {
+      id: 'claim-1',
+      merchant: 'IndiGo Airlines',
+      title: 'Flight 6E-2412 (BLR ➔ DEL)',
+      conflict: 'Arrives 9:00 PM (Rule: < 6:00 PM)',
+      amount: '₹7,850.00',
+      ruleStatus: 'Active Before Booking',
+      statusTag: 'Step 2 of 4 · Ready',
+      currentStep: 2,
+      steps: [
+        { num: '01', name: 'Conflict Detected', meta: '10:02 AM · Rule Breach' },
+        { num: '02', name: 'Evidence Sealed', meta: '10:03 AM · Ready' },
+        { num: '03', name: 'Merchant Review', meta: 'Pending Action' },
+        { num: '04', name: 'Resolution / Refund', meta: 'Pending Review' }
+      ],
+      statement: `On October 21 at 10:02 AM, your Travel Assistant booked IndiGo flight 6E-2412 from Bengaluru to New Delhi arriving at 9:00 PM. Prior to this purchase, an active rule was set at 10:00 AM requiring all domestic flights to arrive before 6:00 PM.<br><br>Because the assistant booked a ticket arriving 3 hours after your specified cutoff time, this dispute package has been generated to submit to IndiGo for review and reimbursement.`,
+      canSubmit: true,
+      buttonText: 'Submit Dispute Claim to IndiGo'
+    },
+    {
+      id: 'claim-2',
+      merchant: 'Croma Electronics',
+      title: 'Smart Display Warranty Add-on',
+      conflict: 'Unauthorized Plan (Rule: Hardware Spec Required)',
+      amount: '₹1,299.00',
+      ruleStatus: 'Resolved',
+      statusTag: 'Step 4 of 4 · Resolved',
+      currentStep: 4,
+      steps: [
+        { num: '01', name: 'Conflict Detected', meta: 'Yesterday, 09:41 AM' },
+        { num: '02', name: 'Evidence Sealed', meta: 'Yesterday, 09:42 AM' },
+        { num: '03', name: 'Merchant Review', meta: 'Accepted by Croma' },
+        { num: '04', name: 'Resolution / Refund', meta: '₹1,299.00 Refunded' }
+      ],
+      statement: `On October 20 at 09:41 AM, an unauthorized 2-year warranty was attached during hardware checkout. Your recorded rule requires explicit specification verification prior to peripheral add-ons.<br><br>Croma customer care accepted the verified dossier and credited ₹1,299.00 back to your original payment method.`,
+      canSubmit: false,
+      buttonText: 'Claim Resolved (Refund Completed)'
+    },
+    {
+      id: 'claim-3',
+      merchant: 'Uber Premier',
+      title: 'Airport Transit Surge Peak',
+      conflict: 'Surge fare ₹1,450.00 exceeded ₹800 Cap',
+      amount: '₹650.00',
+      ruleStatus: 'In Review',
+      statusTag: 'Step 3 of 4 · Under Review',
+      currentStep: 3,
+      steps: [
+        { num: '01', name: 'Conflict Detected', meta: 'Oct 19, 19:12' },
+        { num: '02', name: 'Evidence Sealed', meta: 'Oct 19, 19:15' },
+        { num: '03', name: 'Merchant Review', meta: 'In Review (Est. 24h)' },
+        { num: '04', name: 'Resolution / Refund', meta: 'Pending Determination' }
+      ],
+      statement: `On October 19 at 19:12, an urban mobility ride was debited at ₹1,450.00 INR without required surge pre-authorization above your ₹800.00 INR ceiling.<br><br>The excess delta of ₹650.00 INR was filed with Uber customer resolution. Currently awaiting partner response.`,
+      canSubmit: false,
+      buttonText: 'Under Merchant Review (Est. 24h)'
+    }
+  ];
+
+  let selectedClaimId = 'claim-1';
+
+  function renderSelectedClaim(claimId) {
+    selectedClaimId = claimId;
+    const claim = claimsData.find(c => c.id === claimId) || claimsData[0];
+
+    // Highlight active item in list
+    document.querySelectorAll('.claim-list-item').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('data-claim-id') === claimId);
+    });
+
+    // Update Overview Grid
+    const claimMerchantDisplay = document.getElementById('claimMerchantDisplay');
+    const claimConflictDisplay = document.getElementById('claimConflictDisplay');
+    const claimAmountDisplay = document.getElementById('claimAmountDisplay');
+    const claimRuleStatusDisplay = document.getElementById('claimRuleStatusDisplay');
+    if (claimMerchantDisplay) claimMerchantDisplay.textContent = claim.merchant;
+    if (claimConflictDisplay) claimConflictDisplay.textContent = claim.conflict;
+    if (claimAmountDisplay) claimAmountDisplay.textContent = claim.amount;
+    if (claimRuleStatusDisplay) claimRuleStatusDisplay.textContent = claim.ruleStatus;
+
+    // Update Statement text
+    const claimStatementText = document.getElementById('claimStatementText');
+    if (claimStatementText) claimStatementText.innerHTML = claim.statement;
+
+    // Update Stepper
+    renderStepper(claim);
+
+    // Update Action Button
+    if (btnTransmitArbitration) {
+      btnTransmitArbitration.textContent = claim.buttonText;
+      btnTransmitArbitration.disabled = !claim.canSubmit;
     }
 
-    btnTransmitArbitration.disabled = true;
-    btnTransmitArbitration.textContent = 'Transmitting Notice via ADRP Gateway...';
+    const settlementBox = document.getElementById('settlementBox');
+    if (settlementBox) {
+      if (claim.id === 'claim-1' && state.arbitrationState === 'UNDER_REVIEW') {
+        settlementBox.classList.remove('hidden');
+      } else {
+        settlementBox.classList.add('hidden');
+      }
+    }
+  }
 
-    setTimeout(() => {
-      arbStep2.className = 'step-cell done';
-      arbStep2Meta.textContent = 'Transmitted 10:04 IST';
+  function renderStepper(claim) {
+    const cells = [
+      { el: document.getElementById('step1Cell'), meta: document.getElementById('step1Meta') },
+      { el: document.getElementById('step2Cell'), meta: document.getElementById('step2Meta') },
+      { el: document.getElementById('step3Cell'), meta: document.getElementById('step3Meta') },
+      { el: document.getElementById('step4Cell'), meta: document.getElementById('step4Meta') }
+    ];
 
-      arbStep3.className = 'step-cell current';
-      arbStep3Meta.textContent = 'Validating Signatures';
-      arbitrationStateChip.textContent = 'NOTICE TRANSMITTED';
-      showToast('Formal dispute notice delivered to InterGlobe Aviation API.');
-    }, 1200);
+    cells.forEach((cell, idx) => {
+      if (!cell.el) return;
+      const stepNum = idx + 1;
+      const stepInfo = claim.steps[idx];
+      if (cell.meta && stepInfo) cell.meta.textContent = stepInfo.meta;
 
-    setTimeout(() => {
-      arbStep3.className = 'step-cell done';
-      arbStep3Meta.textContent = 'Handshake Verified';
+      cell.el.className = 'step-cell';
+      if (stepNum < claim.currentStep) {
+        cell.el.classList.add('done');
+      } else if (stepNum === claim.currentStep) {
+        cell.el.classList.add('current');
+        if (claim.currentStep === 4) cell.el.classList.add('done');
+      }
+    });
 
-      arbStep4.className = 'step-cell done current';
-      arbStep4Meta.textContent = 'Restitution Complete';
+    if (arbitrationStateChip) {
+      if (claim.currentStep === 4) {
+        arbitrationStateChip.textContent = 'RESOLVED · REFUNDED 🟢';
+        arbitrationStateChip.className = 'metric-chip mono text-verified';
+      } else if (claim.currentStep === 3) {
+        arbitrationStateChip.textContent = 'UNDER MERCHANT REVIEW ⏳';
+        arbitrationStateChip.className = 'metric-chip mono';
+      } else {
+        arbitrationStateChip.textContent = 'EVIDENCE READY';
+        arbitrationStateChip.className = 'metric-chip mono';
+      }
+    }
+  }
 
-      settlementBox.classList.remove('hidden');
-      btnTransmitArbitration.textContent = 'Arbitration Finalized (Restitution Confirmed)';
-      arbitrationStateChip.textContent = 'SETTLEMENT CONCLUDED';
-      arbitrationStateChip.className = 'metric-chip mono text-verified';
-      disputeFlag.textContent = 'SETTLED';
-      disputeFlag.style.backgroundColor = 'var(--moss-subtle)';
-      disputeFlag.style.color = 'var(--moss-verified)';
-      disputeFlag.style.borderColor = 'var(--moss-border)';
-
-      state.arbitrationState = 'SETTLED';
-      showToast('Restitution confirmed: Full refund of ₹7,850.00 INR credited.');
-    }, 2800);
+  // Bind click on claims list
+  document.querySelectorAll('.claim-list-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-claim-id');
+      renderSelectedClaim(id);
+    });
   });
+
+  // Transmission Flow for Active Claim
+  if (btnTransmitArbitration) {
+    btnTransmitArbitration.addEventListener('click', () => {
+      const claim = claimsData.find(c => c.id === selectedClaimId);
+      if (!claim || !claim.canSubmit) return;
+
+      if (state.arbitrationState === 'UNDER_REVIEW' || state.arbitrationState === 'TRANSMITTED') {
+        showToast('Dispute dossier has already been transmitted and is currently under vendor review.');
+        return;
+      }
+
+      btnTransmitArbitration.disabled = true;
+      btnTransmitArbitration.textContent = 'Transmitting Claim to IndiGo...';
+
+      setTimeout(() => {
+        claim.currentStep = 3;
+        claim.statusTag = 'Step 3 of 4 · Under Review';
+        claim.steps[1].meta = 'Transmitted 10:04 IST';
+        claim.steps[2].meta = 'Vendor Review (Est. 24-48h)';
+        renderStepper(claim);
+
+        // update status pill in list
+        const item1 = document.querySelector('[data-claim-id="claim-1"] .claim-item-status');
+        if (item1) {
+          item1.textContent = 'Step 3 of 4 · In Review';
+          item1.className = 'claim-item-status status-step-3';
+        }
+
+        const settlementBox = document.getElementById('settlementBox');
+        if (settlementBox) settlementBox.classList.remove('hidden');
+
+        btnTransmitArbitration.textContent = 'Dispute Transmitted 🟢 (Under Review ⏳)';
+        state.arbitrationState = 'UNDER_REVIEW';
+        showToast('Dispute transmitted: Evidence Dossier received (#DSP-8910). Under Vendor Review.');
+
+        setTimeout(() => {
+          const prefModal = document.getElementById('preferenceEvolutionModal');
+          if (prefModal) prefModal.classList.remove('hidden');
+        }, 700);
+      }, 1200);
+    });
+  }
+
+  // Preference Evolution Modal Event Listeners
+  const prefModal = document.getElementById('preferenceEvolutionModal');
+  const btnClosePrefEvolModal = document.getElementById('btnClosePrefEvolModal');
+  const btnDismissPrefEvol = document.getElementById('btnDismissPrefEvol');
+  const btnConfirmLockPermanent = document.getElementById('btnConfirmLockPermanent');
+
+  if (btnClosePrefEvolModal && prefModal) {
+    btnClosePrefEvolModal.addEventListener('click', () => {
+      prefModal.classList.add('hidden');
+    });
+  }
+
+  if (btnDismissPrefEvol && prefModal) {
+    btnDismissPrefEvol.addEventListener('click', () => {
+      prefModal.classList.add('hidden');
+      showToast('Preference evolution deferred.');
+    });
+  }
+
+  if (btnConfirmLockPermanent && prefModal) {
+    btnConfirmLockPermanent.addEventListener('click', () => {
+      prefModal.classList.add('hidden');
+      // Increment vault version to V14 and lock mandate
+      state.activeVaultVersion = 'V14.00';
+      const vaultBadge = document.getElementById('vaultSpecBadge');
+      if (vaultBadge) vaultBadge.textContent = 'V14.00';
+      showToast("Mandate SEC-TRV-102 ('Arrive before 6 PM') permanently locked in Vault (Spec V14.00).");
+    });
+  }
 
   // ==========================================
   // FORENSIC EVIDENCE JSON EXPORT
@@ -1315,6 +1995,7 @@ document.addEventListener('DOMContentLoaded', () => {
     standard_specification: "ADRP-2040-REV4",
     dossier_reference: "DSP-2040-8812",
     audit_attestation_timestamp_utc: "2040-10-21T04:33:00.120Z",
+    disclaimer: "Disclaimer: This document contains cryptographically hashed evidence of user instructions and execution payloads. Final remedy determination rests with the destination vendor/marketplace.",
     claimant_principal: {
       account_identifier: "USR-2040-DEMO",
       public_attestation_key: "8F9A-2B3C-1A92-E4F1",
@@ -1346,7 +2027,7 @@ document.addEventListener('DOMContentLoaded', () => {
       temporal_precedence_confirmed: true,
       delta_seconds_precedence: 151,
       variance_summary: "Execution contradicts mandate by +180 minutes",
-      statutory_remedy: "Immediate ticket rescission and 100% financial restitution"
+      statutory_remedy: "Formal evidence dossier compiled to facilitate claim under vendor dispute protocol."
     }
   };
 
@@ -1486,7 +2167,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tag = target.getAttribute('data-detail-tag') || 'VERIFIED';
       const highlight = target.getAttribute('data-detail-highlight') || '';
       const text = target.getAttribute('data-detail-text') || target.getAttribute('data-detail') || '';
-      const meta = target.getAttribute('data-detail-meta') || 'REF: ENCLAVE-ROOT // LOCAL';
+      const meta = target.getAttribute('data-detail-meta') || 'Click to copy full trace // REF: ENCLAVE-ROOT';
 
       if (!text && !highlight && !title) return;
 
@@ -1494,17 +2175,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (ttTag) {
         ttTag.textContent = tag;
         if (tag.includes('CONFLICT') || tag.includes('BREACH') || tag.includes('DANGER') || tag.includes('STRICT')) {
-          ttTag.style.backgroundColor = 'rgba(197, 48, 48, 0.35)';
-          ttTag.style.color = '#FFA8A8';
-          ttTag.style.borderColor = 'rgba(197, 48, 48, 0.5)';
+          ttTag.style.backgroundColor = 'rgba(220, 38, 38, 0.2)';
+          ttTag.style.color = '#FCA5A5';
+          ttTag.style.borderColor = 'rgba(220, 38, 38, 0.4)';
         } else if (tag.includes('UNCOVERED') || tag.includes('ADVISORY') || tag.includes('SECTION')) {
-          ttTag.style.backgroundColor = 'rgba(217, 119, 6, 0.35)';
-          ttTag.style.color = '#FDE68A';
-          ttTag.style.borderColor = 'rgba(217, 119, 6, 0.5)';
+          ttTag.style.backgroundColor = 'rgba(217, 119, 6, 0.2)';
+          ttTag.style.color = '#FCD34D';
+          ttTag.style.borderColor = 'rgba(217, 119, 6, 0.4)';
         } else {
-          ttTag.style.backgroundColor = 'rgba(147, 132, 209, 0.3)';
-          ttTag.style.color = '#E9D5DA';
-          ttTag.style.borderColor = 'rgba(147, 132, 209, 0.4)';
+          ttTag.style.backgroundColor = '#27272A';
+          ttTag.style.color = '#D4D4D8';
+          ttTag.style.borderColor = '#3F3F46';
         }
       }
 
@@ -1573,6 +2254,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!target.contains(related)) {
           hideTooltip();
         }
+      }
+    });
+
+    // Click to copy trace support
+    document.addEventListener('click', (e) => {
+      const copyTarget = e.target.closest('.mandate-info-icon, .code-badge');
+      if (copyTarget && copyTarget.getAttribute('data-detail-text')) {
+        const title = copyTarget.getAttribute('data-detail-title') || 'Mandate';
+        const text = copyTarget.getAttribute('data-detail-text') || '';
+        const meta = copyTarget.getAttribute('data-detail-meta') || '';
+        const trace = `${title}: ${text} [${meta}]`;
+        navigator.clipboard.writeText(trace).then(() => {
+          showToast('Forensic constraint trace copied to clipboard.');
+        }).catch(() => { });
       }
     });
 

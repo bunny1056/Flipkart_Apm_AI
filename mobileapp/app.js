@@ -18,7 +18,11 @@ document.addEventListener('DOMContentLoaded', () => {
     activeVaultVersion: 'V13.04',
     activeFilter: 'all',
     selectedAction: null,
-    arbitrationState: 'PACKAGED',
+    arbitrationState: 'PACKAGED', // 'PACKAGED' | 'TRANSMITTED' | 'UNDER_REVIEW'
+    mandateFilterDomain: 'all',
+    mandateFilterSearch: '',
+    mandateFilterHardOnly: false,
+    pendingRevokeMandate: null,
     mandates: [
       {
         code: 'SEC-TRV-102',
@@ -122,58 +126,58 @@ document.addEventListener('DOMContentLoaded', () => {
     streamRecords: [
       {
         id: 'ACT-9042',
-        title: 'Flight 6E-2412 (BLR ➔ DEL)',
-        merchant: 'InterGlobe Aviation (IndiGo)',
-        agent: 'OpenAgent Travel v8.4',
+        title: 'IndiGo Flight 6E-2412 (BLR ➔ DEL)',
+        merchant: 'IndiGo Airlines',
+        agent: 'Travel Assistant',
         time: 'Today, 10:02 AM',
         value: '₹7,850.00',
         determination: 'breach',
         determinationLabel: 'CONFLICT',
-        explanation: 'Scheduled arrival at 21:00 IST directly breaches Mandate SEC-TRV-102 (Limit: < 18:00 IST).'
+        explanation: 'Flight lands at 9:00 PM, which is 3 hours past your 6:00 PM arrival cutoff rule.'
       },
       {
         id: 'ACT-9041',
         title: '2-Year Hardware Warranty Add-On',
         merchant: 'Croma Electronics',
-        agent: 'RetailAgent v4.2',
+        agent: 'Shopping Assistant',
         time: 'Today, 09:41 AM',
         value: '₹1,500.00',
         determination: 'uncovered',
         determinationLabel: 'UNCOVERED',
-        explanation: 'No constraint in Vault V13 applies to extended device warranties. Non-punitive state.'
+        explanation: 'No rule set for extended warranties. Auto-approved within spending limit.'
       },
       {
         id: 'ACT-9039',
-        title: 'Weekly Organic Sustenance Basket',
-        merchant: 'BigBasket Hyperlocal',
-        agent: 'HouseholdAgent v2.1',
+        title: 'Weekly Grocery Basket',
+        merchant: 'BigBasket',
+        agent: 'Grocery Assistant',
         time: 'Today, 08:15 AM',
         value: '₹4,210.00',
         determination: 'verified',
         determinationLabel: 'VERIFIED',
-        explanation: 'Audited against household weekly sustenance budget allocation.'
+        explanation: 'Audited against household weekly grocery budget.'
       },
       {
         id: 'ACT-9038',
         title: 'Monthly Electric Utility Auto-Pay',
-        merchant: 'BESCOM Power Corp',
-        agent: 'FinanceAgent v6.1',
+        merchant: 'BESCOM Power',
+        agent: 'Bill Pay Assistant',
         time: 'Today, 06:30 AM',
         value: '₹2,340.00',
         determination: 'verified',
         determinationLabel: 'VERIFIED',
-        explanation: 'Within verified seasonal baseline variance.'
+        explanation: 'Standard utility bill, within normal range.'
       },
       {
         id: 'ACT-9037',
-        title: 'Autonomous Urban Commute (AV-4)',
-        merchant: 'Uber Mobility',
-        agent: 'MobilityAgent v3',
-        time: 'Yesterday, 19:12',
+        title: 'City Ride (Uber)',
+        merchant: 'Uber',
+        agent: 'Ride Assistant',
+        time: 'Yesterday, 07:12 PM',
         value: '₹450.00',
         determination: 'verified',
         determinationLabel: 'VERIFIED',
-        explanation: 'Standard commuter tariff compliant with Rule SEC-TRV-107.'
+        explanation: 'Standard commuter ride compliant with travel budget.'
       }
     ],
     agents: [
@@ -213,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const mOverviewActivityList = document.getElementById('mOverviewActivityList');
   const mRulesContainer = document.getElementById('mRulesContainer');
   const mAgentsList = document.getElementById('mAgentsList');
-  const mActivityFilters = document.querySelectorAll('#mActivityFilters .m-pill');
+  const mActivityFilters = document.querySelectorAll('#mActivityFilters button');
 
   // Bottom Sheet
   const mSheetOverlay = document.getElementById('mSheetOverlay');
@@ -230,6 +234,19 @@ document.addEventListener('DOMContentLoaded', () => {
   const inputMRuleText = document.getElementById('inputMRuleText');
   const selectMRuleDomain = document.getElementById('selectMRuleDomain');
   const selectMRuleSeverity = document.getElementById('selectMRuleSeverity');
+  const mMandatesSearchInput = document.getElementById('mMandatesSearchInput');
+  const mMandatesSearchClear = document.getElementById('mMandatesSearchClear');
+  const mDomainFilterPills = document.getElementById('mDomainFilterPills');
+  const btnMSeverityToggle = document.getElementById('btnMSeverityToggle');
+  const mHardLimitsBadge = document.getElementById('mHardLimitsBadge');
+  const mVaultSpecBadge = document.getElementById('mVaultSpecBadge');
+  const mVaultRulesCount = document.getElementById('mVaultRulesCount');
+  const mRevokeRuleOverlay = document.getElementById('mRevokeRuleOverlay');
+  const mRevokeRuleCode = document.getElementById('mRevokeRuleCode');
+  const mRevokeRuleText = document.getElementById('mRevokeRuleText');
+  const btnCloseMRevoke = document.getElementById('btnCloseMRevoke');
+  const btnMCancelRevoke = document.getElementById('btnMCancelRevoke');
+  const btnMConfirmRevoke = document.getElementById('btnMConfirmRevoke');
 
   // Dispute & Kill Switch
   const btnMInitiateDispute = document.getElementById('btnMInitiateDispute');
@@ -247,6 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================
   function init() {
     renderActivityList();
+    renderMDomainFilters();
     renderRules();
     renderAgents();
     renderSpentAnalysis();
@@ -254,6 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupExpandables();
     setupGlobalDetailTooltips();
     setupHandlers();
+    renderSelectedMobileClaim('claim-1');
   }
 
   // ==========================================
@@ -286,8 +305,16 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
+    const mConflictBarToggle = document.getElementById('mConflictBarToggle');
+    if (mConflictBarToggle && mPrimaryConflictCard) {
+      mConflictBarToggle.addEventListener('click', () => {
+        mPrimaryConflictCard.classList.toggle('expanded');
+      });
+    }
+
     if (btnMReviewEvidence) {
-      btnMReviewEvidence.addEventListener('click', () => {
+      btnMReviewEvidence.addEventListener('click', (e) => {
+        e.stopPropagation();
         switchScreen('screen-evidence');
       });
     }
@@ -299,7 +326,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (btnMReviewDismiss) {
-      btnMReviewDismiss.addEventListener('click', () => {
+      btnMReviewDismiss.addEventListener('click', (e) => {
+        e.stopPropagation();
         if (mPrimaryConflictCard) {
           mPrimaryConflictCard.style.opacity = '0';
           mPrimaryConflictCard.style.transform = 'translateY(-8px)';
@@ -332,24 +360,47 @@ document.addEventListener('DOMContentLoaded', () => {
       return true;
     });
 
+    if (filtered.length === 0) {
+      mOverviewActivityList.innerHTML = `
+        <div style="text-align: center; padding: 24px; color: var(--text-faint); font-family: var(--font-mono); font-size: 11px;">
+          NO AUDITED ACTIONS MATCHING CRITERIA
+        </div>
+      `;
+      return;
+    }
+
     filtered.forEach(rec => {
       const isBreach = rec.determination === 'breach';
+      const isUncovered = rec.determination === 'uncovered';
       const isVerified = rec.determination === 'verified';
+
+      const dotClass = isBreach ? 'dot-breach' : (isUncovered ? 'dot-uncovered' : 'dot-verified');
       const tagText = isBreach ? 'CRITICAL CONFLICT' : (isVerified ? 'VERIFIED COMPLIANT' : 'UNCOVERED INTENT');
       const highlight = isBreach ? 'Variance: Scheduled arrival breaches limit' : (isVerified ? 'Audit verified against mandate' : 'No prior constraint defined');
 
       const item = document.createElement('div');
       item.className = 'm-activity-item';
       item.innerHTML = `
-        <div class="act-item-left">
-          <div class="act-item-title">${rec.title}</div>
-          <div class="act-item-sub mono">${rec.merchant} · ${rec.time}</div>
+        <div class="m-act-left-wrap">
+          <span class="m-act-dot ${dotClass}" title="${tagText}"></span>
+          <div class="m-act-details">
+            <div class="m-act-title">${rec.title}</div>
+            <div class="m-act-sub">${rec.merchant} · ${rec.time}</div>
+          </div>
         </div>
-        <div class="act-item-right">
-          <div class="act-item-amount">${rec.value}</div>
-          <span class="status-pill-m status-${rec.determination} has-detail" data-detail-title="${rec.id} Audit Result" data-detail-tag="${tagText}" data-detail-highlight="${highlight}" data-detail-text="${rec.explanation} Source: ${rec.agent}." data-detail-meta="Tap item to open forensic receipt drawer">${rec.determinationLabel}</span>
+        <div class="m-act-right-wrap">
+          <span class="m-act-amt">${rec.value}</span>
+          <button class="m-quick-btn btn-m-trace" data-id="${rec.id}">Trace</button>
         </div>
       `;
+
+      const btnTrace = item.querySelector('.btn-m-trace');
+      if (btnTrace) {
+        btnTrace.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openActionSheet(rec);
+        });
+      }
 
       item.addEventListener('click', () => {
         openActionSheet(rec);
@@ -362,8 +413,12 @@ document.addEventListener('DOMContentLoaded', () => {
   // Filter Buttons
   mActivityFilters.forEach(pill => {
     pill.addEventListener('click', () => {
-      mActivityFilters.forEach(p => p.classList.remove('active'));
+      mActivityFilters.forEach(p => {
+        p.classList.remove('active');
+        if (p.hasAttribute('aria-selected')) p.setAttribute('aria-selected', 'false');
+      });
       pill.classList.add('active');
+      if (pill.hasAttribute('aria-selected')) pill.setAttribute('aria-selected', 'true');
       state.activeFilter = pill.getAttribute('data-filter');
       renderActivityList();
     });
@@ -372,38 +427,38 @@ document.addEventListener('DOMContentLoaded', () => {
   // Action Bottom Sheet
   function openActionSheet(rec) {
     state.selectedAction = rec;
-    if (sheetActionId) sheetActionId.textContent = `#${rec.id}`;
+    if (sheetActionId) sheetActionId.textContent = rec.determination === 'breach' ? '⚠️ Conflict Detected' : 'Audit Details';
     if (sheetActionTitle) sheetActionTitle.textContent = rec.title;
 
     if (sheetBody) {
       sheetBody.innerHTML = `
         <div style="padding: 10px; background-color: var(--surface-subtle); border-radius: var(--radius-xs); border: 1px solid var(--rule-hairline); margin-bottom: 12px;">
-          <div class="mono text-xs text-muted" style="font-size: 9.5px;">FORENSIC DETERMINATION</div>
-          <div style="margin-top: 3px; font-size: 12px; color: var(--text-lead); font-weight: 500;">${rec.explanation}</div>
+          <div class="text-xs text-muted" style="font-size: 10.5px; font-weight: 600;">WHAT HAPPENED</div>
+          <div style="margin-top: 3px; font-size: 12.5px; color: var(--text-lead); font-weight: 500;">${rec.explanation}</div>
         </div>
 
         <div style="display: flex; flex-direction: column; gap: 7px; font-size: 12px; margin-bottom: 14px;">
           <div class="diff-m-item" style="border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-            <span class="diff-m-k">Agent Actor:</span>
-            <span class="mono font-600 text-lead">${rec.agent}</span>
+            <span class="diff-m-k">Booked by:</span>
+            <span class="font-600 text-lead">${rec.agent}</span>
           </div>
           <div class="diff-m-item" style="border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-            <span class="diff-m-k">Merchant API:</span>
-            <span class="mono font-600 text-lead">${rec.merchant}</span>
+            <span class="diff-m-k">Merchant:</span>
+            <span class="font-600 text-lead">${rec.merchant}</span>
           </div>
           <div class="diff-m-item" style="border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-            <span class="diff-m-k">Quantum:</span>
-            <span class="mono font-700 text-lead">${rec.value} INR</span>
+            <span class="diff-m-k">Amount:</span>
+            <span class="font-700 text-lead">${rec.value}</span>
           </div>
           <div class="diff-m-item" style="border-bottom: 1px solid var(--rule-hairline); padding-bottom: 4px;">
-            <span class="diff-m-k">Timestamp:</span>
-            <span class="mono text-xs text-muted">${rec.time}</span>
+            <span class="diff-m-k">Time:</span>
+            <span class="text-xs text-muted">${rec.time}</span>
           </div>
         </div>
 
         ${rec.determination === 'breach' ? `
           <button class="btn btn-primary w-100" id="btnSheetInspectEvidence">
-            Inspect Bilateral Evidence Dossier →
+            Inspect Evidence & Timeline →
           </button>
         ` : ''}
       `;
@@ -449,34 +504,168 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/under ₹500 INR/g, '<strong class="text-lead font-600">under ₹500 INR</strong>');
   }
 
+  function renderMDomainFilters() {
+    if (!mDomainFilterPills) return;
+    mDomainFilterPills.innerHTML = '';
+    const domains = ['all', 'Travel', 'Finance', 'Subscriptions', 'Hardware', 'Dining'];
+
+    domains.forEach(d => {
+      const count = d === 'all'
+        ? state.mandates.length
+        : state.mandates.filter(m => m.domain.toLowerCase() === d.toLowerCase()).length;
+
+      const btn = document.createElement('button');
+      btn.className = `m-domain-tab ${state.mandateFilterDomain.toLowerCase() === d.toLowerCase() ? 'active' : ''}`;
+      btn.setAttribute('role', 'tab');
+      btn.innerHTML = `
+        <span>${d === 'all' ? 'All' : d}</span>
+        <span class="m-domain-tab-badge mono">${count}</span>
+      `;
+
+      btn.addEventListener('click', () => {
+        state.mandateFilterDomain = d;
+        renderMDomainFilters();
+        renderRules();
+      });
+
+      mDomainFilterPills.appendChild(btn);
+    });
+
+    const hardCount = state.mandates.filter(m => m.severity === 'Hard Limit').length;
+    if (mHardLimitsBadge) mHardLimitsBadge.textContent = hardCount;
+  }
+
   function renderRules() {
     if (!mRulesContainer) return;
     mRulesContainer.innerHTML = '';
 
-    state.mandates.forEach(m => {
-      const isHard = m.severity === 'Hard Limit';
-      const item = document.createElement('div');
-      item.className = 'm-card';
-      item.style.marginBottom = '8px';
-      item.innerHTML = `
-        <div class="diff-m-item" style="margin-bottom: 5px;">
-          <span class="mono font-600 text-xs text-mauve has-detail" data-detail-title="${m.code} Specification" data-detail-tag="${m.domain.toUpperCase()}" data-detail-highlight="Enforced in Vault ${m.version}" data-detail-text="${m.text}">${m.code}</span>
-          <span class="status-pill-m ${isHard ? 'status-breach' : 'status-verified'} has-detail" data-detail-title="${m.severity} Enforcement" data-detail-tag="${isHard ? 'STRICT' : 'ADVISORY'}" data-detail-highlight="${isHard ? 'Mandatory Conflict Flag' : 'Discretionary Notice'}" data-detail-text="${isHard ? 'Violations of hard limits result in automatic statutory conflict flagging.' : 'Soft constraints permit 10% discretion.'}">${m.severity}</span>
-        </div>
-        <div style="font-size: 12px; line-height: 1.45; color: var(--text-lead);">${highlightConstraint(m.text)}</div>
-        <div class="diff-m-item" style="margin-top: 6px; font-size: 10px; color: var(--text-muted);">
-          <span class="mono">Domain: ${m.domain} · ${m.version}</span>
-          <button class="btn-link mono text-xs btn-m-revoke" data-code="${m.code}" style="color: var(--text-muted); background: none; border: none; cursor: pointer; text-decoration: underline;">Revoke</button>
-        </div>
-      `;
-      mRulesContainer.appendChild(item);
+    const q = (state.mandateFilterSearch || '').toLowerCase().trim();
+    const filtered = state.mandates.filter(m => {
+      if (state.mandateFilterDomain !== 'all' && m.domain.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) {
+        return false;
+      }
+      if (state.mandateFilterHardOnly && m.severity !== 'Hard Limit') {
+        return false;
+      }
+      if (q) {
+        const matchCode = m.code.toLowerCase().includes(q);
+        const matchText = m.text.toLowerCase().includes(q);
+        const matchDomain = m.domain.toLowerCase().includes(q);
+        if (!matchCode && !matchText && !matchDomain) return false;
+      }
+      return true;
     });
 
-    document.querySelectorAll('.btn-m-revoke').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const code = e.target.getAttribute('data-code');
-        showToast(`Revocation of ${code} requires signing key attestation.`);
+    if (filtered.length === 0) {
+      mRulesContainer.innerHTML = `
+        <div style="text-align: center; padding: 32px 14px; color: var(--text-faint); font-family: var(--font-mono); font-size: 11px;">
+          <div style="font-weight: 600; margin-bottom: 4px; color: var(--text-lead);">NO RULES MATCH CRITERIA</div>
+          <div style="color: var(--text-muted); font-size: 10px;">Adjust search, clear domain, or toggle off Hard Limits.</div>
+        </div>
+      `;
+    } else {
+      filtered.forEach(m => {
+        const isHard = m.severity === 'Hard Limit';
+        const pseudoHash = '0x' + m.code.replace(/[^A-Za-z0-9]/g, '').toLowerCase() + 'a812e9b048';
+        const item = document.createElement('div');
+        item.className = 'm-card';
+        item.style.marginBottom = '8px';
+        item.innerHTML = `
+          <div class="diff-m-item" style="margin-bottom: 6px; align-items: center;">
+            <span class="domain-badge-cell" style="font-weight: 600; font-size: 11px;">${m.domain}</span>
+            <span class="status-pill-m ${isHard ? 'pill-hard' : 'pill-soft'}">${m.severity}</span>
+          </div>
+          <div style="font-size: 12px; line-height: 1.45; color: var(--text-lead); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+            <span class="mandate-sentence">${highlightConstraint(m.text)}</span>
+          </div>
+          <div class="diff-m-item" style="margin-top: 8px; font-size: 11px; color: var(--text-muted); align-items: center;">
+            <span>Active & Enforced</span>
+            <button class="btn-ghost-revoke-m btn-m-revoke" data-code="${m.code}">
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 6h18"></path>
+                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              </svg>
+              <span>Revoke</span>
+            </button>
+          </div>
+        `;
+
+        const btnRevoke = item.querySelector('.btn-m-revoke');
+        if (btnRevoke) {
+          btnRevoke.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openMRevokeSheet(m);
+          });
+        }
+
+        mRulesContainer.appendChild(item);
       });
+    }
+
+    if (mVaultRulesCount) mVaultRulesCount.textContent = `${state.mandates.length} RULES`;
+    if (mVaultSpecBadge) mVaultSpecBadge.textContent = state.activeVaultVersion;
+    const overviewRulesCount = document.getElementById('overviewRulesCount');
+    if (overviewRulesCount) overviewRulesCount.textContent = state.mandates.length;
+  }
+
+  // Mobile Search & Filter Listeners
+  if (mMandatesSearchInput) {
+    mMandatesSearchInput.addEventListener('input', (e) => {
+      state.mandateFilterSearch = e.target.value;
+      if (mMandatesSearchClear) {
+        if (e.target.value) mMandatesSearchClear.classList.remove('hidden');
+        else mMandatesSearchClear.classList.add('hidden');
+      }
+      renderRules();
+    });
+  }
+
+  if (mMandatesSearchClear) {
+    mMandatesSearchClear.addEventListener('click', () => {
+      if (mMandatesSearchInput) {
+        mMandatesSearchInput.value = '';
+        state.mandateFilterSearch = '';
+        mMandatesSearchClear.classList.add('hidden');
+        renderRules();
+        mMandatesSearchInput.focus();
+      }
+    });
+  }
+
+  if (btnMSeverityToggle) {
+    btnMSeverityToggle.addEventListener('click', () => {
+      state.mandateFilterHardOnly = !state.mandateFilterHardOnly;
+      btnMSeverityToggle.classList.toggle('active', state.mandateFilterHardOnly);
+      btnMSeverityToggle.setAttribute('aria-checked', state.mandateFilterHardOnly ? 'true' : 'false');
+      renderRules();
+    });
+  }
+
+  // Mobile Revocation Bottom Sheet Handlers
+  function openMRevokeSheet(mandate) {
+    state.pendingRevokeMandate = mandate;
+    if (mRevokeRuleCode) mRevokeRuleCode.textContent = mandate.code;
+    if (mRevokeRuleText) mRevokeRuleText.textContent = `"${mandate.text}"`;
+    if (mRevokeRuleOverlay) mRevokeRuleOverlay.classList.remove('hidden');
+  }
+
+  function closeMRevokeSheet() {
+    state.pendingRevokeMandate = null;
+    if (mRevokeRuleOverlay) mRevokeRuleOverlay.classList.add('hidden');
+  }
+
+  if (btnCloseMRevoke) btnCloseMRevoke.addEventListener('click', closeMRevokeSheet);
+  if (btnMCancelRevoke) btnMCancelRevoke.addEventListener('click', closeMRevokeSheet);
+  if (btnMConfirmRevoke) {
+    btnMConfirmRevoke.addEventListener('click', () => {
+      if (!state.pendingRevokeMandate) return;
+      const code = state.pendingRevokeMandate.code;
+      state.mandates = state.mandates.filter(m => m.code !== code);
+      state.activeVaultVersion = 'V14.01';
+      closeMRevokeSheet();
+      renderMDomainFilters();
+      renderRules();
+      showToast(`Mandate ${code} revoked. Re-sealed under V14.01.`);
     });
   }
 
@@ -514,6 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       state.activeVaultVersion = 'V14.01';
 
+      renderMDomainFilters();
       renderRules();
       if (mAddRuleOverlay) mAddRuleOverlay.classList.add('hidden');
       showToast(`Mandate committed. Vault specification updated to V14.01.`);
@@ -533,7 +723,7 @@ document.addEventListener('DOMContentLoaded', () => {
       item.innerHTML = `
         <div class="act-item-left">
           <div class="act-item-title">${ag.name}</div>
-          <div class="act-item-sub mono">${ag.category} · Sync: ${ag.lastSync}</div>
+          <div class="act-item-sub">${ag.category}</div>
         </div>
         <div class="act-item-right">
           <span class="status-pill-m ${ag.isActive ? 'status-verified' : 'status-breach'}">${ag.isActive ? 'Active' : 'Suspended'}</span>
@@ -712,38 +902,226 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // ARBITRATION SUBMISSION FLOW
+  // CLAIMS & ARBITRATION INTERACTIVE CONTROLLER (MOBILE)
   // ==========================================
+  const mClaimsData = [
+    {
+      id: 'claim-1',
+      merchant: 'IndiGo Airlines',
+      title: 'Flight 6E-2412 (BLR ➔ DEL)',
+      conflict: 'Arrives 9:00 PM (Rule: < 6:00 PM)',
+      amount: '₹7,850.00',
+      ruleStatus: 'Active Before Booking',
+      currentStep: 2,
+      steps: [
+        { num: '1', title: '1. Conflict Detected', meta: '10:02 AM · Rule Breach' },
+        { num: '2', title: '2. Evidence Sealed', meta: '10:03 AM · Ready' },
+        { num: '3', title: '3. Merchant Review', meta: 'Pending Action' },
+        { num: '4', title: '4. Resolution / Refund', meta: 'Pending Review' }
+      ],
+      statement: `On October 21 at 10:02 AM, your Travel Assistant booked IndiGo flight 6E-2412 from Bengaluru to New Delhi arriving at 9:00 PM. Prior to this booking, an active rule was set at 10:00 AM requiring all domestic flights to arrive before 6:00 PM.<br><br>Because the assistant booked a ticket arriving 3 hours after your specified cutoff time, this dispute package has been generated to submit to IndiGo for review and reimbursement.`,
+      canSubmit: true,
+      buttonText: '⚡ Submit Dispute Claim to IndiGo'
+    },
+    {
+      id: 'claim-2',
+      merchant: 'Croma Electronics',
+      title: 'Smart Display Warranty Add-on',
+      conflict: 'Unauthorized Warranty Attached (No User Intent)',
+      amount: '₹1,299.00',
+      ruleStatus: 'Protected · Refund Complete',
+      currentStep: 4,
+      steps: [
+        { num: '1', title: '1. Conflict Detected', meta: 'Oct 19, 09:41 AM · Rule Breach' },
+        { num: '2', title: '2. Evidence Transmitted', meta: 'Oct 19, 10:15 AM · Delivered' },
+        { num: '3', title: '3. Merchant Review', meta: 'Oct 19, 14:30 PM · Approved' },
+        { num: '4', title: '4. Resolution / Refund', meta: 'Oct 20, 11:00 AM · ₹1,299.00 Credited' }
+      ],
+      statement: `On October 19 at 09:41 AM, an unauthorized 2-year warranty add-on was charged by Croma. As per consumer protection protocol, merchant acknowledged erroneous inclusion and returned ₹1,299.00 to original payment method on October 20.`,
+      canSubmit: false,
+      buttonText: '✓ Claim Resolved & Refunded (₹1,299.00 Credited)'
+    },
+    {
+      id: 'claim-3',
+      merchant: 'Uber Premier',
+      title: 'Airport Transit Surge Peak',
+      conflict: 'Surge fare ₹1,450 exceeded ₹800 spending limit',
+      amount: '₹650.00',
+      ruleStatus: 'Active Before Booking',
+      currentStep: 3,
+      steps: [
+        { num: '1', title: '1. Conflict Detected', meta: 'Oct 20, 07:12 PM · Rule Breach' },
+        { num: '2', title: '2. Evidence Transmitted', meta: 'Oct 20, 07:45 PM · Delivered' },
+        { num: '3', title: '3. Merchant Review', meta: 'In Progress · Est. 24h' },
+        { num: '4', title: '4. Resolution / Refund', meta: 'Awaiting Decision' }
+      ],
+      statement: `On October 20 at 07:12 PM, Uber ride was booked with dynamic surge pricing amounting to ₹1,450.00, breaching the maximum allowed cap of ₹800.00. Dossier was submitted to Uber Partner Support seeking refund of ₹650.00 difference.`,
+      canSubmit: false,
+      buttonText: '⏳ Claim Under Review by Uber Partner Support'
+    }
+  ];
+
+  let selectedMobileClaimId = 'claim-1';
+
+  function renderSelectedMobileClaim(claimId) {
+    selectedMobileClaimId = claimId;
+    const claim = mClaimsData.find(c => c.id === claimId) || mClaimsData[0];
+
+    // Highlight active list item
+    document.querySelectorAll('#mClaimsNavList .m-claim-list-item').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('data-claim-id') === claimId);
+    });
+
+    // Update Overview Grid
+    const mClaimMerchant = document.getElementById('mClaimMerchant');
+    const mClaimConflict = document.getElementById('mClaimConflict');
+    const mClaimAmount = document.getElementById('mClaimAmount');
+    const mClaimRuleStatus = document.getElementById('mClaimRuleStatus');
+    if (mClaimMerchant) mClaimMerchant.textContent = claim.merchant;
+    if (mClaimConflict) mClaimConflict.textContent = claim.conflict;
+    if (mClaimAmount) mClaimAmount.textContent = claim.amount;
+    if (mClaimRuleStatus) mClaimRuleStatus.textContent = claim.ruleStatus;
+
+    // Update Statement text
+    const mClaimStatement = document.getElementById('mClaimStatement');
+    if (mClaimStatement) mClaimStatement.innerHTML = claim.statement;
+
+    // Update 4-step stepper
+    renderMobileStepper(claim);
+
+    // Update Action Button
+    if (btnMInitiateDispute) {
+      if (claim.id === 'claim-1' && state.arbitrationState === 'UNDER_REVIEW') {
+        btnMInitiateDispute.textContent = 'Dispute Transmitted 🟢 (Under Review ⏳)';
+        btnMInitiateDispute.disabled = true;
+      } else {
+        btnMInitiateDispute.textContent = claim.buttonText;
+        btnMInitiateDispute.disabled = !claim.canSubmit;
+      }
+    }
+
+    if (mResolutionResult) {
+      if (claim.id === 'claim-1' && state.arbitrationState === 'UNDER_REVIEW') {
+        mResolutionResult.classList.remove('hidden');
+      } else {
+        mResolutionResult.classList.add('hidden');
+      }
+    }
+  }
+
+  function renderMobileStepper(claim) {
+    const rows = [
+      { row: document.getElementById('mStep1Row'), dot: document.getElementById('mStep1Dot'), text: document.getElementById('mStep1Text'), lbl: document.getElementById('mStep1Lbl') },
+      { row: document.getElementById('mStep2Row'), dot: document.getElementById('mStep2Dot'), text: document.getElementById('mStep2Meta'), lbl: document.getElementById('mStep2Lbl') },
+      { row: document.getElementById('mStep3Row'), dot: document.getElementById('mStep3Dot'), text: document.getElementById('mStep3Meta'), lbl: document.getElementById('mStep3Lbl') },
+      { row: document.getElementById('mStep4Row'), dot: document.getElementById('mStep4Dot'), text: document.getElementById('mStep4Meta'), lbl: document.getElementById('mStep4Lbl') }
+    ];
+
+    rows.forEach((step, idx) => {
+      if (!step.row) return;
+      const stepNum = idx + 1;
+      const stepInfo = claim.steps[idx];
+
+      if (step.text && stepInfo) step.text.textContent = stepInfo.meta;
+      if (step.lbl && stepInfo) step.lbl.textContent = stepInfo.title;
+
+      step.row.className = 'm-timeline-point';
+      if (step.dot) {
+        step.dot.className = 'm-tl-dot';
+        step.dot.style.backgroundColor = '';
+      }
+
+      if (stepNum < claim.currentStep) {
+        step.row.classList.add('point-done');
+        if (step.dot) step.dot.classList.add('dot-done');
+      } else if (stepNum === claim.currentStep) {
+        if (claim.currentStep === 4) {
+          step.row.classList.add('point-done');
+          if (step.dot) step.dot.classList.add('dot-done');
+        } else {
+          step.row.classList.add('point-current');
+          if (step.dot) step.dot.classList.add('dot-current');
+        }
+      }
+    });
+  }
+
+  // Bind click on mobile claims list items
+  document.querySelectorAll('#mClaimsNavList .m-claim-list-item').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.getAttribute('data-claim-id');
+      renderSelectedMobileClaim(id);
+    });
+  });
+
+  // Mobile Dispute Submission
   if (btnMInitiateDispute) {
     btnMInitiateDispute.addEventListener('click', () => {
-      if (state.arbitrationState === 'SETTLED') {
-        showToast('Arbitration dispute already settled.');
+      const claim = mClaimsData.find(c => c.id === selectedMobileClaimId);
+      if (!claim || !claim.canSubmit) return;
+
+      if (state.arbitrationState === 'UNDER_REVIEW' || state.arbitrationState === 'TRANSMITTED') {
+        showToast('Dispute dossier already submitted and under vendor review.');
         return;
       }
 
       btnMInitiateDispute.disabled = true;
-      btnMInitiateDispute.textContent = 'Transmitting notice to carrier...';
-
-      const step2Meta = document.getElementById('mStep2Meta');
-      const step2Dot = document.getElementById('mStep2Dot');
-      const step3Meta = document.getElementById('mStep3Meta');
-      const step3Dot = document.getElementById('mStep3Dot');
+      btnMInitiateDispute.textContent = 'Transmitting dossier to IndiGo...';
 
       setTimeout(() => {
-        if (step2Meta) step2Meta.textContent = 'Transmitted 10:04 IST';
-        if (step2Dot) step2Dot.style.backgroundColor = 'var(--moss-verified)';
-        if (step3Meta) step3Meta.textContent = 'Validating Signatures';
-        showToast('Formal dispute notice delivered to InterGlobe Aviation API.');
-      }, 1200);
+        claim.currentStep = 3;
+        claim.steps[1].meta = 'Transmitted 10:04 IST';
+        claim.steps[2].meta = 'Vendor Decision Pending (Est. 24-48h)';
+        renderMobileStepper(claim);
 
-      setTimeout(() => {
-        if (step3Meta) step3Meta.textContent = 'Handshake Complete · Refund Approved';
-        if (step3Dot) step3Dot.style.backgroundColor = 'var(--moss-verified)';
+        const badgeItem1 = document.querySelector('#mClaimsNavList [data-claim-id="claim-1"] .claim-item-status');
+        if (badgeItem1) {
+          badgeItem1.textContent = 'Step 3 of 4 · In Review';
+          badgeItem1.className = 'claim-item-status status-step-3';
+        }
+
         if (mResolutionResult) mResolutionResult.classList.remove('hidden');
-        btnMInitiateDispute.textContent = 'Restitution Confirmed (₹7,850.00 Refunded)';
-        state.arbitrationState = 'SETTLED';
-        showToast('Restitution confirmed: Full refund of ₹7,850.00 INR credited.');
-      }, 2600);
+        btnMInitiateDispute.textContent = 'Dispute Transmitted 🟢 (Under Vendor Review ⏳)';
+        state.arbitrationState = 'UNDER_REVIEW';
+        showToast('Dispute transmitted: Evidence Dossier received (#DSP-8910). Under Vendor Review.');
+
+        // Trigger Mobile Preference Evolution Modal
+        setTimeout(() => {
+          const mPrefModal = document.getElementById('mPreferenceEvolutionModal');
+          if (mPrefModal) {
+            mPrefModal.classList.remove('hidden');
+          }
+        }, 700);
+      }, 1200);
+    });
+  }
+
+  // Mobile Preference Evolution Modal Handlers
+  const mPrefModal = document.getElementById('mPreferenceEvolutionModal');
+  const btnMClosePrefEvolModal = document.getElementById('btnMClosePrefEvolModal');
+  const btnMDismissPrefEvol = document.getElementById('btnMDismissPrefEvol');
+  const btnMConfirmLockPermanent = document.getElementById('btnMConfirmLockPermanent');
+
+  if (btnMClosePrefEvolModal && mPrefModal) {
+    btnMClosePrefEvolModal.addEventListener('click', () => {
+      mPrefModal.classList.add('hidden');
+    });
+  }
+
+  if (btnMDismissPrefEvol && mPrefModal) {
+    btnMDismissPrefEvol.addEventListener('click', () => {
+      mPrefModal.classList.add('hidden');
+      showToast('Preference evolution deferred.');
+    });
+  }
+
+  if (btnMConfirmLockPermanent && mPrefModal) {
+    btnMConfirmLockPermanent.addEventListener('click', () => {
+      mPrefModal.classList.add('hidden');
+      state.activeVaultVersion = 'V14.00';
+      const mVaultSpecBadge = document.getElementById('mVaultSpecBadge');
+      if (mVaultSpecBadge) mVaultSpecBadge.textContent = 'V14.00';
+      showToast("Mandate SEC-TRV-102 ('Arrive before 6 PM') permanently locked in Vault (Spec V14.00).");
     });
   }
 
@@ -782,7 +1160,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const tag = target.getAttribute('data-detail-tag') || 'VERIFIED';
       const highlight = target.getAttribute('data-detail-highlight') || '';
       const text = target.getAttribute('data-detail-text') || '';
-      const meta = target.getAttribute('data-detail-meta') || 'REF: ENCLAVE-ROOT // LOCAL';
+      const meta = target.getAttribute('data-detail-meta') || 'Click to copy full trace // REF: ENCLAVE-ROOT';
 
       if (!text && !highlight && !title) return;
 
@@ -790,14 +1168,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (ttTag) {
         ttTag.textContent = tag;
         if (tag.includes('CONFLICT') || tag.includes('CRITICAL') || tag.includes('BREACH')) {
-          ttTag.style.backgroundColor = 'rgba(197, 48, 48, 0.35)';
-          ttTag.style.color = '#FFA8A8';
+          ttTag.style.backgroundColor = 'rgba(220, 38, 38, 0.2)';
+          ttTag.style.color = '#FCA5A5';
         } else if (tag.includes('UNCOVERED') || tag.includes('ADVISORY')) {
-          ttTag.style.backgroundColor = 'rgba(217, 119, 6, 0.35)';
-          ttTag.style.color = '#FDE68A';
+          ttTag.style.backgroundColor = 'rgba(217, 119, 6, 0.2)';
+          ttTag.style.color = '#FCD34D';
         } else {
-          ttTag.style.backgroundColor = 'rgba(147, 132, 209, 0.3)';
-          ttTag.style.color = '#E9D5DA';
+          ttTag.style.backgroundColor = '#27272A';
+          ttTag.style.color = '#D4D4D8';
         }
       }
 
@@ -848,10 +1226,18 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-    // Touch / tap toggle
+    // Touch / tap toggle & copy trace
     document.addEventListener('click', (e) => {
       const target = e.target.closest('[data-detail-text], [data-detail-title], .has-detail, .hash-pill');
       if (target) {
+        if (target.closest('.mandate-info-icon-m, .code-badge-m')) {
+          const title = target.getAttribute('data-detail-title') || 'Mandate';
+          const text = target.getAttribute('data-detail-text') || '';
+          const meta = target.getAttribute('data-detail-meta') || '';
+          navigator.clipboard.writeText(`${title}: ${text} [${meta}]`).then(() => {
+            showToast('Mandate constraint trace copied to clipboard.');
+          }).catch(() => { });
+        }
         if (activeTarget === target) {
           hideTooltip();
         } else {
@@ -867,6 +1253,179 @@ document.addEventListener('DOMContentLoaded', () => {
   // PROFILE HANDLERS & EMERGENCY CONTROLS
   // ==========================================
   function setupHandlers() {
+    // Hub-and-Spoke progressive disclosure controller
+    const hubDrawerOverlay = document.getElementById('mHubDrawerOverlay');
+    const hubDrawerTitle = document.getElementById('mHubDrawerTitle');
+    const hubDrawerCategory = document.getElementById('mHubDrawerCategory');
+    const btnCloseHubDrawer = document.getElementById('btnCloseHubDrawer');
+
+    function openHubDrawer(subviewId, title, category) {
+      if (hubDrawerTitle) hubDrawerTitle.textContent = title;
+      if (hubDrawerCategory) hubDrawerCategory.textContent = category;
+
+      document.querySelectorAll('.hub-subview').forEach(view => {
+        view.classList.add('hidden');
+      });
+
+      const target = document.getElementById(subviewId);
+      if (target) target.classList.remove('hidden');
+
+      if (hubDrawerOverlay) hubDrawerOverlay.classList.remove('hidden');
+
+      if (subviewId === 'hubSubSpending') {
+        setTimeout(() => {
+          renderSpentAnalysis();
+        }, 50);
+      }
+    }
+
+    function closeHubDrawer() {
+      if (hubDrawerOverlay) hubDrawerOverlay.classList.add('hidden');
+    }
+
+    if (btnCloseHubDrawer) {
+      btnCloseHubDrawer.addEventListener('click', closeHubDrawer);
+    }
+
+    if (hubDrawerOverlay) {
+      hubDrawerOverlay.addEventListener('click', (e) => {
+        if (e.target === hubDrawerOverlay) closeHubDrawer();
+      });
+    }
+
+    // Top Bar Back & Help
+    const btnHubBack = document.getElementById('btnHubBack');
+    if (btnHubBack) {
+      btnHubBack.addEventListener('click', () => {
+        switchScreen('screen-overview');
+      });
+    }
+
+    const btnHubHelp = document.getElementById('btnHubHelp');
+    if (btnHubHelp) {
+      btnHubHelp.addEventListener('click', () => {
+        switchScreen('screen-guide');
+      });
+    }
+
+    // User Summary & Active Enclave Card
+    const btnHubManageUser = document.getElementById('btnHubManageUser');
+    if (btnHubManageUser) {
+      btnHubManageUser.addEventListener('click', () => {
+        openHubDrawer('hubSubCredentials', 'Hardware Enclave Identity', 'CRYPTOGRAPHIC CREDENTIALS');
+      });
+    }
+
+    const btnHubEnclaveCard = document.getElementById('btnHubEnclaveCard');
+    if (btnHubEnclaveCard) {
+      btnHubEnclaveCard.addEventListener('click', () => {
+        openHubDrawer('hubSubCredentials', 'Active TPM-2040 Enclave', 'CRYPTOGRAPHIC ATTESTATION');
+      });
+    }
+
+    // Alert Banner Inspect Pill
+    const btnHubAlertInspect = document.getElementById('btnHubAlertInspect');
+    if (btnHubAlertInspect) {
+      btnHubAlertInspect.addEventListener('click', () => {
+        switchScreen('screen-overview');
+        showToast('Viewing live continuous agent audit stream.');
+      });
+    }
+
+    // Horizontal "Suggested for You" Tiles
+    const tileDossierExport = document.getElementById('tileDossierExport');
+    if (tileDossierExport) {
+      tileDossierExport.addEventListener('click', () => {
+        openHubDrawer('hubSubCredentials', 'Cryptographic Dossier Export', 'SIGNED ATTESTATION RECORD');
+      });
+    }
+
+    const tileBearerKeys = document.getElementById('tileBearerKeys');
+    if (tileBearerKeys) {
+      tileBearerKeys.addEventListener('click', () => {
+        openHubDrawer('hubSubAgents', 'Connected Agent Bearers', 'ACTIVE OAUTH BEARERS');
+      });
+    }
+
+    const tileBiometric = document.getElementById('tileBiometric');
+    if (tileBiometric) {
+      tileBiometric.addEventListener('click', () => {
+        openHubDrawer('hubSubPasskeys', 'Biometric Passkeys & FIDO2', 'WEBAUTHN ENCLAVE');
+      });
+    }
+
+    const tileArbitration = document.getElementById('tileArbitration');
+    if (tileArbitration) {
+      tileArbitration.addEventListener('click', () => {
+        openHubDrawer('hubSubArbitration', 'Statutory Arbitration Portal', 'ADRP-2040 SECTION 4');
+      });
+    }
+
+    // Vertical Hub-and-Spoke List Items
+    document.querySelectorAll('[data-hub-target]').forEach(row => {
+      row.addEventListener('click', () => {
+        const target = row.getAttribute('data-hub-target');
+        switch (target) {
+          case 'mandates':
+            switchScreen('screen-instructions');
+            showToast('Routing to Instruction Mandates Vault...');
+            break;
+          case 'spending':
+            openHubDrawer('hubSubSpending', 'Audited Spent Analytics', 'EXECUTIVE PORTFOLIO OVERSIGHT');
+            break;
+          case 'ceilings':
+            openHubDrawer('hubSubCeilings', 'Expenditure Ceilings', 'HARD LIMITS ENFORCEMENT');
+            break;
+          case 'agents':
+            openHubDrawer('hubSubAgents', 'Connected Agent Bearers', 'OAUTH TOKEN DIRECTORY');
+            break;
+          case 'killswitch':
+            openHubDrawer('hubSubKillSwitch', 'Emergency Delegation Suspension', 'ZERO-LATENCY REVOCATION');
+            break;
+          case 'hardware':
+            openHubDrawer('hubSubHardware', 'TPM-2040 Hardware Specs', 'LOCAL CRYPTOGRAPHIC ROOT');
+            break;
+          case 'passkeys':
+            openHubDrawer('hubSubPasskeys', 'Biometric Passkeys & Enclave', 'FIDO2 WEBAUTHN ATTESTATION');
+            break;
+          case 'arbitration':
+            openHubDrawer('hubSubArbitration', 'Statutory Arbitration Portal', 'ADRP-2040 DISPUTE DOSSIER');
+            break;
+        }
+      });
+    });
+
+    // Sticky Footer Banner
+    const btnStickyPasskeyTip = document.getElementById('btnStickyPasskeyTip');
+    if (btnStickyPasskeyTip) {
+      btnStickyPasskeyTip.addEventListener('click', () => {
+        openHubDrawer('hubSubPasskeys', 'Biometric Passkeys & Enclave', 'FIDO2 WEBAUTHN ATTESTATION');
+      });
+    }
+
+    // Passkey registration button demo
+    const btnMRegisterPasskey = document.getElementById('btnMRegisterPasskey');
+    if (btnMRegisterPasskey) {
+      btnMRegisterPasskey.addEventListener('click', () => {
+        btnMRegisterPasskey.textContent = 'Enrolling TPM-2040 Passkey...';
+        btnMRegisterPasskey.disabled = true;
+        setTimeout(() => {
+          btnMRegisterPasskey.textContent = 'Biometric Passkey Enrolled ✓';
+          btnMRegisterPasskey.style.backgroundColor = 'var(--moss-verified)';
+          showToast('Passkey enrolled: Touch ID / Windows Hello bound to TPM-2040.');
+        }, 1200);
+      });
+    }
+
+    // Go to dispute view button
+    const btnMGoToDisputeView = document.getElementById('btnMGoToDisputeView');
+    if (btnMGoToDisputeView) {
+      btnMGoToDisputeView.addEventListener('click', () => {
+        closeHubDrawer();
+        switchScreen('screen-disputes');
+      });
+    }
+
     if (btnMCopyKey) {
       btnMCopyKey.addEventListener('click', () => {
         const key = state.principal.keyFingerprint;

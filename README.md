@@ -23,7 +23,7 @@ This prototype directly targets **Segment 4 (High Consequence, Weak Detection)**
   * `#6B5B95` — Deep headings, lead body text, icons, and prominent brand accents
   * `#C53030` — Vermillion breach accent (for explicit instruction conflicts)
   * `#2D6A4F` — Forest moss accent (for verified cryptographic compliance)
-* **Typography:** Modern Google Fonts pairing (`Geist`, `Geist Mono`, and `Space Grotesk`) offering high legibility and data-dense aesthetic across screens.
+* **Typography:** Modern sans-serif typography system (`Inter`, with `Arial, Helvetica, sans-serif` fallbacks) offering high legibility and uniform visual hierarchy across all views, audit feeds, and records.
 * **Micro-Interactions & Depth:** Restrained floating attestation badges with layered depth, collapsible sidebar with `Ctrl+B` shortcut, and fluid SVG data visualizations.
 * **Decluttered Information Architecture:** Dense legal walls of text are replaced by clean executive summary cards, with deep forensic context accessible on **cursor hover** and **expandable accordions**.
 
