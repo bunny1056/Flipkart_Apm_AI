@@ -316,111 +316,557 @@ document.addEventListener('DOMContentLoaded', () => {
       greetingHeader.textContent = `${greeting}, ${state.principal.name}.`;
     }
 
-    // 2. Data-Driven Analytics Datasets
+    // 2. Comprehensive Multidimensional Analytics Datasets
     const analyticsDatasets = {
-      '7d': {
-        badge: '7-Day Trend',
-        audited: '48',
-        auditedMeta: '+12% vs prior period · 100% verified',
+      '24h': {
+        badge: '24-Hour Velocity',
+        audited: '142',
+        auditedDelta: '+18.4%',
+        auditedMeta: '100% verified in hardware enclave',
+        secure: '141',
+        secureDelta: '99.3%',
+        secureMeta: 'Zero cloud financial key leaks',
         conflicts: '1',
-        conflictsMeta: '2.1% conflict rate · 1 Active',
-        secure: '47',
-        secureMeta: '97.9% compliant with Vault Rules',
+        conflictsDelta: '1 Active',
+        conflictsMeta: '1 conflict pending principal review',
         spend: '₹18,450.00',
-        spendMeta: '73.8% of daily cap (₹25,000)',
+        spendDelta: '73.8% Cap',
+        spendMeta: 'Policy limit: ₹25,000 / day',
         pending: '1',
-        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
-        resolved: '2',
-        resolvedMeta: '₹2,319 recovered via dispute',
-        distTotal: '48 Total',
-        distSecureVal: '47 (97.9%)',
-        distSecurePct: '97.9%',
-        distConflictVal: '1 (2.1%)',
-        distConflictPct: '2.1%',
-        distPendingVal: '1 Action',
-        distPendingPct: '2.1%',
-        distResolvedVal: '2 Actions',
-        distResolvedPct: '4.2%',
-        activityPoints: '50,135 115,120 180,95 245,110 310,70 375,55 440,35'
+        pendingDelta: 'Requires Attestation',
+        pendingMeta: 'Flight 6E-2412 (18:45 vs 18:00 cutoff)',
+        resolved: '₹0.00',
+        resolvedDelta: '0 Filed',
+        resolvedMeta: 'No disputes initiated today',
+        distTotal: '142 Actions',
+        distSecureVal: '141 (99.3%)',
+        distSecurePct: '99.3%',
+        distConflictVal: '1 Active (0.7%)',
+        distConflictPct: '0.7%',
+        distResolvedVal: '0 Recovered (0.0%)',
+        distResolvedPct: '0%',
+        polylinePoints: '60,165 145,150 230,120 315,135 400,90 485,75 570,55',
+        areaPoints: '60,180 60,165 145,150 230,120 315,135 400,90 485,75 570,55 570,180',
+        points: [
+          { day: '02:00', count: 12, conflicts: 0, cx: 60, cy: 165 },
+          { day: '06:00', count: 18, conflicts: 0, cx: 145, cy: 150 },
+          { day: '10:00', count: 32, conflicts: 1, cx: 230, cy: 120 },
+          { day: '14:00', count: 24, conflicts: 0, cx: 315, cy: 135 },
+          { day: '18:00', count: 38, conflicts: 0, cx: 400, cy: 90 },
+          { day: '21:00', count: 42, conflicts: 0, cx: 485, cy: 75 },
+          { day: 'Now', count: 52, conflicts: 1, cx: 570, cy: 55 }
+        ],
+        spendBars: [
+          { day: '02:00', amount: '₹1,200', pct: '4.8%', height: 18, y: 142 },
+          { day: '06:00', amount: '₹2,340', pct: '9.4%', height: 26, y: 134 },
+          { day: '10:00', amount: '₹7,850', pct: '31.4%', height: 58, y: 102 },
+          { day: '14:00', amount: '₹3,400', pct: '13.6%', height: 34, y: 126 },
+          { day: '18:00', amount: '₹4,340', pct: '17.4%', height: 42, y: 118 },
+          { day: '21:00', amount: '₹1,450', pct: '5.8%', height: 22, y: 138 },
+          { day: 'Now', amount: '₹18,450', pct: '73.8%', height: 78, y: 82 }
+        ]
+      },
+      '7d': {
+        badge: '7-Day Timeseries',
+        audited: '1,284',
+        auditedDelta: '+14.2%',
+        auditedMeta: '100% verified in hardware enclave',
+        secure: '1,266',
+        secureDelta: '98.6%',
+        secureMeta: 'Zero cloud financial key leaks',
+        conflicts: '18',
+        conflictsDelta: '1 Active',
+        conflictsMeta: '17 mediated · 1 pending review',
+        spend: '₹24,850.00',
+        spendDelta: '73.8% Cap',
+        spendMeta: 'Policy limit: ₹25,000 / day',
+        pending: '1',
+        pendingDelta: 'Requires Attestation',
+        pendingMeta: 'Flight 6E-2412 (18:45 vs 18:00 cutoff)',
+        resolved: '₹2,319.00',
+        resolvedDelta: '100% Success',
+        resolvedMeta: 'Auto-credited to ICICI account',
+        distTotal: '1,284 Actions',
+        distSecureVal: '1,266 (98.6%)',
+        distSecurePct: '98.6%',
+        distConflictVal: '1 Active (0.8%)',
+        distConflictPct: '0.8%',
+        distResolvedVal: '16 Recovered (1.2%)',
+        distResolvedPct: '1.2%',
+        polylinePoints: '60,145 145,130 230,105 315,120 400,80 485,65 570,45',
+        areaPoints: '60,180 60,145 145,130 230,105 315,120 400,80 485,65 570,45 570,180',
+        points: [
+          { day: 'Thu', count: 32, conflicts: 0, cx: 60, cy: 145 },
+          { day: 'Fri', count: 45, conflicts: 0, cx: 145, cy: 130 },
+          { day: 'Sat', count: 68, conflicts: 0, cx: 230, cy: 105 },
+          { day: 'Sun', count: 54, conflicts: 0, cx: 315, cy: 120 },
+          { day: 'Mon', count: 92, conflicts: 0, cx: 400, cy: 80 },
+          { day: 'Tue', count: 110, conflicts: 0, cx: 485, cy: 65 },
+          { day: 'Today', count: 134, conflicts: 1, cx: 570, cy: 45 }
+        ],
+        spendBars: [
+          { day: 'Thu', amount: '₹14,200', pct: '56.8%', height: 65, y: 95 },
+          { day: 'Fri', amount: '₹18,100', pct: '72.4%', height: 80, y: 80 },
+          { day: 'Sat', amount: '₹8,900', pct: '35.6%', height: 35, y: 125 },
+          { day: 'Sun', amount: '₹12,400', pct: '49.6%', height: 55, y: 105 },
+          { day: 'Mon', amount: '₹21,300', pct: '85.2%', height: 95, y: 65 },
+          { day: 'Tue', amount: '₹19,600', pct: '78.4%', height: 85, y: 75 },
+          { day: 'Today', amount: '₹18,450', pct: '73.8%', height: 78, y: 82 }
+        ]
       },
       '30d': {
-        badge: '30-Day Trend',
-        audited: '184',
-        auditedMeta: '+8% vs prior month · 100% verified',
-        conflicts: '3',
-        conflictsMeta: '1.6% conflict rate · 1 Active',
-        secure: '181',
-        secureMeta: '98.4% compliant with Vault Rules',
-        spend: '₹64,280.00',
+        badge: '30-Day Trends',
+        audited: '5,410',
+        auditedDelta: '+11.8%',
+        auditedMeta: '100% verified across enclaves',
+        secure: '5,338',
+        secureDelta: '98.7%',
+        secureMeta: 'Zero key disclosures recorded',
+        conflicts: '72',
+        conflictsDelta: '1 Active',
+        conflictsMeta: '71 mediated · 1 pending review',
+        spend: '₹98,400.00',
+        spendDelta: '68.2% Cap',
         spendMeta: 'Monthly velocity well within quota',
         pending: '1',
-        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
-        resolved: '6',
-        resolvedMeta: '₹8,450 recovered via dispute',
-        distTotal: '184 Total',
-        distSecureVal: '181 (98.4%)',
-        distSecurePct: '98.4%',
-        distConflictVal: '3 (1.6%)',
-        distConflictPct: '1.6%',
-        distPendingVal: '1 Action',
-        distPendingPct: '0.5%',
-        distResolvedVal: '6 Actions',
-        distResolvedPct: '3.3%',
-        activityPoints: '50,140 115,110 180,85 245,95 310,60 375,45 440,25'
+        pendingDelta: 'Requires Attestation',
+        pendingMeta: 'Flight 6E-2412 (18:45 vs 18:00 cutoff)',
+        resolved: '₹8,450.00',
+        resolvedDelta: '98.5% Success',
+        resolvedMeta: 'Settled across 4 carrier filings',
+        distTotal: '5,410 Actions',
+        distSecureVal: '5,338 (98.7%)',
+        distSecurePct: '98.7%',
+        distConflictVal: '1 Active (0.2%)',
+        distConflictPct: '0.2%',
+        distResolvedVal: '71 Recovered (1.3%)',
+        distResolvedPct: '1.3%',
+        polylinePoints: '60,135 145,115 230,95 315,105 400,70 485,55 570,35',
+        areaPoints: '60,180 60,135 145,115 230,95 315,105 400,70 485,55 570,35 570,180',
+        points: [
+          { day: 'W-4', count: 124, conflicts: 2, cx: 60, cy: 135 },
+          { day: 'W-3', count: 156, conflicts: 1, cx: 145, cy: 115 },
+          { day: 'W-2', count: 210, conflicts: 3, cx: 230, cy: 95 },
+          { day: 'W-1', count: 198, conflicts: 2, cx: 315, cy: 105 },
+          { day: '3D Ago', count: 245, conflicts: 1, cx: 400, cy: 70 },
+          { day: 'Yesterday', count: 280, conflicts: 0, cx: 485, cy: 55 },
+          { day: 'Today', count: 320, conflicts: 1, cx: 570, cy: 35 }
+        ],
+        spendBars: [
+          { day: 'W-4', amount: '₹18,400', pct: '73.6%', height: 75, y: 85 },
+          { day: 'W-3', amount: '₹22,100', pct: '88.4%', height: 95, y: 65 },
+          { day: 'W-2', amount: '₹16,500', pct: '66.0%', height: 68, y: 92 },
+          { day: 'W-1', amount: '₹19,200', pct: '76.8%', height: 82, y: 78 },
+          { day: '3D Ago', amount: '₹21,300', pct: '85.2%', height: 94, y: 66 },
+          { day: 'Yesterday', amount: '₹19,600', pct: '78.4%', height: 85, y: 75 },
+          { day: 'Today', amount: '₹18,450', pct: '73.8%', height: 78, y: 82 }
+        ]
       },
       '90d': {
-        badge: '90-Day Trend',
-        audited: '512',
-        auditedMeta: '+15% quarterly growth · 100% verified',
-        conflicts: '8',
-        conflictsMeta: '1.5% conflict rate · 1 Active',
-        secure: '504',
-        secureMeta: '98.5% compliant with Vault Rules',
-        spend: '₹1,86,400.00',
+        badge: 'Quarterly Audit (90d)',
+        audited: '16,840',
+        auditedDelta: '+21.3%',
+        auditedMeta: 'Certified enterprise audit log',
+        secure: '16,590',
+        secureDelta: '98.5%',
+        secureMeta: 'Consistent deterministic compliance',
+        conflicts: '250',
+        conflictsDelta: '2 Active',
+        conflictsMeta: '248 mediated · 2 under review',
+        spend: '₹2,84,000.00',
+        spendDelta: '74.1% Cap',
         spendMeta: 'Disciplined autonomous delegation',
-        pending: '1',
-        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
-        resolved: '14',
-        resolvedMeta: '₹19,200 recovered via dispute',
-        distTotal: '512 Total',
-        distSecureVal: '504 (98.5%)',
+        pending: '2',
+        pendingDelta: 'Requires Attestation',
+        pendingMeta: '2 actions flagged for review',
+        resolved: '₹24,100.00',
+        resolvedDelta: '100% Success',
+        resolvedMeta: 'Recovered via bilateral arbitration',
+        distTotal: '16,840 Actions',
+        distSecureVal: '16,590 (98.5%)',
         distSecurePct: '98.5%',
-        distConflictVal: '8 (1.5%)',
-        distConflictPct: '1.5%',
-        distPendingVal: '1 Action',
-        distPendingPct: '0.2%',
-        distResolvedVal: '14 Actions',
-        distResolvedPct: '2.7%',
-        activityPoints: '50,145 115,125 180,105 245,80 310,65 375,40 440,20'
+        distConflictVal: '2 Active (0.1%)',
+        distConflictPct: '0.1%',
+        distResolvedVal: '248 Recovered (1.4%)',
+        distResolvedPct: '1.4%',
+        polylinePoints: '60,150 145,125 230,100 315,85 400,60 485,45 570,25',
+        areaPoints: '60,180 60,150 145,125 230,100 315,85 400,60 485,45 570,25 570,180',
+        points: [
+          { day: 'Aug', count: 480, conflicts: 6, cx: 60, cy: 150 },
+          { day: 'Sep W1', count: 520, conflicts: 5, cx: 145, cy: 125 },
+          { day: 'Sep W3', count: 640, conflicts: 8, cx: 230, cy: 100 },
+          { day: 'Oct W1', count: 710, conflicts: 7, cx: 315, cy: 85 },
+          { day: 'Oct W2', count: 830, conflicts: 4, cx: 400, cy: 60 },
+          { day: 'Oct W3', count: 910, conflicts: 3, cx: 485, cy: 45 },
+          { day: 'Today', count: 980, conflicts: 2, cx: 570, cy: 25 }
+        ],
+        spendBars: [
+          { day: 'Aug', amount: '₹19,500', pct: '78.0%', height: 84, y: 76 },
+          { day: 'Sep W1', amount: '₹21,800', pct: '87.2%', height: 96, y: 64 },
+          { day: 'Sep W3', amount: '₹17,400', pct: '69.6%', height: 74, y: 86 },
+          { day: 'Oct W1', amount: '₹22,900', pct: '91.6%', height: 102, y: 58 },
+          { day: 'Oct W2', amount: '₹20,100', pct: '80.4%', height: 88, y: 72 },
+          { day: 'Oct W3', amount: '₹19,600', pct: '78.4%', height: 85, y: 75 },
+          { day: 'Today', amount: '₹18,450', pct: '73.8%', height: 78, y: 82 }
+        ]
       },
       'all': {
         badge: 'All-Time Audit',
-        audited: '1,024',
+        audited: '38,920',
+        auditedDelta: '+29.4%',
         auditedMeta: 'Cumulative ledger since installation',
-        conflicts: '14',
-        conflictsMeta: '1.3% conflict rate · 1 Active',
-        secure: '1,010',
-        secureMeta: '98.7% compliant with Vault Rules',
-        spend: '₹3,72,800.00',
+        secure: '38,360',
+        secureDelta: '98.6%',
+        secureMeta: 'Institutional audit log sealed',
+        conflicts: '560',
+        conflictsDelta: '1 Active',
+        conflictsMeta: '559 mediated · 1 pending review',
+        spend: '₹6,42,100.00',
+        spendDelta: '71.5% Cap',
         spendMeta: 'Historical spend across 3 assistants',
         pending: '1',
-        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
-        resolved: '24',
-        resolvedMeta: '₹31,450 recovered via dispute',
-        distTotal: '1,024 Total',
-        distSecureVal: '1,010 (98.7%)',
-        distSecurePct: '98.7%',
-        distConflictVal: '14 (1.3%)',
-        distConflictPct: '1.3%',
-        distPendingVal: '1 Action',
-        distPendingPct: '0.1%',
-        distResolvedVal: '24 Actions',
-        distResolvedPct: '2.3%',
-        activityPoints: '50,150 115,130 180,110 245,75 310,50 375,35 440,15'
+        pendingDelta: 'Requires Attestation',
+        pendingMeta: 'Flight 6E-2412 (18:45 vs 18:00 cutoff)',
+        resolved: '₹52,800.00',
+        resolvedDelta: '100% Success',
+        resolvedMeta: 'Full statutory arbitration recovery',
+        distTotal: '38,920 Actions',
+        distSecureVal: '38,360 (98.6%)',
+        distSecurePct: '98.6%',
+        distConflictVal: '1 Active (0.1%)',
+        distConflictPct: '0.1%',
+        distResolvedVal: '559 Recovered (1.4%)',
+        distResolvedPct: '1.4%',
+        polylinePoints: '60,160 145,135 230,110 315,80 400,55 485,40 570,20',
+        areaPoints: '60,180 60,160 145,135 230,110 315,80 400,55 485,40 570,20 570,180',
+        points: [
+          { day: 'May', count: 1200, conflicts: 18, cx: 60, cy: 160 },
+          { day: 'Jun', count: 1650, conflicts: 24, cx: 145, cy: 135 },
+          { day: 'Jul', count: 2100, conflicts: 32, cx: 230, cy: 110 },
+          { day: 'Aug', count: 2800, conflicts: 41, cx: 315, cy: 80 },
+          { day: 'Sep', count: 3400, conflicts: 38, cx: 400, cy: 55 },
+          { day: 'Oct', count: 4100, conflicts: 45, cx: 485, cy: 40 },
+          { day: 'Today', count: 4600, conflicts: 1, cx: 570, cy: 20 }
+        ],
+        spendBars: [
+          { day: 'May', amount: '₹16,800', pct: '67.2%', height: 72, y: 88 },
+          { day: 'Jun', amount: '₹19,400', pct: '77.6%', height: 84, y: 76 },
+          { day: 'Jul', amount: '₹22,100', pct: '88.4%', height: 96, y: 64 },
+          { day: 'Aug', amount: '₹24,300', pct: '97.2%', height: 108, y: 52 },
+          { day: 'Sep', amount: '₹21,800', pct: '87.2%', height: 96, y: 64 },
+          { day: 'Oct', amount: '₹19,600', pct: '78.4%', height: 85, y: 75 },
+          { day: 'Today', amount: '₹18,450', pct: '73.8%', height: 78, y: 82 }
+        ]
       }
     };
 
-    // 3. Bind Period Filter Buttons
+    // 3. Granular Audited Actions Ledger (For Drill-Down Inspection)
+    const auditedLedgerData = [
+      {
+        id: 'ACT-9042',
+        name: 'IndiGo Flight 6E-2412 (BLR ➔ DEL)',
+        vendor: 'MakeMyTrip Flight Logistics',
+        category: 'Travel Logistics',
+        agent: 'Travel Sentinel v2.4',
+        agentScope: 'travel',
+        time: 'Today, 10:02 AM',
+        amount: '₹7,850.00',
+        status: 'conflict',
+        statusLabel: 'CUTOFF CONFLICT',
+        mandate: 'SEC-TRV-102 (Hard Limit): Domestic arrival scheduled after 18:00 IST',
+        explanation: 'Flight lands at 20:45 IST (2 hours 45 minutes past hard policy cutoff). Interactive 2FA was bypassed by concierge.',
+        intentHash: '0x8F9A-2B3C-1A92-E4F1-9980',
+        day: 'Today',
+        conflictType: 'temporal'
+      },
+      {
+        id: 'ACT-9041',
+        name: '2-Year Extended Protection Plan',
+        vendor: 'Amazon Business India',
+        category: 'Office Peripherals',
+        agent: 'Procurement Bot Alpha',
+        agentScope: 'procurement',
+        time: 'Today, 09:41 AM',
+        amount: '₹1,500.00',
+        status: 'secure',
+        statusLabel: 'COMPLIANT',
+        mandate: 'SEC-HDW-114: Autonomous warranty add-ons cap',
+        explanation: 'Specification verified against primary peripheral order. Certified within allocated hardware budget.',
+        intentHash: '0x3D11-7E90-C2B1-4A5F-8812',
+        day: 'Today',
+        conflictType: 'none'
+      },
+      {
+        id: 'ACT-9039',
+        name: 'Gourmet Sustenance Meal (Team Lunch)',
+        vendor: 'Swiggy Enterprise',
+        category: 'Food & Sustenance',
+        agent: 'Expense Assistant',
+        agentScope: 'expense',
+        time: 'Today, 08:15 AM',
+        amount: '₹4,340.00',
+        status: 'secure',
+        statusLabel: 'COMPLIANT',
+        mandate: 'SEC-DIN-103: Routine sustenance constrained under ₹2,000 unless tagged celebration',
+        explanation: 'Order tagged with project celebration milestone. Verified and cleared through TPM enclave.',
+        intentHash: '0x9E4B-88F2-1092-7A12-B234',
+        day: 'Today',
+        conflictType: 'none'
+      },
+      {
+        id: 'ACT-9038',
+        name: 'BESCOM Electric Grid Utility Auto-Pay',
+        vendor: 'Amazon Business India',
+        category: 'Office Peripherals',
+        agent: 'Procurement Bot Alpha',
+        agentScope: 'procurement',
+        time: 'Yesterday, 06:30 AM',
+        amount: '₹2,340.00',
+        status: 'secure',
+        statusLabel: 'COMPLIANT',
+        mandate: 'SEC-FIN-101: Interactive 2FA required for single transfers > ₹15,000',
+        explanation: 'Transfer ₹2,340 is under ₹15,000 limit. Standard settlement verified without OTP friction.',
+        intentHash: '0x6C71-9A02-54F1-EE98-1120',
+        day: 'Tue',
+        conflictType: 'none'
+      },
+      {
+        id: 'ACT-9037',
+        name: 'Airport Premier Transit Surge Peak',
+        vendor: 'Uber for Business',
+        category: 'Urban Mobility',
+        agent: 'Travel Sentinel v2.4',
+        agentScope: 'travel',
+        time: 'Oct 19, 19:12 IST',
+        amount: '₹1,450.00',
+        status: 'conflict',
+        statusLabel: 'SURGE BREACH',
+        mandate: 'SEC-TRV-107 (Hard Limit): Constrain mobility fares under ₹800 INR',
+        explanation: 'Surge fare ₹1,450 exceeded ₹800 ceiling by ₹650. Dossier filed with Uber partner arbitrations.',
+        intentHash: '0x55B8-43E1-29A0-D3F2-7719',
+        day: 'Sat',
+        conflictType: 'markup'
+      },
+      {
+        id: 'ACT-9036',
+        name: 'Dell UltraSharp 27" USB-C Hub Monitor',
+        vendor: 'Amazon Business India',
+        category: 'Office Peripherals',
+        agent: 'Procurement Bot Alpha',
+        agentScope: 'procurement',
+        time: 'Oct 18, 14:20 IST',
+        amount: '₹28,500.00',
+        status: 'secure',
+        statusLabel: 'COMPLIANT',
+        mandate: 'SEC-HDW-105: Spec verification prior to computing purchase',
+        explanation: 'Color accuracy and ergonomics specifications matched engineering requisition mandate.',
+        intentHash: '0x22F4-77A1-8890-C14D-3351',
+        day: 'Fri',
+        conflictType: 'none'
+      },
+      {
+        id: 'ACT-9035',
+        name: 'Air India Express Flight AI-814 (DEL ➔ BLR)',
+        vendor: 'MakeMyTrip Flight Logistics',
+        category: 'Travel Logistics',
+        agent: 'Travel Sentinel v2.4',
+        agentScope: 'travel',
+        time: 'Oct 17, 11:45 IST',
+        amount: '₹6,350.00',
+        status: 'secure',
+        statusLabel: 'COMPLIANT',
+        mandate: 'SEC-TRV-102: Arrival before 18:00 IST',
+        explanation: 'Arrival scheduled 16:30 IST. Compliant with early arrival mandate; nonstop ticket booked.',
+        intentHash: '0x11A0-55DF-9932-B871-4490',
+        day: 'Thu',
+        conflictType: 'none'
+      },
+      {
+        id: 'ACT-9034',
+        name: 'Arbitration Dispute Settlement Refund',
+        vendor: 'MakeMyTrip Flight Logistics',
+        category: 'Travel Logistics',
+        agent: 'Travel Sentinel v2.4',
+        agentScope: 'travel',
+        time: 'Oct 17, 16:00 IST',
+        amount: '₹2,319.00',
+        status: 'resolved',
+        statusLabel: 'RESOLVED & RECOVERED',
+        mandate: 'ADRP-2040 Statutory Carrier Arbitration',
+        explanation: 'Excess cancellation penalty recovered via cryptographic ADRP-2040 protocol. Credited to ICICI.',
+        intentHash: '0x9921-FF40-1289-AC88-6612',
+        day: 'Thu',
+        conflictType: 'resolved'
+      }
+    ];
+
+    // 4. Slide-Over Inspection Drawer Controller
+    const drawerBackdrop = document.getElementById('analyticsDrawerBackdrop');
+    const drawerTitle = document.getElementById('drawerTitle');
+    const drawerSub = document.getElementById('drawerSub');
+    const drawerKicker = document.getElementById('drawerKicker');
+    const drawerBadgeCount = document.getElementById('drawerBadgeCount');
+    const drawerActionList = document.getElementById('drawerActionList');
+    const btnCloseAnalyticsDrawer = document.getElementById('btnCloseAnalyticsDrawer');
+    const drawerCloseFooterBtn = document.getElementById('drawerCloseFooterBtn');
+
+    function closeAnalyticsDrawer() {
+      if (drawerBackdrop) {
+        drawerBackdrop.classList.remove('open');
+      }
+    }
+
+    function openAnalyticsDrawer(filterType, filterValue, title, subtitle) {
+      if (!drawerBackdrop || !drawerActionList) return;
+
+      let filtered = auditedLedgerData;
+
+      if (filterType === 'metric') {
+        if (filterValue === 'secure') {
+          filtered = auditedLedgerData.filter(d => d.status === 'secure');
+        } else if (filterValue === 'conflicts') {
+          filtered = auditedLedgerData.filter(d => d.status === 'conflict');
+        } else if (filterValue === 'pending') {
+          filtered = auditedLedgerData.filter(d => d.status === 'conflict' || d.id === 'ACT-9042');
+        } else if (filterValue === 'resolved') {
+          filtered = auditedLedgerData.filter(d => d.status === 'resolved');
+        } else if (filterValue === 'spending') {
+          filtered = [...auditedLedgerData].sort((a, b) => {
+            const vA = parseFloat(a.amount.replace(/[^0-9.]/g, '')) || 0;
+            const vB = parseFloat(b.amount.replace(/[^0-9.]/g, '')) || 0;
+            return vB - vA;
+          });
+        }
+      } else if (filterType === 'vendor') {
+        filtered = auditedLedgerData.filter(d => d.vendor.toLowerCase().includes(filterValue.toLowerCase()));
+      } else if (filterType === 'day') {
+        filtered = auditedLedgerData.filter(d => d.day === filterValue || (filterValue === 'Today' && d.day === 'Today'));
+        if (filtered.length === 0) {
+          filtered = auditedLedgerData.slice(0, 3);
+        }
+      } else if (filterType === 'category') {
+        filtered = auditedLedgerData.filter(d => d.category.toLowerCase().includes(filterValue.toLowerCase()));
+      } else if (filterType === 'status') {
+        if (filterValue === 'secure') {
+          filtered = auditedLedgerData.filter(d => d.status === 'secure');
+        } else if (filterValue === 'temporal') {
+          filtered = auditedLedgerData.filter(d => d.conflictType === 'temporal');
+        } else if (filterValue === 'markup') {
+          filtered = auditedLedgerData.filter(d => d.conflictType === 'markup');
+        } else if (filterValue === 'resolved') {
+          filtered = auditedLedgerData.filter(d => d.status === 'resolved');
+        }
+      }
+
+      if (drawerTitle) drawerTitle.textContent = title || 'Audited Agent Transactions';
+      if (drawerSub) drawerSub.textContent = subtitle || 'Forensic ledger records verified under TPM-2040 enclave';
+      if (drawerKicker) drawerKicker.textContent = `AUDIT DRILL-DOWN · ${filterType.toUpperCase()}: ${filterValue.toUpperCase()}`;
+      if (drawerBadgeCount) drawerBadgeCount.textContent = `${filtered.length} Record${filtered.length === 1 ? '' : 's'} Found`;
+
+      drawerActionList.innerHTML = '';
+
+      if (filtered.length === 0) {
+        drawerActionList.innerHTML = `
+          <div style="text-align: center; padding: 48px 20px; color: #6F6F6F;">
+            <div style="font-size: 28px; margin-bottom: 8px;">🛡️</div>
+            <div style="font-weight: 700; color: #000000; font-size: 14px;">No active conflict anomalies in this filter</div>
+            <div style="font-size: 12px; margin-top: 4px;">All autonomous transactions strictly adhered to active Vault Rules.</div>
+          </div>
+        `;
+      } else {
+        filtered.forEach(item => {
+          const card = document.createElement('div');
+          card.className = 'drawer-action-card';
+          const isConflict = item.status === 'conflict';
+          const isResolved = item.status === 'resolved';
+
+          card.innerHTML = `
+            <div class="drawer-action-header">
+              <span class="drawer-action-id">${item.id}</span>
+              <span class="drawer-action-time">${item.time} · ${item.agent}</span>
+            </div>
+            <div class="drawer-action-main">
+              <div class="drawer-action-name">${item.name}</div>
+              <div class="drawer-action-price">${item.amount}</div>
+            </div>
+            <div class="drawer-action-meta">
+              <div><strong>Merchant:</strong> ${item.vendor} (${item.category})</div>
+              <div><strong>Rule Checked:</strong> ${item.mandate}</div>
+              <div><strong>Forensic Explanation:</strong> ${item.explanation}</div>
+              <div class="drawer-hash-tag">SIG: ${item.intentHash} · Enclave: TPM-2040 Root</div>
+            </div>
+            <div class="drawer-action-cta-row">
+              <span class="${isConflict ? 'status-badge-conflict' : (isResolved ? 'status-badge-secure' : 'status-badge-secure')}">
+                ${isConflict ? '⚠️ ' + item.statusLabel : (isResolved ? '✓ ' + item.statusLabel : '✓ ' + item.statusLabel)}
+              </span>
+              ${isConflict ? 
+                `<button class="btn-drawer-action btn-jump-dispute" data-id="${item.id}">Open Dispute Resolution →</button>` : 
+                `<button class="btn-drawer-action btn-copy-proof" data-id="${item.id}">Copy Cryptographic Proof</button>`
+              }
+            </div>
+          `;
+          drawerActionList.appendChild(card);
+        });
+
+        // Bind Dispute buttons inside drawer
+        drawerActionList.querySelectorAll('.btn-jump-dispute').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            closeAnalyticsDrawer();
+            switchView('view-disputes');
+          });
+        });
+
+        // Bind Copy Proof buttons inside drawer
+        drawerActionList.querySelectorAll('.btn-copy-proof').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-id');
+            const target = auditedLedgerData.find(d => d.id === id);
+            if (target) {
+              const proof = {
+                action_id: target.id,
+                timestamp: new Date().toISOString(),
+                intent_hash: target.intentHash,
+                attestation: 'TPM-2040_HARDWARE_ROOT',
+                mandate_rule: target.mandate,
+                status: 'VERIFIED_DETERMINISTIC'
+              };
+              navigator.clipboard.writeText(JSON.stringify(proof, null, 2)).then(() => {
+                showToast(`Cryptographic proof for ${target.id} copied to clipboard.`);
+              }).catch(() => {});
+            }
+          });
+        });
+      }
+
+      drawerBackdrop.classList.add('open');
+    }
+
+    // Bind Close events
+    if (btnCloseAnalyticsDrawer) {
+      btnCloseAnalyticsDrawer.addEventListener('click', closeAnalyticsDrawer);
+    }
+    if (drawerCloseFooterBtn) {
+      drawerCloseFooterBtn.addEventListener('click', closeAnalyticsDrawer);
+    }
+    if (drawerBackdrop) {
+      drawerBackdrop.addEventListener('click', (e) => {
+        if (e.target === drawerBackdrop) {
+          closeAnalyticsDrawer();
+        }
+      });
+    }
+
+    const drawerJumpFeedBtn = document.getElementById('drawerJumpFeedBtn');
+    if (drawerJumpFeedBtn) {
+      drawerJumpFeedBtn.addEventListener('click', () => {
+        closeAnalyticsDrawer();
+        switchView('view-stream');
+      });
+    }
+
+    // 5. Bind Period Filter Buttons (24h, 7d, 30d, 90d, all)
     const periodButtons = document.querySelectorAll('#analyticsPeriodSelector .analytics-filter-btn');
     periodButtons.forEach(btn => {
       btn.addEventListener('click', () => {
@@ -430,38 +876,50 @@ document.addEventListener('DOMContentLoaded', () => {
         const period = btn.getAttribute('data-period') || '7d';
         const d = analyticsDatasets[period] || analyticsDatasets['7d'];
 
-        // Update Metric Cards
+        // Update Stripe Metric Cards
         const elAudited = document.getElementById('metricAuditedCount');
+        const elAuditedDelta = document.getElementById('metricAuditedDelta');
         const elAuditedMeta = document.getElementById('metricAuditedMeta');
         if (elAudited) elAudited.textContent = d.audited;
+        if (elAuditedDelta) elAuditedDelta.textContent = d.auditedDelta;
         if (elAuditedMeta) elAuditedMeta.textContent = d.auditedMeta;
 
-        const elConflicts = document.getElementById('metricConflictsCount');
-        const elConflictsMeta = document.getElementById('metricConflictsMeta');
-        if (elConflicts) elConflicts.textContent = d.conflicts;
-        if (elConflictsMeta) elConflictsMeta.textContent = d.conflictsMeta;
-
         const elSecure = document.getElementById('metricSecureCount');
+        const elSecureDelta = document.getElementById('metricSecureDelta');
         const elSecureMeta = document.getElementById('metricSecureMeta');
         if (elSecure) elSecure.textContent = d.secure;
+        if (elSecureDelta) elSecureDelta.textContent = d.secureDelta;
         if (elSecureMeta) elSecureMeta.textContent = d.secureMeta;
 
+        const elConflicts = document.getElementById('metricConflictsCount');
+        const elConflictsDelta = document.getElementById('metricConflictsDelta');
+        const elConflictsMeta = document.getElementById('metricConflictsMeta');
+        if (elConflicts) elConflicts.textContent = d.conflicts;
+        if (elConflictsDelta) elConflictsDelta.textContent = d.conflictsDelta;
+        if (elConflictsMeta) elConflictsMeta.textContent = d.conflictsMeta;
+
         const elSpend = document.getElementById('metricSpendCount');
+        const elSpendDelta = document.getElementById('metricSpendDelta');
         const elSpendMeta = document.getElementById('metricSpendMeta');
         if (elSpend) elSpend.textContent = d.spend;
+        if (elSpendDelta) elSpendDelta.textContent = d.spendDelta;
         if (elSpendMeta) elSpendMeta.textContent = d.spendMeta;
 
         const elPending = document.getElementById('metricPendingCount');
+        const elPendingDelta = document.getElementById('metricPendingDelta');
         const elPendingMeta = document.getElementById('metricPendingMeta');
         if (elPending) elPending.textContent = d.pending;
+        if (elPendingDelta) elPendingDelta.textContent = d.pendingDelta;
         if (elPendingMeta) elPendingMeta.textContent = d.pendingMeta;
 
         const elResolved = document.getElementById('metricResolvedCount');
+        const elResolvedDelta = document.getElementById('metricResolvedDelta');
         const elResolvedMeta = document.getElementById('metricResolvedMeta');
         if (elResolved) elResolved.textContent = d.resolved;
+        if (elResolvedDelta) elResolvedDelta.textContent = d.resolvedDelta;
         if (elResolvedMeta) elResolvedMeta.textContent = d.resolvedMeta;
 
-        // Update Distribution Bar
+        // Update Conflict Distribution Elements
         const elDistTotal = document.getElementById('distTotalBadge');
         if (elDistTotal) elDistTotal.textContent = d.distTotal;
 
@@ -475,26 +933,227 @@ document.addEventListener('DOMContentLoaded', () => {
         if (elDistConflictVal) elDistConflictVal.textContent = d.distConflictVal;
         if (elDistConflictFill) elDistConflictFill.style.width = d.distConflictPct;
 
-        const elDistPendingVal = document.getElementById('distPendingVal');
-        const elDistPendingFill = document.getElementById('distPendingFill');
-        if (elDistPendingVal) elDistPendingVal.textContent = d.distPendingVal;
-        if (elDistPendingFill) elDistPendingFill.style.width = d.distPendingPct;
-
         const elDistResolvedVal = document.getElementById('distResolvedVal');
         const elDistResolvedFill = document.getElementById('distResolvedFill');
         if (elDistResolvedVal) elDistResolvedVal.textContent = d.distResolvedVal;
         if (elDistResolvedFill) elDistResolvedFill.style.width = d.distResolvedPct;
 
-        // Update Activity Chart Line
-        const line = document.getElementById('activityChartLine');
-        if (line) line.setAttribute('points', d.activityPoints);
+        // Update Datadog Chart SVG Polyline and Area Polygon
+        const polyline = document.getElementById('datadogActivityPolyline');
+        const areaPolygon = document.getElementById('datadogAreaPolygon');
+        if (polyline) polyline.setAttribute('points', d.polylinePoints);
+        if (areaPolygon) areaPolygon.setAttribute('points', d.areaPoints);
 
         const badge = document.getElementById('activityChartBadge');
         if (badge) badge.textContent = d.badge;
 
+        // Update Datadog Chart Circle Points data
+        const chartPoints = document.querySelectorAll('.chart-interactive-point');
+        chartPoints.forEach((pt, idx) => {
+          if (d.points && d.points[idx]) {
+            const pInfo = d.points[idx];
+            pt.setAttribute('data-day', pInfo.day);
+            pt.setAttribute('data-count', pInfo.count);
+            pt.setAttribute('data-conflicts', pInfo.conflicts);
+            pt.setAttribute('cx', pInfo.cx);
+            pt.setAttribute('cy', pInfo.cy);
+          }
+        });
+
+        // Update Ramp Spend Bars
+        const spendBars = document.querySelectorAll('.ramp-spend-bar');
+        spendBars.forEach((bar, idx) => {
+          if (d.spendBars && d.spendBars[idx]) {
+            const bInfo = d.spendBars[idx];
+            bar.setAttribute('data-day', bInfo.day);
+            bar.setAttribute('data-amount', bInfo.amount);
+            bar.setAttribute('data-pct', bInfo.pct);
+            bar.setAttribute('height', bInfo.height);
+            bar.setAttribute('y', bInfo.y);
+          }
+        });
+
         showToast(`Analytics period updated: ${btn.textContent} (${d.audited} actions)`);
       });
     });
+
+    // 6. Agent Scope Selector (Datadog Multi-Service Scope)
+    const analyticsAgentScope = document.getElementById('analyticsAgentScope');
+    if (analyticsAgentScope) {
+      analyticsAgentScope.addEventListener('change', (e) => {
+        const val = e.target.value;
+        const text = e.target.options[e.target.selectedIndex].text;
+
+        const vendorRows = document.querySelectorAll('.ramp-vendor-row');
+        vendorRows.forEach(row => {
+          const rowCategory = (row.getAttribute('data-category') || '').toLowerCase();
+          if (val === 'all') {
+            row.style.display = '';
+          } else if (val === 'travel' && rowCategory.includes('travel')) {
+            row.style.display = '';
+          } else if (val === 'procurement' && (rowCategory.includes('office') || rowCategory.includes('hardware'))) {
+            row.style.display = '';
+          } else if (val === 'expense' && (rowCategory.includes('food') || rowCategory.includes('mobility'))) {
+            row.style.display = '';
+          } else {
+            row.style.display = 'none';
+          }
+        });
+
+        showToast(`Telemetry filter scoped to: ${text}`);
+      });
+    }
+
+    // 7. Interactive Stripe Metric Cards (Click to Drill-Down)
+    document.querySelectorAll('.stripe-metric-card[data-inspect]').forEach(card => {
+      card.addEventListener('click', () => {
+        const inspectType = card.getAttribute('data-inspect');
+        const cardTitle = card.querySelector('.stripe-card-label')?.textContent || 'Metric Audit';
+        const cardVal = card.querySelector('.stripe-card-val')?.textContent || '';
+        openAnalyticsDrawer('metric', inspectType, `${cardTitle} (${cardVal})`, `Forensic inspection of underlying ${cardTitle.toLowerCase()} ledger entries`);
+      });
+
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
+    });
+
+    // 8. Datadog Interactive SVG Chart Points (Hover HUD & Click Drill-Down)
+    const datadogTooltip = document.getElementById('datadogTooltip');
+    const hudDay = document.getElementById('hudDay');
+    const hudAudited = document.getElementById('hudAudited');
+    const hudConflicts = document.getElementById('hudConflicts');
+
+    document.querySelectorAll('.chart-interactive-point').forEach(point => {
+      point.addEventListener('mouseenter', (e) => {
+        const day = point.getAttribute('data-day') || 'Period';
+        const count = point.getAttribute('data-count') || '0';
+        const conflicts = point.getAttribute('data-conflicts') || '0';
+
+        if (hudDay) hudDay.textContent = `Snapshot: ${day}`;
+        if (hudAudited) hudAudited.textContent = `${count} verified`;
+        if (hudConflicts) {
+          hudConflicts.textContent = conflicts === '0' ? '0 active conflicts' : `${conflicts} active conflict (Review Required)`;
+          hudConflicts.className = conflicts === '0' ? 'hud-v text-secure' : 'hud-v text-blue';
+        }
+
+        if (datadogTooltip) {
+          datadogTooltip.style.display = 'block';
+          const rect = point.getBoundingClientRect();
+          const container = document.getElementById('datadogChartContainer');
+          if (container) {
+            const containerRect = container.getBoundingClientRect();
+            const left = rect.left - containerRect.left + (rect.width / 2) - 80;
+            const top = rect.top - containerRect.top - 80;
+            datadogTooltip.style.left = `${Math.max(10, Math.min(containerRect.width - 170, left))}px`;
+            datadogTooltip.style.top = `${Math.max(10, top)}px`;
+          }
+        }
+      });
+
+      point.addEventListener('mouseleave', () => {
+        if (datadogTooltip) datadogTooltip.style.display = 'none';
+      });
+
+      point.addEventListener('click', () => {
+        const day = point.getAttribute('data-day') || 'Today';
+        const count = point.getAttribute('data-count') || '0';
+        const conflicts = point.getAttribute('data-conflicts') || '0';
+        openAnalyticsDrawer('day', day, `Activity Trace: ${day}`, `${count} audited actions with ${conflicts} conflict flagged`);
+      });
+    });
+
+    // 9. Interactive Conflict Distribution Rows
+    document.querySelectorAll('.interactive-dist-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const filter = row.getAttribute('data-filter') || row.getAttribute('data-category') || '';
+        const name = row.querySelector('.dist-bar-name')?.textContent || 'Classification';
+        openAnalyticsDrawer(row.hasAttribute('data-category') ? 'category' : 'status', filter, `Classification: ${name.trim()}`, 'Audited decisions filtered by categorical classification');
+      });
+
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          row.click();
+        }
+      });
+    });
+
+    const btnInspectAllConflicts = document.getElementById('btnInspectAllConflicts');
+    if (btnInspectAllConflicts) {
+      btnInspectAllConflicts.addEventListener('click', () => {
+        openAnalyticsDrawer('metric', 'conflicts', 'Active Conflicts & Violations', 'All 18 flagged transaction traces requiring mediation');
+      });
+    }
+
+    // 10. Ramp Vendor Ledger Rows (Click to Inspect Vendor Receipts)
+    document.querySelectorAll('.interactive-vendor-row').forEach(row => {
+      row.addEventListener('click', () => {
+        const vendor = row.getAttribute('data-vendor') || 'Vendor';
+        const category = row.getAttribute('data-category') || '';
+        openAnalyticsDrawer('vendor', vendor, `${vendor} Spend & Intent Ledger`, `Detailed audited receipts and compliance checks for ${category}`);
+      });
+
+      row.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          row.click();
+        }
+      });
+    });
+
+    // 11. Ramp Spending Bars (Click to Inspect Daily Spend)
+    document.querySelectorAll('.ramp-spend-bar').forEach(bar => {
+      bar.addEventListener('click', () => {
+        const day = bar.getAttribute('data-day') || 'Day';
+        const amount = bar.getAttribute('data-amount') || '';
+        openAnalyticsDrawer('day', day, `Spending Breakdown: ${day} (${amount})`, `Corporate spend transactions executed under daily policy ceiling`);
+      });
+    });
+
+    // 12. Export Cryptographic Audit Proof CTA
+    const btnExportAnalyticsProof = document.getElementById('btnExportAnalyticsProof');
+    if (btnExportAnalyticsProof) {
+      btnExportAnalyticsProof.addEventListener('click', () => {
+        const activePeriodBtn = document.querySelector('#analyticsPeriodSelector .analytics-filter-btn.active');
+        const period = activePeriodBtn ? activePeriodBtn.getAttribute('data-period') : '7d';
+        const dataset = analyticsDatasets[period] || analyticsDatasets['7d'];
+        const scopeSelect = document.getElementById('analyticsAgentScope');
+        const scope = scopeSelect ? scopeSelect.value : 'all';
+
+        const proofPayload = {
+          standard: 'ADRP-AUDIT-PROOF-2040',
+          generated_at: new Date().toISOString(),
+          period_scope: period,
+          agent_scope: scope,
+          principal: {
+            name: state.principal.name,
+            id: state.principal.id,
+            key_fingerprint: state.principal.keyFingerprint
+          },
+          telemetry_metrics: {
+            audited_actions: dataset.audited,
+            secure_actions: dataset.secure,
+            conflicts_flagged: dataset.conflicts,
+            total_spend: dataset.spend,
+            disputed_recovery: dataset.resolved
+          },
+          hardware_attestation: {
+            enclave_type: 'TPM-2040_DEDICATED',
+            signature_algorithm: 'Ed25519',
+            root_signature: 'SIG-ED25519-8F9A-2B3C-1A92-E4F1-VERIFIED',
+            merkle_root: '0x4a7e91d03b2c89f2a71de44a9c10f823e590',
+            zero_cloud_key_leak_guarantee: true
+          }
+        };
+
+        triggerFileDownload(`AgentRecourse-AuditProof-${period}.json`, JSON.stringify(proofPayload, null, 2), 'application/json');
+        showToast('Cryptographic audit proof exported (.json).');
+      });
+    }
   }
 
   // ==========================================
@@ -2806,6 +3465,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function setupEventListeners() {
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        const analyticsDrawer = document.getElementById('analyticsDrawerBackdrop');
+        if (analyticsDrawer && analyticsDrawer.classList.contains('open')) {
+          analyticsDrawer.classList.remove('open');
+        }
         actionDrawer.classList.add('hidden');
         appendModal.classList.add('hidden');
         payloadModal.classList.add('hidden');
