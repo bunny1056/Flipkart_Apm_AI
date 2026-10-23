@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -568,19 +568,8 @@
                 <div id="robot-stage" role="img" aria-label="Interactive AI agent robot mascot that follows your cursor"></div>
               </div>
 
-              <!-- TOP HUD: SENTINEL STATUS PILL & SPEECH BUBBLE -->
-              <div class="mascot-top-hud">
-                <div class="mascot-status-pill">
-                  <span class="mascot-status-dot"></span>
-                  <span class="mascot-status-text">GUARDIAN SENTINEL · INSPECTING AGENT ACTIONS</span>
-                </div>
-                <div class="mascot-speech-bubble" id="mascotSpeechBubble">
-                  <span class="speech-text">14 Intent Mandates enforced · Watching all agent actions</span>
-                </div>
-              </div>
-
-              <!-- LEFT OVERLAY: FLOATING 1-LINE VALUE PROP & DIRECT CTAs -->
-              <div class="mascot-overlay-left">
+              <!-- LEFT OVERLAY: FLOATING 1-LINE VALUE PROP & DIRECT CTAs (iOS GLASS FRAMED) -->
+              <div class="mascot-overlay-left ios-glass-panel">
                 <div class="mascot-kicker">
                   <span class="mascot-kicker-dot"></span>
                   <span id="mascotGreetingHeader">Harshith · Active Enclave</span>
@@ -602,37 +591,32 @@
                   </button>
                   <button class="btn-mascot-secondary" id="btnMascotHowItWorks">How it works</button>
                 </div>
-
-                <div class="mascot-badge-row">
-                  <span class="mascot-pill pill-secure">✓ 100% Client Enclave</span>
-                  <span class="mascot-pill" data-jump-view="view-vault" style="cursor: pointer;" title="View Your Rules">14 Mandates Active →</span>
-                </div>
               </div>
 
-              <!-- RIGHT OVERLAY: FLOATING TELEMETRY MINI-BLOCKS -->
+              <!-- RIGHT OVERLAY: FLOATING TELEMETRY MINI-BLOCKS (iOS GLASS FRAMED) -->
               <div class="mascot-overlay-right">
                 <!-- Metric 1: Audited Actions -->
-                <div class="mini-metric-pill" data-jump-view="view-analytics" title="Click to view full Analytics">
+                <div class="mini-metric-pill ios-glass-card" data-jump-view="view-analytics" title="Click to view full Analytics">
                   <div class="mini-metric-header">
                     <span class="mini-metric-name">AUDITED ACTIONS</span>
-                    <span class="mini-metric-tag tag-green">+12%</span>
+                    <span class="mini-metric-tag tag-blue">+12%</span>
                   </div>
                   <div class="mini-metric-num">1,284</div>
                   <div class="mini-metric-sub">100% verified in enclave</div>
                 </div>
 
                 <!-- Metric 2: Conflicts Flagged -->
-                <div class="mini-metric-pill pill-alert" data-jump-view="view-disputes" title="Click to review active conflict">
+                <div class="mini-metric-pill ios-glass-card pill-conflict-highlight" data-jump-view="view-disputes" title="Click to review active conflict">
                   <div class="mini-metric-header">
-                    <span class="mini-metric-name name-alert">CONFLICTS FLAGGED</span>
-                    <span class="mini-metric-tag tag-red">1 Active</span>
+                    <span class="mini-metric-name name-blue">CONFLICTS FLAGGED</span>
+                    <span class="mini-metric-tag tag-blue-solid">1 Active</span>
                   </div>
-                  <div class="mini-metric-num num-alert">18</div>
+                  <div class="mini-metric-num num-blue">18</div>
                   <div class="mini-metric-sub">Flight 6E-2412 breach</div>
                 </div>
 
                 <!-- Metric 3: Agent Spending -->
-                <div class="mini-metric-pill" data-jump-view="view-analytics" title="Click to view Spending Analytics">
+                <div class="mini-metric-pill ios-glass-card" data-jump-view="view-analytics" title="Click to view Spending Analytics">
                   <div class="mini-metric-header">
                     <span class="mini-metric-name">AGENT SPENDING</span>
                     <span class="mini-metric-tag">73.8% Cap</span>
@@ -642,83 +626,89 @@
                 </div>
               </div>
 
-              <!-- BOTTOM HUD: ORBITAL GAZE RADAR READOUT -->
-              <div class="mascot-bottom-hud">
-                <div class="mascot-gaze-hud">
-                  <span class="gaze-radar-dot"></span>
-                  <span class="gaze-hud-text">AUDIT RADAR:</span>
-                  <span class="gaze-angle-tag" id="mascotGazeAngle">GAZE: 0° CENTER</span>
-                </div>
-              </div>
-
             </div>
 
-            <!-- SECTION BELOW MASCOT: 3 FOCUSED INFORMATIONAL CARDS -->
-            <div class="mascot-cards-row">
+            <!-- SECTION BELOW MASCOT: 3 FOCUSED INFORMATIONAL CARDS (ALTERNATING 1/4 IMAGE iOS GLASS FRAMED) -->
+            <div class="mascot-cards-stack">
 
-              <!-- Card 1: Agent Activity (Executive Snapshot) -->
-              <div class="mascot-info-card">
-                <div class="info-card-header">
-                  <span class="info-card-badge">LIVE STREAM SNAPSHOT</span>
-                  <span class="info-card-status">● Live</span>
+              <!-- Card 1: Live Stream Snapshot (Image Left 1/4, Content Right 3/4) -->
+              <div class="mascot-info-card-horizontal ios-glass-panel layout-img-left">
+                <div class="info-card-media">
+                  <img src="assets/card_livestream.jpg" alt="Live Stream Audit Snapshot" class="info-card-img" />
                 </div>
-                <h3 class="info-card-title">Agent Activity Snapshot</h3>
-                <p class="info-card-body">
-                  48 transactions evaluated in the last 24 hours across Travel Logistics, Sustenance, and Devices. 47 verified compliant with zero prompt drift.
-                </p>
-                <div class="info-card-highlight">
-                  <span class="highlight-label">LATEST CONFLICT:</span>
-                  <span class="highlight-val">Flight 6E-2412 arrives 18:45 (violates 18:00 cutoff)</span>
-                </div>
-                <div class="info-card-footer">
-                  <button class="info-card-link-btn" data-jump-view="view-stream">
-                    <span>Inspect Activity Feed</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                  </button>
+                <div class="info-card-content">
+                  <div class="info-card-header">
+                    <span class="info-card-badge">LIVE STREAM SNAPSHOT</span>
+                    <span class="info-card-status">● Live</span>
+                  </div>
+                  <h3 class="info-card-title">Agent Activity Snapshot</h3>
+                  <p class="info-card-body">
+                    48 transactions evaluated in the last 24 hours across Travel Logistics, Sustenance, and Devices. 47 verified compliant with zero prompt drift.
+                  </p>
+                  <div class="info-card-highlight">
+                    <span class="highlight-label">LATEST CONFLICT:</span>
+                    <span class="highlight-val">Flight 6E-2412 arrives 18:45 (violates 18:00 cutoff)</span>
+                  </div>
+                  <div class="info-card-footer">
+                    <button class="info-card-link-btn" data-jump-view="view-stream">
+                      <span>Inspect Activity Feed</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  </div>
                 </div>
               </div>
 
-              <!-- Card 2: Emerging AI Risks (Featured: Vendor Steering) -->
-              <div class="mascot-info-card card-featured-risk">
-                <div class="info-card-header">
-                  <span class="info-card-badge badge-risk">EMERGING AI RISK</span>
-                  <span class="info-card-meta">Oct 2026</span>
+              <!-- Card 2: Emerging AI Risks (Content Left 3/4, Image Right 1/4) -->
+              <div class="mascot-info-card-horizontal ios-glass-panel layout-img-right">
+                <div class="info-card-content">
+                  <div class="info-card-header">
+                    <span class="info-card-badge badge-blue">EMERGING AI RISK</span>
+                    <span class="info-card-meta">Oct 2026</span>
+                  </div>
+                  <h3 class="info-card-title">Vendor Steering in AI Agents</h3>
+                  <p class="info-card-body">
+                    Commercial incentives embedded in merchant aggregators can influence autonomous buying agents to prioritize affiliate partners over user constraints.
+                  </p>
+                  <div class="info-card-highlight highlight-blue">
+                    <span class="highlight-label">RECOURSE DEFENSE:</span>
+                    <span class="highlight-val">Signed intent hashes prove breach during arbitration</span>
+                  </div>
+                  <div class="info-card-footer">
+                    <button class="info-card-link-btn" id="btnOpenVendorRiskModal">
+                      <span>Read Advisory</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  </div>
                 </div>
-                <h3 class="info-card-title">Vendor Steering in AI Agents</h3>
-                <p class="info-card-body">
-                  Commercial incentives embedded in merchant aggregators can influence autonomous buying agents to prioritize affiliate partners over user constraints.
-                </p>
-                <div class="info-card-highlight highlight-risk">
-                  <span class="highlight-label">RECOURSE DEFENSE:</span>
-                  <span class="highlight-val">Signed intent hashes prove breach during arbitration</span>
-                </div>
-                <div class="info-card-footer">
-                  <button class="info-card-link-btn" id="btnOpenVendorRiskModal">
-                    <span>Read Advisory</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                  </button>
+                <div class="info-card-media">
+                  <img src="assets/card_ai_risks.jpg" alt="Emerging AI Risks & Vendor Steering" class="info-card-img" />
                 </div>
               </div>
 
-              <!-- Card 3: Important Updates (Security & Governance) -->
-              <div class="mascot-info-card">
-                <div class="info-card-header">
-                  <span class="info-card-badge">STANDARDS & SECURITY</span>
-                  <span class="info-card-meta">W3C / IT ACT</span>
+              <!-- Card 3: Standards & Security (Image Left 1/4, Content Right 3/4) -->
+              <div class="mascot-info-card-horizontal ios-glass-panel layout-img-left">
+                <div class="info-card-media">
+                  <img src="assets/card_standards.jpg" alt="Hardware TPM Attestation" class="info-card-img" />
                 </div>
-                <h3 class="info-card-title">Hardware TPM Attestation</h3>
-                <p class="info-card-body">
-                  All autonomous payment tokens are cryptographically locked to client hardware keys under Indian IT Act §43A to prevent silent API parameter drift.
-                </p>
-                <div class="info-card-highlight">
-                  <span class="highlight-label">PROTECTION:</span>
-                  <span class="highlight-val">Zero cloud custody of financial signing keys</span>
-                </div>
-                <div class="info-card-footer">
-                  <button class="info-card-link-btn" data-jump-view="view-governance">
-                    <span>View Connected Agents</span>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
-                  </button>
+                <div class="info-card-content">
+                  <div class="info-card-header">
+                    <span class="info-card-badge">STANDARDS & SECURITY</span>
+                    <span class="info-card-meta">W3C / IT ACT</span>
+                  </div>
+                  <h3 class="info-card-title">Hardware TPM Attestation</h3>
+                  <p class="info-card-body">
+                    All autonomous payment tokens are cryptographically locked to client hardware keys under Indian IT Act §43A to prevent silent API parameter drift.
+                  </p>
+                  <div class="info-card-highlight">
+                    <span class="highlight-label">PROTECTION:</span>
+                    <span class="highlight-val">Zero cloud custody of financial signing keys</span>
+                  </div>
+                  <div class="info-card-footer">
+                    <button class="info-card-link-btn" data-jump-view="view-governance">
+                      <span>View Connected Agents</span>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </button>
+                  </div>
                 </div>
               </div>
 
