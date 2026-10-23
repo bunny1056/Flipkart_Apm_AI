@@ -218,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // Profile Elements
   const btnMastheadProfile = document.getElementById('btnMastheadProfile');
   const btnExportIdentityCert = document.getElementById('btnExportIdentityCert');
-  const btnManageVaultFromProfile = document.getElementById('btnManageVaultFromProfile');
   const btnCopyProfileKey = document.getElementById('btnCopyProfileKey');
   const btnToggleEmergencyKill = document.getElementById('btnToggleEmergencyKill');
   const killSwitchStatusText = document.getElementById('killSwitchStatusText');
@@ -300,6 +299,721 @@ document.addEventListener('DOMContentLoaded', () => {
   const notifRibbon = document.getElementById('notifRibbon');
 
   // ==========================================
+  // OVERVIEW DASHBOARD & ANALYTICS CONTROLLER
+  // ==========================================
+  function setupOverviewDashboard() {
+    // 1. Personalized Greeting
+    const greetingHeader = document.getElementById('mascotGreetingHeader') || document.getElementById('overviewGreetingHeader');
+    if (greetingHeader) {
+      const now = new Date();
+      const hour = now.getHours();
+      let greeting = 'Good morning';
+      if (hour >= 12 && hour < 17) {
+        greeting = 'Good afternoon';
+      } else if (hour >= 17) {
+        greeting = 'Good evening';
+      }
+      greetingHeader.textContent = `${greeting}, ${state.principal.name}.`;
+    }
+
+    // 2. Data-Driven Analytics Datasets
+    const analyticsDatasets = {
+      '7d': {
+        badge: '7-Day Trend',
+        audited: '48',
+        auditedMeta: '+12% vs prior period · 100% verified',
+        conflicts: '1',
+        conflictsMeta: '2.1% conflict rate · 1 Active',
+        secure: '47',
+        secureMeta: '97.9% compliant with Vault Rules',
+        spend: '₹18,450.00',
+        spendMeta: '73.8% of daily cap (₹25,000)',
+        pending: '1',
+        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
+        resolved: '2',
+        resolvedMeta: '₹2,319 recovered via dispute',
+        distTotal: '48 Total',
+        distSecureVal: '47 (97.9%)',
+        distSecurePct: '97.9%',
+        distConflictVal: '1 (2.1%)',
+        distConflictPct: '2.1%',
+        distPendingVal: '1 Action',
+        distPendingPct: '2.1%',
+        distResolvedVal: '2 Actions',
+        distResolvedPct: '4.2%',
+        activityPoints: '50,135 115,120 180,95 245,110 310,70 375,55 440,35'
+      },
+      '30d': {
+        badge: '30-Day Trend',
+        audited: '184',
+        auditedMeta: '+8% vs prior month · 100% verified',
+        conflicts: '3',
+        conflictsMeta: '1.6% conflict rate · 1 Active',
+        secure: '181',
+        secureMeta: '98.4% compliant with Vault Rules',
+        spend: '₹64,280.00',
+        spendMeta: 'Monthly velocity well within quota',
+        pending: '1',
+        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
+        resolved: '6',
+        resolvedMeta: '₹8,450 recovered via dispute',
+        distTotal: '184 Total',
+        distSecureVal: '181 (98.4%)',
+        distSecurePct: '98.4%',
+        distConflictVal: '3 (1.6%)',
+        distConflictPct: '1.6%',
+        distPendingVal: '1 Action',
+        distPendingPct: '0.5%',
+        distResolvedVal: '6 Actions',
+        distResolvedPct: '3.3%',
+        activityPoints: '50,140 115,110 180,85 245,95 310,60 375,45 440,25'
+      },
+      '90d': {
+        badge: '90-Day Trend',
+        audited: '512',
+        auditedMeta: '+15% quarterly growth · 100% verified',
+        conflicts: '8',
+        conflictsMeta: '1.5% conflict rate · 1 Active',
+        secure: '504',
+        secureMeta: '98.5% compliant with Vault Rules',
+        spend: '₹1,86,400.00',
+        spendMeta: 'Disciplined autonomous delegation',
+        pending: '1',
+        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
+        resolved: '14',
+        resolvedMeta: '₹19,200 recovered via dispute',
+        distTotal: '512 Total',
+        distSecureVal: '504 (98.5%)',
+        distSecurePct: '98.5%',
+        distConflictVal: '8 (1.5%)',
+        distConflictPct: '1.5%',
+        distPendingVal: '1 Action',
+        distPendingPct: '0.2%',
+        distResolvedVal: '14 Actions',
+        distResolvedPct: '2.7%',
+        activityPoints: '50,145 115,125 180,105 245,80 310,65 375,40 440,20'
+      },
+      'all': {
+        badge: 'All-Time Audit',
+        audited: '1,024',
+        auditedMeta: 'Cumulative ledger since installation',
+        conflicts: '14',
+        conflictsMeta: '1.3% conflict rate · 1 Active',
+        secure: '1,010',
+        secureMeta: '98.7% compliant with Vault Rules',
+        spend: '₹3,72,800.00',
+        spendMeta: 'Historical spend across 3 assistants',
+        pending: '1',
+        pendingMeta: 'Flight 6E-2412 (Arrives > 18:00)',
+        resolved: '24',
+        resolvedMeta: '₹31,450 recovered via dispute',
+        distTotal: '1,024 Total',
+        distSecureVal: '1,010 (98.7%)',
+        distSecurePct: '98.7%',
+        distConflictVal: '14 (1.3%)',
+        distConflictPct: '1.3%',
+        distPendingVal: '1 Action',
+        distPendingPct: '0.1%',
+        distResolvedVal: '24 Actions',
+        distResolvedPct: '2.3%',
+        activityPoints: '50,150 115,130 180,110 245,75 310,50 375,35 440,15'
+      }
+    };
+
+    // 3. Bind Period Filter Buttons
+    const periodButtons = document.querySelectorAll('#analyticsPeriodSelector .analytics-filter-btn');
+    periodButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        periodButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        const period = btn.getAttribute('data-period') || '7d';
+        const d = analyticsDatasets[period] || analyticsDatasets['7d'];
+
+        // Update Metric Cards
+        const elAudited = document.getElementById('metricAuditedCount');
+        const elAuditedMeta = document.getElementById('metricAuditedMeta');
+        if (elAudited) elAudited.textContent = d.audited;
+        if (elAuditedMeta) elAuditedMeta.textContent = d.auditedMeta;
+
+        const elConflicts = document.getElementById('metricConflictsCount');
+        const elConflictsMeta = document.getElementById('metricConflictsMeta');
+        if (elConflicts) elConflicts.textContent = d.conflicts;
+        if (elConflictsMeta) elConflictsMeta.textContent = d.conflictsMeta;
+
+        const elSecure = document.getElementById('metricSecureCount');
+        const elSecureMeta = document.getElementById('metricSecureMeta');
+        if (elSecure) elSecure.textContent = d.secure;
+        if (elSecureMeta) elSecureMeta.textContent = d.secureMeta;
+
+        const elSpend = document.getElementById('metricSpendCount');
+        const elSpendMeta = document.getElementById('metricSpendMeta');
+        if (elSpend) elSpend.textContent = d.spend;
+        if (elSpendMeta) elSpendMeta.textContent = d.spendMeta;
+
+        const elPending = document.getElementById('metricPendingCount');
+        const elPendingMeta = document.getElementById('metricPendingMeta');
+        if (elPending) elPending.textContent = d.pending;
+        if (elPendingMeta) elPendingMeta.textContent = d.pendingMeta;
+
+        const elResolved = document.getElementById('metricResolvedCount');
+        const elResolvedMeta = document.getElementById('metricResolvedMeta');
+        if (elResolved) elResolved.textContent = d.resolved;
+        if (elResolvedMeta) elResolvedMeta.textContent = d.resolvedMeta;
+
+        // Update Distribution Bar
+        const elDistTotal = document.getElementById('distTotalBadge');
+        if (elDistTotal) elDistTotal.textContent = d.distTotal;
+
+        const elDistSecureVal = document.getElementById('distSecureVal');
+        const elDistSecureFill = document.getElementById('distSecureFill');
+        if (elDistSecureVal) elDistSecureVal.textContent = d.distSecureVal;
+        if (elDistSecureFill) elDistSecureFill.style.width = d.distSecurePct;
+
+        const elDistConflictVal = document.getElementById('distConflictVal');
+        const elDistConflictFill = document.getElementById('distConflictFill');
+        if (elDistConflictVal) elDistConflictVal.textContent = d.distConflictVal;
+        if (elDistConflictFill) elDistConflictFill.style.width = d.distConflictPct;
+
+        const elDistPendingVal = document.getElementById('distPendingVal');
+        const elDistPendingFill = document.getElementById('distPendingFill');
+        if (elDistPendingVal) elDistPendingVal.textContent = d.distPendingVal;
+        if (elDistPendingFill) elDistPendingFill.style.width = d.distPendingPct;
+
+        const elDistResolvedVal = document.getElementById('distResolvedVal');
+        const elDistResolvedFill = document.getElementById('distResolvedFill');
+        if (elDistResolvedVal) elDistResolvedVal.textContent = d.distResolvedVal;
+        if (elDistResolvedFill) elDistResolvedFill.style.width = d.distResolvedPct;
+
+        // Update Activity Chart Line
+        const line = document.getElementById('activityChartLine');
+        if (line) line.setAttribute('points', d.activityPoints);
+
+        const badge = document.getElementById('activityChartBadge');
+        if (badge) badge.textContent = d.badge;
+
+        showToast(`Analytics period updated: ${btn.textContent} (${d.audited} actions)`);
+      });
+    });
+  }
+
+  // ==========================================
+  // CURSOR-RESPONSIVE AI ROBOT MASCOT ENGINE
+  // Serious Inspecting Sentinel Guardian
+  // ==========================================
+  function setupMascotRobot() {
+    const canvas = document.getElementById('mascotCanvas');
+    if (!canvas) return;
+
+    const ctx = canvas.getContext('2d');
+    const gazeAngleEl = document.getElementById('mascotGazeAngle');
+    const speechBubble = document.getElementById('mascotSpeechBubble');
+    const viewport = document.getElementById('mascotViewport');
+
+    // High-DPI Retina Display Configuration
+    const dpr = window.devicePixelRatio || 1;
+    const logicalWidth = 400;
+    const logicalHeight = 360;
+    canvas.width = logicalWidth * dpr;
+    canvas.height = logicalHeight * dpr;
+    canvas.style.width = `${logicalWidth}px`;
+    canvas.style.height = `${logicalHeight}px`;
+
+    // Coordinates and Dynamic Physics
+    let pointerX = window.innerWidth / 2;
+    let pointerY = window.innerHeight / 3;
+    let targetYaw = 0;       // -0.55 to +0.55 radians
+    let targetPitch = 0;     // -0.38 to +0.38 radians
+    let targetHeadX = 0;     // -42 to +42 pixels
+    let targetHeadY = 0;     // -26 to +26 pixels
+    let targetPupilX = 0;    // -20 to +20 pixels
+    let targetPupilY = 0;    // -14 to +14 pixels
+
+    let currentYaw = 0;
+    let currentPitch = 0;
+    let currentHeadX = 0;
+    let currentHeadY = 0;
+    let currentPupilX = 0;
+    let currentPupilY = 0;
+
+    let hoverOffset = 0;
+    let jumpOffset = 0;
+    let jumpVelocity = 0;
+    let isBlinking = false;
+    let blinkProgress = 1.0;
+    let nextBlinkTime = performance.now() + 3500;
+    let isInspectingAlert = false;
+    let scanSweep = 0;
+
+    // Fast, Direct Global Cursor Tracking
+    function onPointerMove(e) {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+    }
+    window.addEventListener('pointermove', onPointerMove, { passive: true });
+    window.addEventListener('mousemove', onPointerMove, { passive: true });
+    document.addEventListener('mousemove', onPointerMove, { passive: true });
+
+    window.addEventListener('touchmove', (e) => {
+      if (e.touches && e.touches[0]) {
+        pointerX = e.touches[0].clientX;
+        pointerY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    // Mascot Click Interaction — Pulse Audit Scan
+    if (viewport) {
+      viewport.addEventListener('click', () => {
+        jumpVelocity = -10;
+        isInspectingAlert = true;
+        setTimeout(() => { isInspectingAlert = false; }, 2500);
+
+        if (speechBubble) {
+          speechBubble.classList.add('visible');
+          clearTimeout(speechBubble._timer);
+          speechBubble._timer = setTimeout(() => {
+            speechBubble.classList.remove('visible');
+          }, 3500);
+        }
+
+        showToast("Sentinel Active: Inspecting all delegated agent transactions");
+      });
+    }
+
+    // Helper: Draw Rounded Rectangle
+    function roundRect(ctx, x, y, w, h, r) {
+      if (typeof r === 'number') r = { tl: r, tr: r, br: r, bl: r };
+      ctx.beginPath();
+      ctx.moveTo(x + r.tl, y);
+      ctx.lineTo(x + w - r.tr, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r.tr);
+      ctx.lineTo(x + w, y + h - r.br);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r.br, y + h);
+      ctx.lineTo(x + r.bl, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r.bl);
+      ctx.lineTo(x + r.tl);
+      ctx.quadraticCurveTo(x, y, x + r.tl, y);
+      ctx.closePath();
+    }
+
+    // Helper: Draw Serious Inspecting Angular Eye Lens
+    function drawInspectingEye(ctx, x, y, isLeft, pupilX, pupilY, blinkScale) {
+      ctx.save();
+      ctx.translate(x, y);
+
+      const eyeW = 44;
+      const eyeH = 50 * (1 - blinkScale * 0.9);
+
+      // 1. Angular Serious Inspecting Brow Contour
+      // Slanted downward toward center to create determined, intense inspection
+      ctx.beginPath();
+      if (isLeft) {
+        // Left eye: outer top higher (y = -eyeH/2 - 2), inner top lower (y = -eyeH/2 + 6)
+        ctx.moveTo(-eyeW / 2, -eyeH / 2 - 2);
+        ctx.lineTo(eyeW / 2, -eyeH / 2 + 6);
+        ctx.lineTo(eyeW / 2, eyeH / 2 - 4);
+        ctx.quadraticCurveTo(0, eyeH / 2 + 3, -eyeW / 2, eyeH / 2 - 4);
+      } else {
+        // Right eye: inner top lower (y = -eyeH/2 + 6), outer top higher (y = -eyeH/2 - 2)
+        ctx.moveTo(-eyeW / 2, -eyeH / 2 + 6);
+        ctx.lineTo(eyeW / 2, -eyeH / 2 - 2);
+        ctx.lineTo(eyeW / 2, eyeH / 2 - 4);
+        ctx.quadraticCurveTo(0, eyeH / 2 + 3, -eyeW / 2, eyeH / 2 - 4);
+      }
+      ctx.closePath();
+
+      // Outer Lens Rim
+      ctx.fillStyle = '#0284C7'; // Sharp cyan-blue lens
+      ctx.fill();
+      ctx.strokeStyle = '#38BDF8';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // Clip inside eye for pupil and HUD reticle
+      ctx.clip();
+
+      if (blinkScale < 0.8) {
+        // 2. Inner Analytical Iris
+        ctx.beginPath();
+        ctx.ellipse(0, 0, eyeW / 2, eyeH / 2, 0, 0, Math.PI * 2);
+        ctx.fillStyle = '#0369A1';
+        ctx.fill();
+
+        // 3. Large High-Contrast Sharp Dark Pupil (Tracks Cursor!)
+        const px = pupilX;
+        const py = pupilY;
+        const pupilRadius = 14;
+
+        ctx.beginPath();
+        ctx.arc(px, py, pupilRadius, 0, Math.PI * 2);
+        ctx.fillStyle = '#09090B'; // Deep obsidian pupil
+        ctx.fill();
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // 4. Concentric HUD Targeting Ring inside Pupil
+        ctx.beginPath();
+        ctx.arc(px, py, 7.5, 0, Math.PI * 2);
+        ctx.strokeStyle = 'rgba(0, 240, 255, 0.65)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Precision Audit Crosshair Lines (+)
+        ctx.beginPath();
+        ctx.moveTo(px - 11, py);
+        ctx.lineTo(px + 11, py);
+        ctx.moveTo(px, py - 11);
+        ctx.lineTo(px, py + 11);
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 1.2;
+        ctx.stroke();
+
+        // Dual Laser Specular Glints (Alert & Alive!)
+        ctx.beginPath();
+        ctx.arc(px + 4.5, py - 5, 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(px - 4, py + 4.5, 2, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.fill();
+      }
+
+      ctx.restore();
+    }
+
+    // Main 60FPS Render Loop
+    function renderLoop(now) {
+      // 1. Calculate Target Yaw and Pitch relative to Canvas Center
+      const rect = canvas.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = pointerX - cx;
+      const dy = pointerY - cy;
+      const dist = Math.hypot(dx, dy);
+
+      // Normalized coordinates (-1.0 to +1.0)
+      const halfW = Math.max(300, window.innerWidth * 0.42);
+      const halfH = Math.max(250, window.innerHeight * 0.42);
+      const normX = Math.max(-1.0, Math.min(1.0, dx / halfW));
+      const normY = Math.max(-1.0, Math.min(1.0, dy / halfH));
+
+      // DRAMATIC & CLEAR TARGET OFFSETS:
+      targetYaw = normX * 0.52;      // Up to ±30 degrees head rotation
+      targetPitch = normY * 0.35;    // Up to ±20 degrees pitch
+      targetHeadX = normX * 42;      // Moves up to ±42px across canvas!
+      targetHeadY = normY * 24;      // Moves up to ±24px vertically!
+      targetPupilX = normX * 19;     // Pupils move up to ±19px across lens!
+      targetPupilY = normY * 13;     // Pupils move up to ±13px vertically!
+
+      // Snappy and responsive damping (0.13 lerp factor gives zero lag)
+      currentYaw += (targetYaw - currentYaw) * 0.13;
+      currentPitch += (targetPitch - currentPitch) * 0.13;
+      currentHeadX += (targetHeadX - currentHeadX) * 0.13;
+      currentHeadY += (targetHeadY - currentHeadY) * 0.13;
+      currentPupilX += (targetPupilX - currentPupilX) * 0.16;
+      currentPupilY += (targetPupilY - currentPupilY) * 0.16;
+
+      // Idle Hover Physics & Jump
+      hoverOffset = Math.sin(now * 0.0028) * 6;
+      if (jumpVelocity !== 0 || jumpOffset !== 0) {
+        jumpOffset += jumpVelocity;
+        jumpVelocity += 0.85; // gravity
+        if (jumpOffset >= 0) {
+          jumpOffset = 0;
+          jumpVelocity = 0;
+        }
+      }
+
+      // Blink Management (Quick tactical shutter)
+      if (!isBlinking && now > nextBlinkTime) {
+        isBlinking = true;
+        blinkProgress = 0;
+      }
+      if (isBlinking) {
+        blinkProgress += 0.22; // Snappy 120ms blink
+        if (blinkProgress >= 1) {
+          isBlinking = false;
+          nextBlinkTime = now + 3200 + Math.random() * 3000;
+        }
+      }
+      const blinkScale = isBlinking ? Math.sin(blinkProgress * Math.PI) : 0;
+
+      // Continuous Scanning Line Oscillation
+      scanSweep = Math.sin(now * 0.0035) * 32;
+
+      // Update Live Gaze HUD Text
+      if (gazeAngleEl) {
+        const deg = Math.round(Math.atan2(dy, dx) * 180 / Math.PI);
+        let dir = 'CENTER';
+        if (dist > 30) {
+          if (deg >= -22 && deg <= 22) dir = 'RIGHT';
+          else if (deg > 22 && deg < 68) dir = 'DOWN-RIGHT';
+          else if (deg >= 68 && deg <= 112) dir = 'DOWN';
+          else if (deg > 112 && deg < 158) dir = 'DOWN-LEFT';
+          else if (deg >= 158 || deg <= -158) dir = 'LEFT';
+          else if (deg > -158 && deg < -112) dir = 'UP-LEFT';
+          else if (deg >= -112 && deg <= -68) dir = 'UP';
+          else if (deg > -68 && deg < -22) dir = 'UP-RIGHT';
+        }
+        gazeAngleEl.textContent = `GAZE: ${Math.abs(deg)}° ${dir}`;
+      }
+
+      // ------------------------------------
+      // DRAW PROCEDURAL SENTINEL ROBOT
+      // ------------------------------------
+      ctx.save();
+      ctx.scale(dpr, dpr);
+      ctx.clearRect(0, 0, logicalWidth, logicalHeight);
+
+      const centerX = logicalWidth / 2;
+      const centerY = logicalHeight / 2 - 10;
+      const baseY = centerY + hoverOffset + jumpOffset;
+
+      // 1. Soft Levitation Ground Shadow
+      const shadowScale = Math.max(0.65, 1 - (hoverOffset + jumpOffset) * 0.025);
+      ctx.beginPath();
+      ctx.ellipse(centerX + currentHeadX * 0.2, centerY + 130, 68 * shadowScale, 11 * shadowScale, 0, 0, Math.PI * 2);
+      ctx.fillStyle = '#E4E4E7';
+      ctx.fill();
+
+      // Levitation Magnetic Ring
+      ctx.beginPath();
+      ctx.ellipse(centerX + currentHeadX * 0.2, centerY + 116, 44 * shadowScale, 7 * shadowScale, 0, 0, Math.PI * 2);
+      ctx.strokeStyle = '#93C5FD';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // 2. Robotic Body / Torso
+      ctx.save();
+      const bodyX = centerX + currentHeadX * 0.4;
+      const bodyY = baseY + 54;
+      ctx.translate(bodyX, bodyY);
+      ctx.rotate(currentYaw * 0.2); // body follows head rotation
+
+      // Left & Right Armor Thruster Pods
+      // Left Pod
+      ctx.beginPath();
+      ctx.ellipse(-66 + currentHeadX * 0.1, 4, 10, 16, -0.25, 0, Math.PI * 2);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#18181B';
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      // Right Pod
+      ctx.beginPath();
+      ctx.ellipse(66 + currentHeadX * 0.1, 4, 10, 16, 0.25, 0, Math.PI * 2);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#18181B';
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      // Torso Armor Shell (Solid White with Dark Obsidian Trim)
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 52, 42, 0, 0, Math.PI * 2);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#18181B';
+      ctx.lineWidth = 2.5;
+      ctx.fill();
+      ctx.stroke();
+
+      // Chest Seam Plate
+      ctx.beginPath();
+      ctx.arc(0, -6, 32, 0.2, Math.PI - 0.2);
+      ctx.strokeStyle = '#E4E4E7';
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // Active Enclave Green Audit Diode
+      ctx.beginPath();
+      ctx.arc(0, 8, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#16A34A';
+      ctx.fill();
+      ctx.strokeStyle = '#14532D';
+      ctx.lineWidth = 1.2;
+      ctx.stroke();
+
+      ctx.restore();
+
+      // 3. Articulated Sentinel Head Module (MAJOR CENTERPIECE!)
+      ctx.save();
+      const headX = centerX + currentHeadX;
+      const headY = baseY - 24 + currentHeadY;
+      ctx.translate(headX, headY);
+      ctx.rotate(currentYaw); // Full head rotation tracking cursor!
+
+      // Lateral Swept-Back Radar Ears
+      const earAngle = currentYaw * 0.35;
+      // Left Radar Ear
+      ctx.beginPath();
+      ctx.moveTo(-84, 0);
+      ctx.lineTo(-104, -22);
+      ctx.lineTo(-94, -32);
+      ctx.lineTo(-76, -14);
+      ctx.closePath();
+      ctx.fillStyle = '#18181B';
+      ctx.strokeStyle = '#18181B';
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      // Left Ear Cyan Sensor Tip
+      ctx.beginPath();
+      ctx.arc(-102, -24, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#00F0FF';
+      ctx.fill();
+
+      // Right Radar Ear
+      ctx.beginPath();
+      ctx.moveTo(84, 0);
+      ctx.lineTo(104, -22);
+      ctx.lineTo(94, -32);
+      ctx.lineTo(76, -14);
+      ctx.closePath();
+      ctx.fillStyle = '#18181B';
+      ctx.strokeStyle = '#18181B';
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      // Right Ear Cyan Sensor Tip
+      ctx.beginPath();
+      ctx.arc(102, -24, 4, 0, Math.PI * 2);
+      ctx.fillStyle = '#00F0FF';
+      ctx.fill();
+
+      // Top Sentinel Sensor Crest
+      ctx.beginPath();
+      ctx.moveTo(-16, -72);
+      ctx.lineTo(0, -96);
+      ctx.lineTo(16, -72);
+      ctx.closePath();
+      ctx.fillStyle = '#18181B';
+      ctx.strokeStyle = '#18181B';
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      // Top Audit Diode
+      ctx.beginPath();
+      ctx.arc(0, -98, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#16A34A'; // Active Enclave green
+      ctx.fill();
+
+      // Head Outer Porcelain Armor Shell
+      const headW = 196;
+      const headH = 144;
+      roundRect(ctx, -headW / 2, -headH / 2, headW, headH, 44);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.strokeStyle = '#18181B';
+      ctx.lineWidth = 3;
+      ctx.fill();
+      ctx.stroke();
+
+      // Large Obsidian Panoramic Visor Screen
+      const visorW = 168;
+      const visorH = 98;
+      const visorPitchShift = currentPitch * 14;
+      roundRect(ctx, -visorW / 2, -visorH / 2 + visorPitchShift, visorW, visorH, 26);
+      ctx.fillStyle = '#09090B'; // Jet Black Glass
+      ctx.strokeStyle = '#27272A';
+      ctx.lineWidth = 2;
+      ctx.fill();
+      ctx.stroke();
+
+      // Curved Glass Reflection Highlight on Visor
+      ctx.beginPath();
+      ctx.moveTo(-visorW / 2 + 20, -visorH / 2 + 10 + visorPitchShift);
+      ctx.lineTo(visorW / 2 - 30, -visorH / 2 + 10 + visorPitchShift);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.18)';
+      ctx.lineWidth = 2.5;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // Active Scan Laser Sweep line across Visor
+      ctx.beginPath();
+      ctx.moveTo(-visorW / 2 + 12, visorPitchShift + scanSweep);
+      ctx.lineTo(visorW / 2 - 12, visorPitchShift + scanSweep);
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.12)';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+
+      // 4. DRAW SERIOUS & INSPECTING EYES (PROMINENT, BOLD, AND ALERT)
+      const eyeBaseY = visorPitchShift;
+      // Left Eye
+      drawInspectingEye(ctx, -38, eyeBaseY, true, currentPupilX, currentPupilY, blinkScale);
+      // Right Eye
+      drawInspectingEye(ctx, 38, eyeBaseY, false, currentPupilX, currentPupilY, blinkScale);
+
+      // Subtle Enclave Micro-Badge on Chin
+      ctx.beginPath();
+      ctx.arc(0, 54, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#71717A';
+      ctx.fill();
+
+      ctx.restore(); // End Head
+      ctx.restore(); // End Canvas
+
+      requestAnimationFrame(renderLoop);
+    }
+
+    requestAnimationFrame(renderLoop);
+  }
+
+  // ==========================================
+  // MASCOT MODALS & HERO ACTION BINDINGS
+  // ==========================================
+  function setupMascotModals() {
+    // "How it works" modal
+    const btnHowItWorks = document.getElementById('btnMascotHowItWorks');
+    const modalHowItWorks = document.getElementById('mascotHowItWorksModal');
+    const btnCloseMascotModal = document.getElementById('btnCloseMascotModal');
+    const btnCloseMascotModalBtn = document.getElementById('btnCloseMascotModalBtn');
+
+    if (btnHowItWorks && modalHowItWorks) {
+      btnHowItWorks.addEventListener('click', () => {
+        modalHowItWorks.classList.remove('hidden');
+      });
+    }
+    const closeHowItWorks = () => {
+      if (modalHowItWorks) modalHowItWorks.classList.add('hidden');
+    };
+    if (btnCloseMascotModal) btnCloseMascotModal.addEventListener('click', closeHowItWorks);
+    if (btnCloseMascotModalBtn) btnCloseMascotModalBtn.addEventListener('click', closeHowItWorks);
+    if (modalHowItWorks) {
+      modalHowItWorks.addEventListener('click', (e) => {
+        if (e.target === modalHowItWorks) closeHowItWorks();
+      });
+    }
+
+    // "Vendor Steering Risk" modal
+    const btnOpenRisk = document.getElementById('btnOpenVendorRiskModal');
+    const modalRisk = document.getElementById('vendorRiskModal');
+    const btnCloseRisk = document.getElementById('btnCloseVendorRiskModal');
+    const btnCloseRiskBtn = document.getElementById('btnCloseVendorRiskBtn');
+
+    if (btnOpenRisk && modalRisk) {
+      btnOpenRisk.addEventListener('click', () => {
+        modalRisk.classList.remove('hidden');
+      });
+    }
+    const closeRisk = () => {
+      if (modalRisk) modalRisk.classList.add('hidden');
+    };
+    if (btnCloseRisk) btnCloseRisk.addEventListener('click', closeRisk);
+    if (btnCloseRiskBtn) btnCloseRiskBtn.addEventListener('click', closeRisk);
+    if (modalRisk) {
+      modalRisk.addEventListener('click', (e) => {
+        if (e.target === modalRisk) closeRisk();
+      });
+    }
+  }
+
+  // ==========================================
   // INITIAL RENDER
   // ==========================================
   function init() {
@@ -308,6 +1022,9 @@ document.addEventListener('DOMContentLoaded', () => {
     renderDomainFilters();
     renderVaultTable();
     renderAgentTable();
+    setupOverviewDashboard();
+    setupMascotRobot();
+    setupMascotModals();
     setupNavigation();
     setupOnboarding();
     setupProfileHandlers();
@@ -343,10 +1060,9 @@ document.addEventListener('DOMContentLoaded', () => {
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-    }, 10);
+    if (viewId === 'view-overview' && window.AgentRecourseRobot?.resize) {
+      setTimeout(() => window.AgentRecourseRobot.resize(), 50);
+    }
   }
 
   function setupNavigation() {
@@ -371,6 +1087,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     handleInitialHash();
 
+    // Wire up all [data-jump-view] elements across overview, heroes, and cards
+    document.querySelectorAll('[data-jump-view]').forEach(el => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const targetView = el.getAttribute('data-jump-view');
+        if (targetView) {
+          switchView(targetView);
+        }
+      });
+    });
+
+    // Profile Back button routing
+    const btnDesktopProfileBack = document.getElementById('btnDesktopProfileBack');
+    if (btnDesktopProfileBack) {
+      btnDesktopProfileBack.addEventListener('click', () => {
+        switchView('view-overview');
+      });
+    }
+
     // Expandable conflict bar toggle
     const conflictBarToggle = document.getElementById('conflictBarToggle');
     if (conflictBarToggle) {
@@ -384,13 +1119,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnInspectEvidence) {
       btnInspectEvidence.addEventListener('click', (e) => {
         e.stopPropagation();
-        switchView('view-evidence');
+        switchView('view-disputes');
       });
     }
 
     if (btnProceedArbitration) {
       btnProceedArbitration.addEventListener('click', () => {
         switchView('view-disputes');
+      });
+    }
+
+    const btnReturnToFeed = document.getElementById('btnReturnToFeed');
+    if (btnReturnToFeed) {
+      btnReturnToFeed.addEventListener('click', () => {
+        switchView('view-stream');
       });
     }
 
@@ -418,80 +1160,9 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    // Profile Dropdown Component Handlers
-    const profileContainer = document.getElementById('profileDropdownContainer');
-    const profileMenu = document.getElementById('profileDropdownMenu');
-    if (btnMastheadProfile && profileContainer && profileMenu) {
-      btnMastheadProfile.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const isOpen = profileContainer.classList.contains('open');
-        if (isOpen) {
-          profileContainer.classList.remove('open');
-          profileMenu.classList.add('hidden');
-          btnMastheadProfile.setAttribute('aria-expanded', 'false');
-        } else {
-          profileContainer.classList.add('open');
-          profileMenu.classList.remove('hidden');
-          btnMastheadProfile.setAttribute('aria-expanded', 'true');
-        }
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!profileContainer.contains(e.target)) {
-          profileContainer.classList.remove('open');
-          profileMenu.classList.add('hidden');
-          btnMastheadProfile.setAttribute('aria-expanded', 'false');
-        }
-      });
-
-      const menuItemProfile = document.getElementById('menuItemProfile');
-      if (menuItemProfile) {
-        menuItemProfile.addEventListener('click', () => {
-          profileContainer.classList.remove('open');
-          profileMenu.classList.add('hidden');
-          switchView('view-profile');
-        });
-      }
-
-      const menuItemSpending = document.getElementById('menuItemSpending');
-      if (menuItemSpending) {
-        menuItemSpending.addEventListener('click', () => {
-          profileContainer.classList.remove('open');
-          profileMenu.classList.add('hidden');
-          switchView('view-profile');
-          const spendingSec = document.getElementById('spendingAnalysisSection');
-          if (spendingSec) {
-            spendingSec.scrollIntoView({ behavior: 'smooth' });
-          }
-        });
-      }
-
-      const menuItemCert = document.getElementById('menuItemCert');
-      if (menuItemCert) {
-        menuItemCert.addEventListener('click', () => {
-          profileContainer.classList.remove('open');
-          profileMenu.classList.add('hidden');
-          if (btnExportIdentityCert) btnExportIdentityCert.click();
-        });
-      }
-
-      const menuItemKillSwitch = document.getElementById('menuItemKillSwitch');
-      if (menuItemKillSwitch) {
-        menuItemKillSwitch.addEventListener('click', () => {
-          profileContainer.classList.remove('open');
-          profileMenu.classList.add('hidden');
-          switchView('view-profile');
-          if (btnToggleEmergencyKill) {
-            btnToggleEmergencyKill.scrollIntoView({ behavior: 'smooth' });
-            btnToggleEmergencyKill.focus();
-          }
-        });
-      }
-    }
-
-    if (btnManageVaultFromProfile) {
-      btnManageVaultFromProfile.addEventListener('click', () => {
-        switchView('view-vault');
+    if (btnMastheadProfile) {
+      btnMastheadProfile.addEventListener('click', () => {
+        switchView('view-profile');
       });
     }
   }
@@ -527,7 +1198,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (btnGoToOverview) {
       btnGoToOverview.addEventListener('click', () => {
-        switchView('view-stream');
+        switchView('view-overview');
       });
     }
 
@@ -1063,10 +1734,6 @@ document.addEventListener('DOMContentLoaded', () => {
       row.addEventListener('click', () => {
         const target = row.getAttribute('data-desktop-target');
         switch (target) {
-          case 'mandates':
-            switchView('view-vault');
-            showToast('Routing to Instruction Mandates Vault...');
-            break;
           case 'spending':
             openDesktopProfileDrawer('deskSubSpending', 'Audited Spent Analytics', 'EXECUTIVE PORTFOLIO OVERSIGHT');
             break;
@@ -1430,7 +2097,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btnDrawerInspectDossier) {
       btnDrawerInspectDossier.addEventListener('click', () => {
         actionDrawer.classList.add('hidden');
-        switchView('view-evidence');
+        switchView('view-disputes');
       });
     }
 
@@ -1764,165 +2431,139 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ==========================================
-  // CLAIMS & ARBITRATION INTERACTIVE CONTROLLER
   // ==========================================
-  const claimsData = [
-    {
-      id: 'claim-1',
-      merchant: 'IndiGo Airlines',
-      title: 'Flight 6E-2412 (BLR ➔ DEL)',
-      conflict: 'Arrives 9:00 PM (Rule: < 6:00 PM)',
-      amount: '₹7,850.00',
-      ruleStatus: 'Active Before Booking',
-      statusTag: 'Step 2 of 4 · Ready',
-      currentStep: 2,
-      steps: [
-        { num: '01', name: 'Conflict Detected', meta: '10:02 AM · Rule Breach' },
-        { num: '02', name: 'Evidence Sealed', meta: '10:03 AM · Ready' },
-        { num: '03', name: 'Merchant Review', meta: 'Pending Action' },
-        { num: '04', name: 'Resolution / Refund', meta: 'Pending Review' }
-      ],
-      statement: `On October 21 at 10:02 AM, your Travel Assistant booked IndiGo flight 6E-2412 from Bengaluru to New Delhi arriving at 9:00 PM. Prior to this purchase, an active rule was set at 10:00 AM requiring all domestic flights to arrive before 6:00 PM.<br><br>Because the assistant booked a ticket arriving 3 hours after your specified cutoff time, this dispute package has been generated to submit to IndiGo for review and reimbursement.`,
-      canSubmit: true,
-      buttonText: 'Submit Dispute Claim to IndiGo'
-    },
-    {
-      id: 'claim-2',
-      merchant: 'Croma Electronics',
-      title: 'Smart Display Warranty Add-on',
-      conflict: 'Unauthorized Plan (Rule: Hardware Spec Required)',
-      amount: '₹1,299.00',
-      ruleStatus: 'Resolved',
-      statusTag: 'Step 4 of 4 · Resolved',
-      currentStep: 4,
-      steps: [
-        { num: '01', name: 'Conflict Detected', meta: 'Yesterday, 09:41 AM' },
-        { num: '02', name: 'Evidence Sealed', meta: 'Yesterday, 09:42 AM' },
-        { num: '03', name: 'Merchant Review', meta: 'Accepted by Croma' },
-        { num: '04', name: 'Resolution / Refund', meta: '₹1,299.00 Refunded' }
-      ],
-      statement: `On October 20 at 09:41 AM, an unauthorized 2-year warranty was attached during hardware checkout. Your recorded rule requires explicit specification verification prior to peripheral add-ons.<br><br>Croma customer care accepted the verified dossier and credited ₹1,299.00 back to your original payment method.`,
-      canSubmit: false,
-      buttonText: 'Claim Resolved (Refund Completed)'
-    },
-    {
-      id: 'claim-3',
-      merchant: 'Uber Premier',
-      title: 'Airport Transit Surge Peak',
-      conflict: 'Surge fare ₹1,450.00 exceeded ₹800 Cap',
-      amount: '₹650.00',
-      ruleStatus: 'In Review',
-      statusTag: 'Step 3 of 4 · Under Review',
-      currentStep: 3,
-      steps: [
-        { num: '01', name: 'Conflict Detected', meta: 'Oct 19, 19:12' },
-        { num: '02', name: 'Evidence Sealed', meta: 'Oct 19, 19:15' },
-        { num: '03', name: 'Merchant Review', meta: 'In Review (Est. 24h)' },
-        { num: '04', name: 'Resolution / Refund', meta: 'Pending Determination' }
-      ],
-      statement: `On October 19 at 19:12, an urban mobility ride was debited at ₹1,450.00 INR without required surge pre-authorization above your ₹800.00 INR ceiling.<br><br>The excess delta of ₹650.00 INR was filed with Uber customer resolution. Currently awaiting partner response.`,
-      canSubmit: false,
-      buttonText: 'Under Merchant Review (Est. 24h)'
-    }
-  ];
+  // ==========================================
+  // STREAMLINED DISPUTE RESOLUTION & EVIDENCE INTERACTIVE CONTROLLER
+  // ==========================================
 
-  let selectedClaimId = 'claim-1';
-
-  function renderSelectedClaim(claimId) {
-    selectedClaimId = claimId;
-    const claim = claimsData.find(c => c.id === claimId) || claimsData[0];
-
-    // Highlight active item in list
-    document.querySelectorAll('.claim-list-item').forEach(el => {
-      el.classList.toggle('active', el.getAttribute('data-claim-id') === claimId);
-    });
-
-    // Update Overview Grid
-    const claimMerchantDisplay = document.getElementById('claimMerchantDisplay');
-    const claimConflictDisplay = document.getElementById('claimConflictDisplay');
-    const claimAmountDisplay = document.getElementById('claimAmountDisplay');
-    const claimRuleStatusDisplay = document.getElementById('claimRuleStatusDisplay');
-    if (claimMerchantDisplay) claimMerchantDisplay.textContent = claim.merchant;
-    if (claimConflictDisplay) claimConflictDisplay.textContent = claim.conflict;
-    if (claimAmountDisplay) claimAmountDisplay.textContent = claim.amount;
-    if (claimRuleStatusDisplay) claimRuleStatusDisplay.textContent = claim.ruleStatus;
-
-    // Update Statement text
-    const claimStatementText = document.getElementById('claimStatementText');
-    if (claimStatementText) claimStatementText.innerHTML = claim.statement;
-
-    // Update Stepper
-    renderStepper(claim);
-
-    // Update Action Button
-    if (btnTransmitArbitration) {
-      btnTransmitArbitration.textContent = claim.buttonText;
-      btnTransmitArbitration.disabled = !claim.canSubmit;
-    }
-
-    const settlementBox = document.getElementById('settlementBox');
-    if (settlementBox) {
-      if (claim.id === 'claim-1' && state.arbitrationState === 'UNDER_REVIEW') {
-        settlementBox.classList.remove('hidden');
-      } else {
-        settlementBox.classList.add('hidden');
+  // 1. Accordion logic for Dispute Issue Cards (Expands all Image 1 details at bottom on click)
+  document.querySelectorAll('.dispute-issue-toggle').forEach(toggle => {
+    toggle.addEventListener('click', (e) => {
+      // Don't toggle if clicking directly on a button inside the toggle bar
+      if (e.target.closest('button')) return;
+      const parentCard = toggle.closest('.dispute-issue-card');
+      if (parentCard) {
+        parentCard.classList.toggle('expanded');
       }
-    }
-  }
-
-  function renderStepper(claim) {
-    const cells = [
-      { el: document.getElementById('step1Cell'), meta: document.getElementById('step1Meta') },
-      { el: document.getElementById('step2Cell'), meta: document.getElementById('step2Meta') },
-      { el: document.getElementById('step3Cell'), meta: document.getElementById('step3Meta') },
-      { el: document.getElementById('step4Cell'), meta: document.getElementById('step4Meta') }
-    ];
-
-    cells.forEach((cell, idx) => {
-      if (!cell.el) return;
-      const stepNum = idx + 1;
-      const stepInfo = claim.steps[idx];
-      if (cell.meta && stepInfo) cell.meta.textContent = stepInfo.meta;
-
-      cell.el.className = 'step-cell';
-      if (stepNum < claim.currentStep) {
-        cell.el.classList.add('done');
-      } else if (stepNum === claim.currentStep) {
-        cell.el.classList.add('current');
-        if (claim.currentStep === 4) cell.el.classList.add('done');
-      }
-    });
-
-    if (arbitrationStateChip) {
-      if (claim.currentStep === 4) {
-        arbitrationStateChip.textContent = 'RESOLVED · REFUNDED 🟢';
-        arbitrationStateChip.className = 'metric-chip mono text-verified';
-      } else if (claim.currentStep === 3) {
-        arbitrationStateChip.textContent = 'UNDER MERCHANT REVIEW ⏳';
-        arbitrationStateChip.className = 'metric-chip mono';
-      } else {
-        arbitrationStateChip.textContent = 'EVIDENCE READY';
-        arbitrationStateChip.className = 'metric-chip mono';
-      }
-    }
-  }
-
-  // Bind click on claims list
-  document.querySelectorAll('.claim-list-item').forEach(el => {
-    el.addEventListener('click', () => {
-      const id = el.getAttribute('data-claim-id');
-      renderSelectedClaim(id);
     });
   });
 
-  // Transmission Flow for Active Claim
-  if (btnTransmitArbitration) {
-    btnTransmitArbitration.addEventListener('click', () => {
-      const claim = claimsData.find(c => c.id === selectedClaimId);
-      if (!claim || !claim.canSubmit) return;
+  // 2. Inspect Evidence toggle button (located to the left of Submit Claim)
+  const btnToggleInspectEvidence = document.getElementById('btnToggleInspectEvidence');
+  const claimEvidenceBox = document.getElementById('claimEvidenceBox');
+  if (btnToggleInspectEvidence && claimEvidenceBox) {
+    btnToggleInspectEvidence.addEventListener('click', (e) => {
+      e.stopPropagation();
+      claimEvidenceBox.classList.toggle('hidden');
+      const isHidden = claimEvidenceBox.classList.contains('hidden');
+      btnToggleInspectEvidence.textContent = isHidden ? 'Inspect Evidence' : 'Hide Evidence Dossier';
+      if (!isHidden) {
+        showToast('Forensic evidence dossier displayed below.');
+      }
+    });
+  }
 
+  // 3. Accordion logic for 5 Categorized Evidence Items inside Inspect Evidence
+  document.querySelectorAll('.evidence-category-header').forEach(header => {
+    header.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const item = header.closest('.evidence-category-item');
+      if (item) {
+        item.classList.toggle('open');
+      }
+    });
+  });
+
+  // 4. Merchant Dispute Terms Modal Logic
+  const btnMerchantTerms = document.getElementById('btnMerchantTerms');
+  const merchantTermsModal = document.getElementById('merchantTermsModal');
+  const btnCloseTermsModal = document.getElementById('btnCloseTermsModal');
+  const btnCloseTermsModalBtn = document.getElementById('btnCloseTermsModalBtn');
+
+  function openTermsModal() {
+    if (merchantTermsModal) merchantTermsModal.classList.add('open');
+  }
+
+  function closeTermsModal() {
+    if (merchantTermsModal) merchantTermsModal.classList.remove('open');
+  }
+
+  if (btnMerchantTerms) {
+    btnMerchantTerms.addEventListener('click', openTermsModal);
+  }
+  if (btnCloseTermsModal) {
+    btnCloseTermsModal.addEventListener('click', closeTermsModal);
+  }
+  if (btnCloseTermsModalBtn) {
+    btnCloseTermsModalBtn.addEventListener('click', closeTermsModal);
+  }
+  if (merchantTermsModal) {
+    merchantTermsModal.addEventListener('click', (e) => {
+      if (e.target === merchantTermsModal) closeTermsModal();
+    });
+  }
+
+  // 5. Download Evidence Dossier JSON
+  const btnExportEvidenceJson = document.getElementById('btnExportEvidenceJson');
+  if (btnExportEvidenceJson) {
+    btnExportEvidenceJson.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dossierPayload = {
+        dossier_id: 'DSP-8910-INDIGO',
+        generated_at: new Date().toISOString(),
+        claimant: {
+          name: state.principal.name,
+          account_id: state.principal.id,
+          hardware_key_fingerprint: state.principal.keyFingerprint
+        },
+        merchant: {
+          name: 'IndiGo Airlines (InterGlobe Aviation Ltd.)',
+          booking_reference_pnr: 'X89Q42',
+          flight_number: '6E-2412',
+          route: 'BLR Kempegowda -> DEL Indira Gandhi',
+          scheduled_arrival_actual: '20:45 IST',
+          disputed_amount: 14200.00,
+          currency: 'INR'
+        },
+        constraint_violation: {
+          mandate_code: 'SEC-TRV-102',
+          mandate_text: 'Never book domestic flights scheduled to arrive after 18:00 IST.',
+          rule_active_since: '2026-10-21T10:00:00+05:30',
+          variance_past_cutoff: '2 hours 45 minutes',
+          severity: 'Hard Limit (Deterministic Invalidation)'
+        },
+        agent_audit: {
+          actor_id: 'travel-concierge-v4.2',
+          action: 'ORDER_SETTLEMENT_EXECUTE',
+          biometric_bypass: true,
+          execution_timestamp: '2026-10-21T10:02:14.218+05:30'
+        },
+        cryptographic_attestation: {
+          tpm_enclave_signature: 'SIG-ED25519-8F9A-2B3C-1A92-E4F1-9980',
+          sha256_merkle_root: '0x7d91e843b02c89f2a71de44a9c10f823',
+          tamper_evident_status: 'VALID_UNMODIFIED'
+        }
+      };
+
+      const blob = new Blob([JSON.stringify(dossierPayload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `Evidence_Dossier_DSP8910_${Date.now()}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast('Downloaded signed Evidence Dossier JSON.');
+    });
+  }
+
+  // 6. Submit Dispute Claim to Merchant Flow (Image 1 Stepper & State update)
+  if (btnTransmitArbitration) {
+    btnTransmitArbitration.addEventListener('click', (e) => {
+      e.stopPropagation();
       if (state.arbitrationState === 'UNDER_REVIEW' || state.arbitrationState === 'TRANSMITTED') {
-        showToast('Dispute dossier has already been transmitted and is currently under vendor review.');
+        showToast('Dispute dossier has already been transmitted to IndiGo and is under vendor review.');
         return;
       }
 
@@ -1930,31 +2571,54 @@ document.addEventListener('DOMContentLoaded', () => {
       btnTransmitArbitration.textContent = 'Transmitting Claim to IndiGo...';
 
       setTimeout(() => {
-        claim.currentStep = 3;
-        claim.statusTag = 'Step 3 of 4 · Under Review';
-        claim.steps[1].meta = 'Transmitted 10:04 IST';
-        claim.steps[2].meta = 'Vendor Review (Est. 24-48h)';
-        renderStepper(claim);
+        state.arbitrationState = 'UNDER_REVIEW';
 
-        // update status pill in list
-        const item1 = document.querySelector('[data-claim-id="claim-1"] .claim-item-status');
-        if (item1) {
-          item1.textContent = 'Step 3 of 4 · In Review';
-          item1.className = 'claim-item-status status-step-3';
+        // 4-Step Stepper updates:
+        const step2Cell = document.getElementById('step2Cell');
+        const step2Meta = document.getElementById('step2Meta');
+        if (step2Cell) {
+          step2Cell.classList.remove('current');
+          step2Cell.classList.add('done');
+          if (step2Meta) step2Meta.textContent = '10:03 AM · Sealed & Transmitted';
         }
 
+        const step3Cell = document.getElementById('step3Cell');
+        const step3Meta = document.getElementById('step3Meta');
+        if (step3Cell) {
+          step3Cell.classList.add('current');
+          if (step3Meta) step3Meta.textContent = 'Under Merchant Review ⏳';
+        }
+
+        // Header chips & tags
+        if (arbitrationStateChip) {
+          arbitrationStateChip.textContent = 'CLAIM TRANSMITTED // UNDER REVIEW ⏳';
+          arbitrationStateChip.className = 'metric-chip mono text-verified';
+        }
+
+        const disputeCard1Tag = document.getElementById('disputeCard1Tag');
+        if (disputeCard1Tag) {
+          disputeCard1Tag.textContent = 'STEP 3 OF 4 · IN MERCHANT REVIEW ⏳';
+          disputeCard1Tag.className = 'step-status-tag tag-active';
+        }
+
+        if (disputeFlag) {
+          disputeFlag.textContent = 'IN REVIEW';
+          disputeFlag.classList.remove('nav-flag');
+          disputeFlag.classList.add('nav-count');
+        }
+
+        // Reveal settlement acknowledgement
         const settlementBox = document.getElementById('settlementBox');
         if (settlementBox) settlementBox.classList.remove('hidden');
 
-        btnTransmitArbitration.textContent = 'Dispute Transmitted 🟢 (Under Review ⏳)';
-        state.arbitrationState = 'UNDER_REVIEW';
-        showToast('Dispute transmitted: Evidence Dossier received (#DSP-8910). Under Vendor Review.');
+        btnTransmitArbitration.textContent = 'Claim Transmitted 🟢 (Under Merchant Review ⏳)';
+        showToast('Dispute Claim submitted to IndiGo (#DSP-8910). Review active.');
 
         setTimeout(() => {
           const prefModal = document.getElementById('preferenceEvolutionModal');
           if (prefModal) prefModal.classList.remove('hidden');
-        }, 700);
-      }, 1200);
+        }, 900);
+      }, 900);
     });
   }
 
@@ -2031,29 +2695,39 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  btnDownloadEvidenceJson.addEventListener('click', () => {
-    triggerFileDownload('ADRP-Dossier-DSP-2040-8812.json', JSON.stringify(formalEvidencePayload, null, 2), 'application/json');
-    showToast('Forensic dossier payload exported (.json).');
-  });
-
-  btnPreviewFilingJson.addEventListener('click', () => {
-    rawJsonArea.textContent = JSON.stringify(formalEvidencePayload, null, 2);
-    payloadModal.classList.remove('hidden');
-  });
-
-  btnClosePayloadModal.addEventListener('click', () => {
-    payloadModal.classList.add('hidden');
-  });
-
-  btnCopyRawJson.addEventListener('click', () => {
-    navigator.clipboard.writeText(JSON.stringify(formalEvidencePayload, null, 2)).then(() => {
-      showToast('Payload copied to clipboard.');
+  if (btnDownloadEvidenceJson) {
+    btnDownloadEvidenceJson.addEventListener('click', () => {
+      triggerFileDownload('ADRP-Dossier-DSP-2040-8812.json', JSON.stringify(formalEvidencePayload, null, 2), 'application/json');
+      showToast('Forensic dossier payload exported (.json).');
     });
-  });
+  }
 
-  btnDownloadRawJson.addEventListener('click', () => {
-    triggerFileDownload('ADRP-Filing-Payload.json', JSON.stringify(formalEvidencePayload, null, 2), 'application/json');
-  });
+  if (btnPreviewFilingJson) {
+    btnPreviewFilingJson.addEventListener('click', () => {
+      if (rawJsonArea) rawJsonArea.textContent = JSON.stringify(formalEvidencePayload, null, 2);
+      if (payloadModal) payloadModal.classList.remove('hidden');
+    });
+  }
+
+  if (btnClosePayloadModal) {
+    btnClosePayloadModal.addEventListener('click', () => {
+      if (payloadModal) payloadModal.classList.add('hidden');
+    });
+  }
+
+  if (btnCopyRawJson) {
+    btnCopyRawJson.addEventListener('click', () => {
+      navigator.clipboard.writeText(JSON.stringify(formalEvidencePayload, null, 2)).then(() => {
+        showToast('Payload copied to clipboard.');
+      });
+    });
+  }
+
+  if (btnDownloadRawJson) {
+    btnDownloadRawJson.addEventListener('click', () => {
+      triggerFileDownload('ADRP-Filing-Payload.json', JSON.stringify(formalEvidencePayload, null, 2), 'application/json');
+    });
+  }
 
   // ==========================================
   // GOVERNANCE CONTROLS
@@ -2127,6 +2801,7 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => toast.remove(), 200);
     }, 3200);
   }
+  window.showToast = showToast;
 
   function setupEventListeners() {
     document.addEventListener('keydown', (e) => {
