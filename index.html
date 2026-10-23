@@ -1399,315 +1399,737 @@
         <section class="stage-pane" id="view-analytics">
           <div class="overview-dashboard analytics-dashboard">
 
-            <!-- SECTION 1: HEADER & IDENTITY BADGES -->
+            <!-- SECTION 1: HEADER & IDENTITY BADGES (GRAFANA / DATADOG STYLE) -->
             <div class="analytics-header-section">
               <div class="analytics-header-main">
                 <div class="analytics-header-kicker">
                   <span class="analytics-header-dot"></span>
-                  <span>Autonomous Agent Intelligence · Telemetry & Ledger Audit</span>
+                  <span>Agent Recourse Intelligence · Enterprise Telemetry & Spend Audit</span>
                 </div>
                 <h1 class="analytics-header-title">Agent Analytics & Financial Telemetry</h1>
                 <p class="analytics-header-body">
-                  Comprehensive performance audit, conflict rates, category expenditures, and financial policy adherence across all delegated autonomous assistants.
+                  Unified analytics suite combining <strong>Ramp</strong> corporate spending governance, <strong>Datadog</strong> real-time operational monitoring, <strong>Stripe</strong> financial ledger summaries, and <strong>Mixpanel</strong> behavioral intent tracking across all autonomous agents.
                 </p>
               </div>
               <div class="analytics-header-badges">
                 <div class="overview-pill-badge pill-secure">
-                  <span>✓ Enclave Cryptographic Attestation</span>
+                  <span class="pill-dot-green"></span>
+                  <span>Hardware TPM Attestation Active</span>
                 </div>
                 <div class="overview-pill-badge">
-                  <span>3 Connected Agents Active</span>
+                  <span>3 Delegated Agents Streaming</span>
                 </div>
               </div>
             </div>
 
-            <!-- SECTION 2: ANALYTICS FILTER TOOLBAR -->
+            <!-- SECTION 2: ANALYTICS FILTER & CONTROL TOOLBAR (GRAFANA / DATADOG) -->
             <div class="overview-analytics-toolbar">
-              <div class="analytics-filter-group" id="analyticsPeriodSelector">
-                <button class="analytics-filter-btn active" data-period="7d">Last 7 Days</button>
-                <button class="analytics-filter-btn" data-period="30d">Last 30 Days</button>
-                <button class="analytics-filter-btn" data-period="90d">Last 90 Days</button>
-                <button class="analytics-filter-btn" data-period="all">All Time</button>
+              <div class="analytics-toolbar-left">
+                <!-- Time Range Filter Pills -->
+                <div class="analytics-filter-group" id="analyticsPeriodSelector">
+                  <button class="analytics-filter-btn" data-period="24h">24 Hours</button>
+                  <button class="analytics-filter-btn active" data-period="7d">Last 7 Days</button>
+                  <button class="analytics-filter-btn" data-period="30d">Last 30 Days</button>
+                  <button class="analytics-filter-btn" data-period="90d">Quarter (90d)</button>
+                  <button class="analytics-filter-btn" data-period="all">All Time</button>
+                </div>
+
+                <!-- Agent Scope Selector (Datadog Multi-Service Scope) -->
+                <div class="analytics-scope-filter">
+                  <label for="analyticsAgentScope" class="scope-label">Scope:</label>
+                  <select id="analyticsAgentScope" class="analytics-select-input">
+                    <option value="all">All Autonomous Agents (3)</option>
+                    <option value="travel">Travel Sentinel v2.4 (Logistics)</option>
+                    <option value="procurement">Procurement Bot Alpha (Purchases)</option>
+                    <option value="expense">Expense Assistant (Sustenance)</option>
+                  </select>
+                </div>
               </div>
-              <div class="analytics-toolbar-meta">
-                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #16A34A;"></span>
-                <span>Audited Ledger Data · Synced with Hardware Enclave</span>
+
+              <div class="analytics-toolbar-right">
+                <button class="analytics-tool-btn" id="btnExportAnalyticsProof" title="Export Cryptographic Audit Proof">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                  <span>Export Audit Proof</span>
+                </button>
+                <div class="analytics-toolbar-meta">
+                  <span class="pulse-live-indicator"></span>
+                  <span>Enclave Sync: 0s Latency</span>
+                </div>
               </div>
             </div>
 
-            <!-- SECTION 3: KEY METRICS CARDS GRID (6 DATA-DRIVEN METRICS) -->
-            <div class="overview-metrics-grid">
+            <!-- SECTION 3: STRIPE-STYLE FINANCIAL & AUDIT METRIC CARDS (6 INTERACTIVE CARDS) -->
+            <div class="stripe-metrics-grid">
               
-              <!-- Metric 1: Total Audited Actions -->
-              <div class="overview-metric-card">
-                <span class="metric-card-label">Total Audited Actions</span>
-                <span class="metric-card-val" id="metricAuditedCount">48</span>
-                <span class="metric-card-sub" id="metricAuditedMeta">+12% vs prior period · 100% verified</span>
+              <!-- Metric 1: Audited Actions -->
+              <div class="stripe-metric-card" data-inspect="audited" role="button" tabindex="0" title="Click to inspect audited agent actions">
+                <div class="stripe-card-top">
+                  <span class="stripe-card-label">Audited Actions</span>
+                  <span class="stripe-delta-pill delta-positive" id="metricAuditedDelta">+14.2%</span>
+                </div>
+                <div class="stripe-card-body">
+                  <div class="stripe-card-val" id="metricAuditedCount">1,284</div>
+                  <div class="stripe-sparkline-wrap">
+                    <svg class="stripe-sparkline" viewBox="0 0 80 24">
+                      <path d="M0,20 Q20,18 35,12 T60,8 T80,3" fill="none" stroke="#2874F0" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stripe-card-footer">
+                  <span class="stripe-card-sub" id="metricAuditedMeta">100% verified in hardware enclave</span>
+                  <span class="stripe-card-hint">Inspect →</span>
+                </div>
               </div>
 
-              <!-- Metric 2: Total Conflicts -->
-              <div class="overview-metric-card">
-                <span class="metric-card-label">Total Conflicts</span>
-                <span class="metric-card-val val-conflict" id="metricConflictsCount">1</span>
-                <span class="metric-card-sub" id="metricConflictsMeta">2.1% conflict rate · 1 Active</span>
+              <!-- Metric 2: Secure Actions -->
+              <div class="stripe-metric-card" data-inspect="secure" role="button" tabindex="0" title="Click to inspect secure actions">
+                <div class="stripe-card-top">
+                  <span class="stripe-card-label">Secure Actions</span>
+                  <span class="stripe-delta-pill delta-green" id="metricSecureDelta">98.6%</span>
+                </div>
+                <div class="stripe-card-body">
+                  <div class="stripe-card-val text-secure" id="metricSecureCount">1,266</div>
+                  <div class="stripe-sparkline-wrap">
+                    <svg class="stripe-sparkline" viewBox="0 0 80 24">
+                      <path d="M0,18 Q25,16 45,10 T70,5 T80,2" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stripe-card-footer">
+                  <span class="stripe-card-sub" id="metricSecureMeta">Zero cloud financial key leaks</span>
+                  <span class="stripe-card-hint">Inspect →</span>
+                </div>
               </div>
 
-              <!-- Metric 3: Secure Actions -->
-              <div class="overview-metric-card">
-                <span class="metric-card-label">Secure Actions</span>
-                <span class="metric-card-val val-secure" id="metricSecureCount">47</span>
-                <span class="metric-card-sub" id="metricSecureMeta">97.9% compliant with Vault Rules</span>
+              <!-- Metric 3: Total Conflicts Flagged -->
+              <div class="stripe-metric-card" data-inspect="conflicts" role="button" tabindex="0" title="Click to review active conflict traces">
+                <div class="stripe-card-top">
+                  <span class="stripe-card-label">Conflicts Flagged</span>
+                  <span class="stripe-delta-pill delta-alert" id="metricConflictsDelta">1 Active</span>
+                </div>
+                <div class="stripe-card-body">
+                  <div class="stripe-card-val text-brand-blue" id="metricConflictsCount">18</div>
+                  <div class="stripe-sparkline-wrap">
+                    <svg class="stripe-sparkline" viewBox="0 0 80 24">
+                      <path d="M0,22 L40,22 L50,6 L60,22 L80,22" fill="none" stroke="#2874F0" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stripe-card-footer">
+                  <span class="stripe-card-sub" id="metricConflictsMeta">17 mediated · 1 pending review</span>
+                  <span class="stripe-card-hint">Inspect →</span>
+                </div>
               </div>
 
               <!-- Metric 4: Total Agent Spending -->
-              <div class="overview-metric-card">
-                <span class="metric-card-label">Total Agent Spending</span>
-                <span class="metric-card-val" id="metricSpendCount">₹18,450.00</span>
-                <span class="metric-card-sub" id="metricSpendMeta">73.8% of daily cap (₹25,000)</span>
+              <div class="stripe-metric-card" data-inspect="spending" role="button" tabindex="0" title="Click to inspect vendor spend ledger">
+                <div class="stripe-card-top">
+                  <span class="stripe-card-label">Total Agent Spend</span>
+                  <span class="stripe-delta-pill delta-neutral" id="metricSpendDelta">73.8% Cap</span>
+                </div>
+                <div class="stripe-card-body">
+                  <div class="stripe-card-val" id="metricSpendCount">₹24,850.00</div>
+                  <div class="stripe-sparkline-wrap">
+                    <svg class="stripe-sparkline" viewBox="0 0 80 24">
+                      <path d="M0,22 Q20,18 40,14 T65,8 T80,4" fill="none" stroke="#2874F0" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stripe-card-footer">
+                  <span class="stripe-card-sub" id="metricSpendMeta">Policy limit: ₹25,000 / day</span>
+                  <span class="stripe-card-hint">Inspect →</span>
+                </div>
               </div>
 
               <!-- Metric 5: Pending Reviews -->
-              <div class="overview-metric-card">
-                <span class="metric-card-label">Pending Reviews</span>
-                <span class="metric-card-val val-conflict" id="metricPendingCount">1</span>
-                <span class="metric-card-sub" id="metricPendingMeta">Flight 6E-2412 (Arrives &gt; 18:00)</span>
+              <div class="stripe-metric-card" data-inspect="pending" role="button" tabindex="0" title="Click to review pending action">
+                <div class="stripe-card-top">
+                  <span class="stripe-card-label">Pending Reviews</span>
+                  <span class="stripe-delta-pill delta-warning" id="metricPendingDelta">Requires Attestation</span>
+                </div>
+                <div class="stripe-card-body">
+                  <div class="stripe-card-val text-brand-blue" id="metricPendingCount">1</div>
+                  <div class="stripe-sparkline-wrap">
+                    <svg class="stripe-sparkline" viewBox="0 0 80 24">
+                      <circle cx="40" cy="12" r="6" fill="#F2F6FF" stroke="#2874F0" stroke-width="2"></circle>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stripe-card-footer">
+                  <span class="stripe-card-sub" id="metricPendingMeta">Flight 6E-2412 (18:45 vs 18:00 cutoff)</span>
+                  <span class="stripe-card-hint">Review →</span>
+                </div>
               </div>
 
-              <!-- Metric 6: Resolved Conflicts -->
-              <div class="overview-metric-card">
-                <span class="metric-card-label">Resolved Conflicts</span>
-                <span class="metric-card-val" id="metricResolvedCount">2</span>
-                <span class="metric-card-sub" id="metricResolvedMeta">₹2,319 recovered via dispute</span>
+              <!-- Metric 6: Recovered via Dispute -->
+              <div class="stripe-metric-card" data-inspect="resolved" role="button" tabindex="0" title="Click to view recovered dispute funds">
+                <div class="stripe-card-top">
+                  <span class="stripe-card-label">Disputed Recovery</span>
+                  <span class="stripe-delta-pill delta-green" id="metricResolvedDelta">100% Success</span>
+                </div>
+                <div class="stripe-card-body">
+                  <div class="stripe-card-val text-secure" id="metricResolvedCount">₹2,319.00</div>
+                  <div class="stripe-sparkline-wrap">
+                    <svg class="stripe-sparkline" viewBox="0 0 80 24">
+                      <path d="M0,22 L30,22 L30,12 L60,12 L60,4 L80,4" fill="none" stroke="#16A34A" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                  </div>
+                </div>
+                <div class="stripe-card-footer">
+                  <span class="stripe-card-sub" id="metricResolvedMeta">Auto-credited to ICICI account</span>
+                  <span class="stripe-card-hint">Inspect →</span>
+                </div>
               </div>
 
             </div>
 
-            <!-- SECTION 4: ACTIVITY & FINANCIAL ANALYTICS CHARTS (ROW 1) -->
-            <div class="overview-charts-grid">
+            <!-- SECTION 4: DATADOG MONITORING ROW (TIMESERIES TRENDS + CONFLICT DISTRIBUTION) -->
+            <div class="grafana-chart-row">
               
-              <!-- Chart 1: Agent Activity Over Time -->
-              <div class="overview-chart-card">
-                <div class="chart-card-header">
-                  <div>
-                    <h3 class="chart-card-title">Agent Activity Over Time</h3>
-                    <div class="chart-card-sub">Daily count of audited agent actions across delegated assistants</div>
+              <!-- Panel 1: Activity & Conflict Trends (Datadog Timeseries with Anomaly Markers) -->
+              <div class="grafana-panel" id="panelActivityTrend">
+                <div class="grafana-panel-header">
+                  <div class="panel-header-titles">
+                    <h3 class="grafana-panel-title">Audited Actions & Activity Trends</h3>
+                    <div class="grafana-panel-sub">Time-series audit velocity with real-time conflict anomaly markers</div>
                   </div>
-                  <span class="chart-card-badge" id="activityChartBadge">7-Day Trend</span>
+                  <div class="panel-header-actions">
+                    <span class="chart-legend-item"><span class="legend-dot dot-blue"></span> Audited Actions</span>
+                    <span class="chart-legend-item"><span class="legend-dot dot-alert"></span> Conflict Spike</span>
+                    <span class="panel-status-pill" id="activityChartBadge">7-Day Timeseries</span>
+                  </div>
                 </div>
-                <div class="chart-svg-container" id="activityChartContainer">
-                  <svg id="overviewActivitySvg" width="100%" height="180" viewBox="0 0 500 180" preserveAspectRatio="none">
-                    <!-- Axes & Grid -->
-                    <line x1="40" y1="20" x2="40" y2="150" stroke="#E4E4E7" stroke-width="1"></line>
-                    <line x1="40" y1="150" x2="490" y2="150" stroke="#E4E4E7" stroke-width="1"></line>
-                    <line x1="40" y1="85" x2="490" y2="85" stroke="#F4F4F5" stroke-dasharray="3 3" stroke-width="1"></line>
-                    
-                    <!-- Trend Line -->
-                    <polyline id="activityChartLine" fill="none" stroke="#18181B" stroke-width="2.5" points="50,135 115,120 180,95 245,110 310,70 375,55 440,35"></polyline>
-                    
-                    <!-- Data Points -->
-                    <circle cx="50" cy="135" r="4" fill="#18181B"></circle>
-                    <circle cx="115" cy="120" r="4" fill="#18181B"></circle>
-                    <circle cx="180" cy="95" r="4" fill="#18181B"></circle>
-                    <circle cx="245" cy="110" r="4" fill="#18181B"></circle>
-                    <circle cx="310" cy="70" r="4" fill="#18181B"></circle>
-                    <circle cx="375" cy="55" r="4" fill="#18181B"></circle>
-                    <circle cx="440" cy="35" r="4" fill="#16A34A"></circle>
+                
+                <div class="datadog-chart-container" id="datadogChartContainer">
+                  <svg id="datadogActivitySvg" width="100%" height="220" viewBox="0 0 620 220" preserveAspectRatio="none">
+                    <!-- Grid Lines -->
+                    <line x1="50" y1="20" x2="600" y2="20" stroke="#E6E6E6" stroke-dasharray="3 3"></line>
+                    <line x1="50" y1="65" x2="600" y2="65" stroke="#E6E6E6" stroke-dasharray="3 3"></line>
+                    <line x1="50" y1="110" x2="600" y2="110" stroke="#E6E6E6" stroke-dasharray="3 3"></line>
+                    <line x1="50" y1="155" x2="600" y2="155" stroke="#E6E6E6" stroke-dasharray="3 3"></line>
+                    <line x1="50" y1="180" x2="600" y2="180" stroke="#E6E6E6"></line>
 
-                    <!-- X-Axis Labels -->
-                    <text x="50" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Thu</text>
-                    <text x="115" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Fri</text>
-                    <text x="180" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Sat</text>
-                    <text x="245" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Sun</text>
-                    <text x="310" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Mon</text>
-                    <text x="375" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Tue</text>
-                    <text x="440" y="170" font-size="10.5" fill="#18181B" font-weight="600" text-anchor="middle">Today</text>
+                    <!-- Area gradient definition -->
+                    <defs>
+                      <linearGradient id="blueAreaGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                        <stop offset="0%" stop-color="#2874F0" stop-opacity="0.18"></stop>
+                        <stop offset="100%" stop-color="#2874F0" stop-opacity="0.01"></stop>
+                      </linearGradient>
+                    </defs>
 
-                    <!-- Y-Axis Labels -->
-                    <text x="30" y="152" font-size="10" fill="#71717A" text-anchor="end">0</text>
-                    <text x="30" y="88" font-size="10" fill="#71717A" text-anchor="end">25</text>
-                    <text x="30" y="24" font-size="10" fill="#71717A" text-anchor="end">50</text>
+                    <!-- Gradient Area Fill -->
+                    <polygon id="datadogAreaPolygon" points="60,180 60,145 145,130 230,105 315,120 400,80 485,65 570,45 570,180" fill="url(#blueAreaGrad)"></polygon>
+
+                    <!-- Main Blue Trend Line -->
+                    <polyline id="datadogActivityPolyline" fill="none" stroke="#2874F0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" points="60,145 145,130 230,105 315,120 400,80 485,65 570,45"></polyline>
+
+                    <!-- Interactive Data Points -->
+                    <circle class="chart-interactive-point" data-day="Thu" data-count="32" data-conflicts="0" cx="60" cy="145" r="4.5" fill="#FFFFFF" stroke="#2874F0" stroke-width="2.5"></circle>
+                    <circle class="chart-interactive-point" data-day="Fri" data-count="45" data-conflicts="0" cx="145" cy="130" r="4.5" fill="#FFFFFF" stroke="#2874F0" stroke-width="2.5"></circle>
+                    <circle class="chart-interactive-point" data-day="Sat" data-count="68" data-conflicts="0" cx="230" cy="105" r="4.5" fill="#FFFFFF" stroke="#2874F0" stroke-width="2.5"></circle>
+                    <circle class="chart-interactive-point" data-day="Sun" data-count="54" data-conflicts="0" cx="315" cy="120" r="4.5" fill="#FFFFFF" stroke="#2874F0" stroke-width="2.5"></circle>
+                    <circle class="chart-interactive-point" data-day="Mon" data-count="92" data-conflicts="0" cx="400" cy="80" r="4.5" fill="#FFFFFF" stroke="#2874F0" stroke-width="2.5"></circle>
+                    <circle class="chart-interactive-point" data-day="Tue" data-count="110" data-conflicts="0" cx="485" cy="65" r="4.5" fill="#FFFFFF" stroke="#2874F0" stroke-width="2.5"></circle>
+                    <circle class="chart-interactive-point point-spike" data-day="Today" data-count="134" data-conflicts="1" cx="570" cy="45" r="6" fill="#2874F0" stroke="#FFFFFF" stroke-width="2"></circle>
+
+                    <!-- Datadog Anomaly Pin / Callout -->
+                    <g transform="translate(540, 10)">
+                      <rect x="0" y="0" width="60" height="22" rx="4" fill="#2874F0"></rect>
+                      <text x="30" y="14" fill="#FFFFFF" font-size="10" font-weight="700" text-anchor="middle">1 Conflict</text>
+                      <line x1="30" y1="22" x2="30" y2="35" stroke="#2874F0" stroke-width="1.5" stroke-dasharray="2 2"></line>
+                    </g>
+
+                    <!-- X-Axis Date Labels -->
+                    <text x="60" y="200" font-size="11" fill="#6F6F6F" text-anchor="middle">17 Oct (Thu)</text>
+                    <text x="145" y="200" font-size="11" fill="#6F6F6F" text-anchor="middle">18 Oct (Fri)</text>
+                    <text x="230" y="200" font-size="11" fill="#6F6F6F" text-anchor="middle">19 Oct (Sat)</text>
+                    <text x="315" y="200" font-size="11" fill="#6F6F6F" text-anchor="middle">20 Oct (Sun)</text>
+                    <text x="400" y="200" font-size="11" fill="#6F6F6F" text-anchor="middle">21 Oct (Mon)</text>
+                    <text x="485" y="200" font-size="11" fill="#6F6F6F" text-anchor="middle">22 Oct (Tue)</text>
+                    <text x="570" y="200" font-size="11" fill="#000000" font-weight="700" text-anchor="middle">Today</text>
+
+                    <!-- Y-Axis Value Labels -->
+                    <text x="40" y="184" font-size="10" fill="#6F6F6F" text-anchor="end">0</text>
+                    <text x="40" y="158" font-size="10" fill="#6F6F6F" text-anchor="end">50</text>
+                    <text x="40" y="114" font-size="10" fill="#6F6F6F" text-anchor="end">100</text>
+                    <text x="40" y="68" font-size="10" fill="#6F6F6F" text-anchor="end">150</text>
+                    <text x="40" y="24" font-size="10" fill="#6F6F6F" text-anchor="end">200</text>
                   </svg>
+                  
+                  <div class="chart-tooltip-hud" id="datadogTooltip" style="display: none;">
+                    <div class="hud-title" id="hudDay">Today</div>
+                    <div class="hud-row"><span class="hud-k">Audited Actions:</span> <span class="hud-v" id="hudAudited">134</span></div>
+                    <div class="hud-row"><span class="hud-k">Active Conflicts:</span> <span class="hud-v text-blue" id="hudConflicts">1 (Flight 6E)</span></div>
+                    <div class="hud-hint">Click point to inspect traces →</div>
+                  </div>
+                </div>
+
+                <div class="datadog-panel-footer">
+                  <span class="footer-insight-item">⚡ <strong>180ms</strong> Avg. Verification Latency</span>
+                  <span class="footer-insight-item">🛡️ <strong>99.4%</strong> Intent Adherence</span>
+                  <span class="footer-insight-item">🔐 <strong>100%</strong> Hardware Enclave Coverage</span>
                 </div>
               </div>
 
-              <!-- Chart 2: Conflict & Compliance Distribution -->
-              <div class="overview-chart-card">
-                <div class="chart-card-header">
-                  <div>
-                    <h3 class="chart-card-title">Conflict Distribution</h3>
-                    <div class="chart-card-sub">Classification breakdown of all audited decisions</div>
+              <!-- Panel 2: Conflict Trends & Status Distribution (Datadog Status Breakdown) -->
+              <div class="grafana-panel" id="panelConflictDist">
+                <div class="grafana-panel-header">
+                  <div class="panel-header-titles">
+                    <h3 class="grafana-panel-title">Conflict Distribution & Status</h3>
+                    <div class="grafana-panel-sub">Categorical classification of all agent decisions</div>
                   </div>
-                  <span class="chart-card-badge" id="distTotalBadge">48 Total</span>
+                  <span class="panel-status-pill" id="distTotalBadge">1,284 Actions</span>
                 </div>
-                <div class="distribution-bars-list">
-                  
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Secure & Compliant</span>
-                      <span class="dist-bar-metrics" id="distSecureVal">47 (97.9%)</span>
-                    </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill fill-secure" id="distSecureFill" style="width: 97.9%;"></div>
+
+                <div class="conflict-donut-layout">
+                  <!-- SVG Donut Chart -->
+                  <div class="donut-chart-wrap">
+                    <svg class="donut-svg" width="130" height="130" viewBox="0 0 100 100">
+                      <circle cx="50" cy="50" r="38" fill="none" stroke="#F3F3F3" stroke-width="12"></circle>
+                      <!-- 98.6% Green Segment (Circumference = 2 * PI * 38 = 238.76) -->
+                      <circle cx="50" cy="50" r="38" fill="none" stroke="#2874F0" stroke-width="12" stroke-dasharray="235.4 238.76" stroke-dashoffset="0" transform="rotate(-90 50 50)"></circle>
+                      <!-- 1.4% Red / Alert Segment -->
+                      <circle cx="50" cy="50" r="38" fill="none" stroke="#DC2626" stroke-width="12" stroke-dasharray="3.36 238.76" stroke-dashoffset="-235.4" transform="rotate(-90 50 50)"></circle>
+                    </svg>
+                    <div class="donut-center-stat">
+                      <span class="donut-center-pct">98.6%</span>
+                      <span class="donut-center-lbl">Compliant</span>
                     </div>
                   </div>
 
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Active Conflicts</span>
-                      <span class="dist-bar-metrics text-danger" id="distConflictVal">1 (2.1%)</span>
+                  <!-- Interactive Status Classification Bars -->
+                  <div class="distribution-bars-list">
+                    <div class="dist-bar-item interactive-dist-row" data-filter="secure" role="button" tabindex="0">
+                      <div class="dist-bar-header">
+                        <span class="dist-bar-name"><span class="legend-dot dot-blue"></span> Verified Compliant</span>
+                        <span class="dist-bar-metrics" id="distSecureVal">1,266 (98.6%)</span>
+                      </div>
+                      <div class="dist-bar-track">
+                        <div class="dist-bar-fill fill-blue" id="distSecureFill" style="width: 98.6%;"></div>
+                      </div>
                     </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill fill-conflict" id="distConflictFill" style="width: 2.1%;"></div>
+
+                    <div class="dist-bar-item interactive-dist-row" data-filter="temporal" role="button" tabindex="0">
+                      <div class="dist-bar-header">
+                        <span class="dist-bar-name"><span class="legend-dot dot-alert"></span> Temporal Cutoff Violation</span>
+                        <span class="dist-bar-metrics text-blue" id="distConflictVal">1 Active (0.8%)</span>
+                      </div>
+                      <div class="dist-bar-track">
+                        <div class="dist-bar-fill fill-blue-solid" id="distConflictFill" style="width: 0.8%;"></div>
+                      </div>
+                    </div>
+
+                    <div class="dist-bar-item interactive-dist-row" data-filter="markup" role="button" tabindex="0">
+                      <div class="dist-bar-header">
+                        <span class="dist-bar-name"><span class="legend-dot dot-gray"></span> Price / Markup Anomaly</span>
+                        <span class="dist-bar-metrics">1 Resolved (0.1%)</span>
+                      </div>
+                      <div class="dist-bar-track">
+                        <div class="dist-bar-fill fill-resolved" style="width: 0.1%;"></div>
+                      </div>
+                    </div>
+
+                    <div class="dist-bar-item interactive-dist-row" data-filter="resolved" role="button" tabindex="0">
+                      <div class="dist-bar-header">
+                        <span class="dist-bar-name"><span class="legend-dot dot-green"></span> Resolved via Arbitration</span>
+                        <span class="dist-bar-metrics" id="distResolvedVal">16 Recovered (1.2%)</span>
+                      </div>
+                      <div class="dist-bar-track">
+                        <div class="dist-bar-fill fill-green" id="distResolvedFill" style="width: 1.2%;"></div>
+                      </div>
                     </div>
                   </div>
+                </div>
 
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Pending Merchant Review</span>
-                      <span class="dist-bar-metrics" id="distPendingVal">1 Action</span>
-                    </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill fill-pending" id="distPendingFill" style="width: 2.1%;"></div>
-                    </div>
-                  </div>
-
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Resolved via Recourse</span>
-                      <span class="dist-bar-metrics" id="distResolvedVal">2 Actions</span>
-                    </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill fill-resolved" id="distResolvedFill" style="width: 4.2%;"></div>
-                    </div>
-                  </div>
-
+                <div class="dist-card-footer">
+                  <button class="dist-inspect-btn" id="btnInspectAllConflicts" data-inspect="conflicts">
+                    <span>Inspect 18 Conflict Traces</span>
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
                 </div>
               </div>
 
             </div>
 
-            <!-- SECTION 4 (CONT.): SPENDING & ACTION BREAKDOWN (ROW 2) -->
-            <div class="overview-charts-grid">
+            <!-- SECTION 5: RAMP-STYLE CORPORATE SPENDING & VENDOR BREAKDOWN -->
+            <div class="grafana-chart-row">
               
-              <!-- Chart 3: Spending Analytics Over Time -->
-              <div class="overview-chart-card">
-                <div class="chart-card-header">
-                  <div>
-                    <h3 class="chart-card-title">Spending Analytics</h3>
-                    <div class="chart-card-sub">Daily autonomous expenditures against configured policy cap</div>
+              <!-- Panel 1: Spending Velocity vs Policy Cap (Ramp Spending) -->
+              <div class="grafana-panel" id="panelSpendVelocity">
+                <div class="grafana-panel-header">
+                  <div class="panel-header-titles">
+                    <h3 class="grafana-panel-title">Total Spending & Velocity</h3>
+                    <div class="grafana-panel-sub">Autonomous expenditures against daily policy cap (₹25,000)</div>
                   </div>
-                  <span class="chart-card-badge">Daily Cap: ₹25,000</span>
+                  <div class="ramp-cap-indicator">
+                    <span class="cap-pill-label">Daily Limit:</span>
+                    <span class="cap-pill-val">₹25,000.00</span>
+                  </div>
                 </div>
+
                 <div class="chart-svg-container" id="spendingChartContainer">
-                  <svg id="overviewSpendSvg" width="100%" height="180" viewBox="0 0 500 180" preserveAspectRatio="none">
-                    <!-- Baseline and Grid -->
-                    <line x1="40" y1="150" x2="490" y2="150" stroke="#E4E4E7" stroke-width="1"></line>
-                    <line x1="40" y1="50" x2="490" y2="50" stroke="#FEE2E2" stroke-dasharray="4 4" stroke-width="1"></line>
-                    <text x="485" y="44" font-size="9.5" fill="#DC2626" text-anchor="end">₹25,000 Policy Cap</text>
+                  <svg id="overviewSpendSvg" width="100%" height="200" viewBox="0 0 500 200" preserveAspectRatio="none">
+                    <!-- Baseline and Policy Cap Line -->
+                    <line x1="40" y1="160" x2="490" y2="160" stroke="#E6E6E6" stroke-width="1"></line>
+                    <line x1="40" y1="45" x2="490" y2="45" stroke="#2874F0" stroke-dasharray="4 4" stroke-width="1.5"></line>
+                    <text x="485" y="38" font-size="10" font-weight="700" fill="#2874F0" text-anchor="end">₹25,000 Mandate Ceiling</text>
 
-                    <!-- Solid Bars (Thu - Today) -->
-                    <rect x="55" y="110" width="30" height="40" fill="#E4E4E7" rx="3"></rect>
-                    <rect x="120" y="95" width="30" height="55" fill="#E4E4E7" rx="3"></rect>
-                    <rect x="185" y="125" width="30" height="25" fill="#E4E4E7" rx="3"></rect>
-                    <rect x="250" y="105" width="30" height="45" fill="#E4E4E7" rx="3"></rect>
-                    <rect x="315" y="80" width="30" height="70" fill="#E4E4E7" rx="3"></rect>
-                    <rect x="380" y="90" width="30" height="60" fill="#E4E4E7" rx="3"></rect>
-                    <rect x="445" y="65" width="30" height="85" fill="#18181B" rx="3"></rect>
+                    <!-- Ramp-style clean bars with hover data -->
+                    <rect class="ramp-spend-bar" data-day="Thu" data-amount="₹14,200" data-pct="56.8%" x="55" y="95" width="34" height="65" fill="#E6E6E6" rx="4"></rect>
+                    <rect class="ramp-spend-bar" data-day="Fri" data-amount="₹18,100" data-pct="72.4%" x="120" y="80" width="34" height="80" fill="#E6E6E6" rx="4"></rect>
+                    <rect class="ramp-spend-bar" data-day="Sat" data-amount="₹8,900" data-pct="35.6%" x="185" y="125" width="34" height="35" fill="#E6E6E6" rx="4"></rect>
+                    <rect class="ramp-spend-bar" data-day="Sun" data-amount="₹12,400" data-pct="49.6%" x="250" y="105" width="34" height="55" fill="#E6E6E6" rx="4"></rect>
+                    <rect class="ramp-spend-bar" data-day="Mon" data-amount="₹21,300" data-pct="85.2%" x="315" y="65" width="34" height="95" fill="#E6E6E6" rx="4"></rect>
+                    <rect class="ramp-spend-bar" data-day="Tue" data-amount="₹19,600" data-pct="78.4%" x="380" y="75" width="34" height="85" fill="#E6E6E6" rx="4"></rect>
+                    <rect class="ramp-spend-bar bar-active" data-day="Today" data-amount="₹18,450" data-pct="73.8%" x="445" y="82" width="34" height="78" fill="#2874F0" rx="4"></rect>
 
                     <!-- X-Axis Labels -->
-                    <text x="70" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Thu</text>
-                    <text x="135" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Fri</text>
-                    <text x="200" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Sat</text>
-                    <text x="265" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Sun</text>
-                    <text x="330" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Mon</text>
-                    <text x="395" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Tue</text>
-                    <text x="460" y="168" font-size="10.5" fill="#18181B" font-weight="600" text-anchor="middle">Today</text>
+                    <text x="72" y="180" font-size="10.5" fill="#6F6F6F" text-anchor="middle">Thu</text>
+                    <text x="137" y="180" font-size="10.5" fill="#6F6F6F" text-anchor="middle">Fri</text>
+                    <text x="202" y="180" font-size="10.5" fill="#6F6F6F" text-anchor="middle">Sat</text>
+                    <text x="267" y="180" font-size="10.5" fill="#6F6F6F" text-anchor="middle">Sun</text>
+                    <text x="332" y="180" font-size="10.5" fill="#6F6F6F" text-anchor="middle">Mon</text>
+                    <text x="397" y="180" font-size="10.5" fill="#6F6F6F" text-anchor="middle">Tue</text>
+                    <text x="462" y="180" font-size="10.5" fill="#000000" font-weight="700" text-anchor="middle">Today</text>
 
-                    <!-- Values on top of bars -->
-                    <text x="460" y="58" font-size="10" font-weight="600" fill="#18181B" text-anchor="middle">₹18.4k</text>
+                    <!-- Values above today's bar -->
+                    <text x="462" y="74" font-size="10.5" font-weight="700" fill="#2874F0" text-anchor="middle">₹18.4k</text>
                   </svg>
+                </div>
+
+                <div class="ramp-panel-summary">
+                  <div class="ramp-summary-col">
+                    <span class="summary-label">TOTAL AUTHORIZED</span>
+                    <span class="summary-val">₹24,850.00</span>
+                  </div>
+                  <div class="ramp-summary-col">
+                    <span class="summary-label">DISPUTED / RECOVERED</span>
+                    <span class="summary-val text-blue">₹2,319.00</span>
+                  </div>
+                  <div class="ramp-summary-col">
+                    <span class="summary-label">REMAINING HEADROOM</span>
+                    <span class="summary-val text-green">₹6,550.00</span>
+                  </div>
                 </div>
               </div>
 
-              <!-- Chart 4: Agent Action Breakdown by Domain -->
-              <div class="overview-chart-card">
-                <div class="chart-card-header">
-                  <div>
-                    <h3 class="chart-card-title">Agent Action Breakdown</h3>
-                    <div class="chart-card-sub">Expenditure distribution across delegated domains</div>
+              <!-- Panel 2: Total Spending & Vendor Breakdown (Ramp Corporate Card Style) -->
+              <div class="grafana-panel" id="panelVendorBreakdown">
+                <div class="grafana-panel-header">
+                  <div class="panel-header-titles">
+                    <h3 class="grafana-panel-title">Vendor Breakdown & Policy Caps</h3>
+                    <div class="grafana-panel-sub">Expenditures grouped by merchant aggregator and category rules</div>
                   </div>
-                  <span class="chart-card-badge">4 Domains</span>
+                  <span class="panel-status-pill">4 Active Vendors</span>
                 </div>
-                <div class="distribution-bars-list">
-                  
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Travel & Flight Logistics</span>
-                      <span class="dist-bar-metrics">₹14,200 (77.0%)</span>
-                    </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill" style="width: 77%; background: #18181B;"></div>
-                    </div>
-                  </div>
 
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Food & Sustenance</span>
-                      <span class="dist-bar-metrics">₹2,340 (12.7%)</span>
-                    </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill" style="width: 12.7%; background: #52525B;"></div>
-                    </div>
-                  </div>
+                <div class="ramp-vendor-table-wrap">
+                  <table class="ramp-vendor-table">
+                    <thead>
+                      <tr>
+                        <th>MERCHANT / CATEGORY</th>
+                        <th>SPEND / CAP</th>
+                        <th style="width: 25%;">UTILIZATION</th>
+                        <th style="text-align: right;">STATUS</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <!-- Vendor 1: MakeMyTrip -->
+                      <tr class="ramp-vendor-row interactive-vendor-row" data-vendor="MakeMyTrip" data-category="Travel Logistics" role="button" tabindex="0">
+                        <td>
+                          <div class="vendor-cell">
+                            <span class="vendor-avatar">✈️</span>
+                            <div class="vendor-info">
+                              <span class="vendor-name">MakeMyTrip Flight Logistics</span>
+                              <span class="vendor-category">Travel Logistics · Max ₹20,000 Cap</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-amount-cell">
+                            <span class="vendor-spend">₹14,200.00</span>
+                            <span class="vendor-cap-sub">of ₹20,000 cap</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-progress-wrap">
+                            <div class="vendor-progress-bar" style="width: 71.0%;"></div>
+                            <span class="vendor-pct">71.0%</span>
+                          </div>
+                        </td>
+                        <td style="text-align: right;">
+                          <span class="vendor-badge badge-warning">1 Conflict</span>
+                        </td>
+                      </tr>
 
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Hardware & Peripherals</span>
-                      <span class="dist-bar-metrics">₹1,500 (8.1%)</span>
-                    </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill" style="width: 8.1%; background: #71717A;"></div>
-                    </div>
-                  </div>
+                      <!-- Vendor 2: Swiggy Enterprise -->
+                      <tr class="ramp-vendor-row interactive-vendor-row" data-vendor="Swiggy" data-category="Food & Sustenance" role="button" tabindex="0">
+                        <td>
+                          <div class="vendor-cell">
+                            <span class="vendor-avatar">🍱</span>
+                            <div class="vendor-info">
+                              <span class="vendor-name">Swiggy Enterprise</span>
+                              <span class="vendor-category">Food & Sustenance · Max ₹500/order</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-amount-cell">
+                            <span class="vendor-spend">₹4,340.00</span>
+                            <span class="vendor-cap-sub">of ₹10,000 cap</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-progress-wrap">
+                            <div class="vendor-progress-bar" style="width: 43.4%;"></div>
+                            <span class="vendor-pct">43.4%</span>
+                          </div>
+                        </td>
+                        <td style="text-align: right;">
+                          <span class="vendor-badge badge-success">✓ Compliant</span>
+                        </td>
+                      </tr>
 
-                  <div class="dist-bar-item">
-                    <div class="dist-bar-header">
-                      <span class="dist-bar-name">Urban Mobility (Rides)</span>
-                      <span class="dist-bar-metrics">₹410 (2.2%)</span>
-                    </div>
-                    <div class="dist-bar-track">
-                      <div class="dist-bar-fill" style="width: 2.2%; background: #A1A1AA;"></div>
-                    </div>
-                  </div>
+                      <!-- Vendor 3: Amazon Business -->
+                      <tr class="ramp-vendor-row interactive-vendor-row" data-vendor="Amazon Business" data-category="Office Peripherals" role="button" tabindex="0">
+                        <td>
+                          <div class="vendor-cell">
+                            <span class="vendor-avatar">📦</span>
+                            <div class="vendor-info">
+                              <span class="vendor-name">Amazon Business India</span>
+                              <span class="vendor-category">Office Peripherals · Strict Mandate</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-amount-cell">
+                            <span class="vendor-spend">₹3,900.00</span>
+                            <span class="vendor-cap-sub">of ₹10,000 cap</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-progress-wrap">
+                            <div class="vendor-progress-bar" style="width: 39.0%;"></div>
+                            <span class="vendor-pct">39.0%</span>
+                          </div>
+                        </td>
+                        <td style="text-align: right;">
+                          <span class="vendor-badge badge-success">✓ Compliant</span>
+                        </td>
+                      </tr>
 
+                      <!-- Vendor 4: Uber for Business -->
+                      <tr class="ramp-vendor-row interactive-vendor-row" data-vendor="Uber" data-category="Urban Mobility" role="button" tabindex="0">
+                        <td>
+                          <div class="vendor-cell">
+                            <span class="vendor-avatar">🚗</span>
+                            <div class="vendor-info">
+                              <span class="vendor-name">Uber for Business</span>
+                              <span class="vendor-category">Urban Mobility · Auto-Authorized</span>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-amount-cell">
+                            <span class="vendor-spend">₹2,410.00</span>
+                            <span class="vendor-cap-sub">of ₹5,000 cap</span>
+                          </div>
+                        </td>
+                        <td>
+                          <div class="vendor-progress-wrap">
+                            <div class="vendor-progress-bar" style="width: 48.2%;"></div>
+                            <span class="vendor-pct">48.2%</span>
+                          </div>
+                        </td>
+                        <td style="text-align: right;">
+                          <span class="vendor-badge badge-success">✓ Compliant</span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="ramp-table-footer">
+                  <span class="footer-hint">Click any vendor row to inspect individual audited receipts</span>
                 </div>
               </div>
 
             </div>
 
-            <!-- SECTION 5: OPERATIONAL INSIGHTS (DATA-BACKED) -->
-            <div class="overview-insights-section">
-              <div class="insight-item">
-                <span class="insight-icon">⚡</span>
-                <div>
-                  <div class="insight-text-title">200ms Conflict Intercept</div>
-                  <p class="insight-text-desc">100% of rule breaches were intercepted and flagged within 200ms of transaction generation before settlement cleared.</p>
+            <!-- SECTION 6: MIXPANEL-STYLE DETAILED ACTIVITY BEHAVIOR & INTENT FUNNEL -->
+            <div class="grafana-chart-row">
+              
+              <!-- Panel 1: Intent Adherence & Funnel Analysis (Mixpanel Behavioral Funnel) -->
+              <div class="grafana-panel" id="panelBehaviorFunnel">
+                <div class="grafana-panel-header">
+                  <div class="panel-header-titles">
+                    <h3 class="grafana-panel-title">Detailed Activity Behavior & Intent Funnel</h3>
+                    <div class="grafana-panel-sub">Step-by-step conversion from prompt instruction to cryptographic settlement</div>
+                  </div>
+                  <span class="panel-status-pill">Mixpanel Funnel Audit</span>
+                </div>
+
+                <div class="mixpanel-funnel-container">
+                  <!-- Step 1: Prompt Intent Captured -->
+                  <div class="funnel-step-item">
+                    <div class="funnel-step-top">
+                      <span class="funnel-step-num">STEP 1</span>
+                      <span class="funnel-step-pct">100%</span>
+                    </div>
+                    <div class="funnel-step-bar-wrap">
+                      <div class="funnel-step-bar" style="width: 100%;"></div>
+                    </div>
+                    <div class="funnel-step-title">Prompt Intent Captured</div>
+                    <div class="funnel-step-sub">1,284 raw user prompts converted into cryptographic intent hashes.</div>
+                  </div>
+
+                  <!-- Step 2: Mandate & Policy Check -->
+                  <div class="funnel-step-item">
+                    <div class="funnel-step-top">
+                      <span class="funnel-step-num">STEP 2</span>
+                      <span class="funnel-step-pct">100%</span>
+                    </div>
+                    <div class="funnel-step-bar-wrap">
+                      <div class="funnel-step-bar" style="width: 100%;"></div>
+                    </div>
+                    <div class="funnel-step-title">Mandates Checked</div>
+                    <div class="funnel-step-sub">14 personal Vault Rules evaluated under 200ms before checkout.</div>
+                  </div>
+
+                  <!-- Step 3: Hardware Enclave Signing -->
+                  <div class="funnel-step-item">
+                    <div class="funnel-step-top">
+                      <span class="funnel-step-num">STEP 3</span>
+                      <span class="funnel-step-pct">100%</span>
+                    </div>
+                    <div class="funnel-step-bar-wrap">
+                      <div class="funnel-step-bar" style="width: 100%;"></div>
+                    </div>
+                    <div class="funnel-step-title">Enclave Attestation</div>
+                    <div class="funnel-step-sub">Client TPM device keys signed each action with zero cloud key custody.</div>
+                  </div>
+
+                  <!-- Step 4: Settled Without Conflict -->
+                  <div class="funnel-step-item">
+                    <div class="funnel-step-top">
+                      <span class="funnel-step-num">STEP 4</span>
+                      <span class="funnel-step-pct text-blue">98.6%</span>
+                    </div>
+                    <div class="funnel-step-bar-wrap">
+                      <div class="funnel-step-bar bar-blue" style="width: 98.6%;"></div>
+                    </div>
+                    <div class="funnel-step-title">Settled Without Conflict</div>
+                    <div class="funnel-step-sub">1,266 settled smoothly; 18 flagged for temporal or pricing variance.</div>
+                  </div>
+                </div>
+
+                <div class="mixpanel-footer-meta">
+                  <div class="meta-metric-block">
+                    <span class="meta-k">PROMPT DRIFT DETECTED:</span>
+                    <span class="meta-v">0.04% (Exceptional Fidelity)</span>
+                  </div>
+                  <div class="meta-metric-block">
+                    <span class="meta-k">INTERCEPT LATENCY:</span>
+                    <span class="meta-v">180ms avg before settlement</span>
+                  </div>
+                  <div class="meta-metric-block">
+                    <span class="meta-k">RECOURSE SUCCESS RATE:</span>
+                    <span class="meta-v text-blue">100% of claims recovered</span>
+                  </div>
                 </div>
               </div>
 
-              <div class="insight-item">
-                <span class="insight-icon">🛡️</span>
-                <div>
-                  <div class="insight-text-title">97.9% Mandate Adherence</div>
-                  <p class="insight-text-desc">47 out of 48 audited actions strictly satisfied your 14 personal Vault Mandates.</p>
+              <!-- Panel 2: Agent Activity Domain Breakdown -->
+              <div class="grafana-panel" id="panelDomainBreakdown">
+                <div class="grafana-panel-header">
+                  <div class="panel-header-titles">
+                    <h3 class="grafana-panel-title">Domain Spending Distribution</h3>
+                    <div class="grafana-panel-sub">Cross-assistant capital allocation and risk profile</div>
+                  </div>
+                  <span class="panel-status-pill">4 Domains</span>
+                </div>
+
+                <div class="distribution-bars-list">
+                  <div class="dist-bar-item interactive-dist-row" data-category="Travel" role="button" tabindex="0">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">✈️ Travel & Flight Logistics</span>
+                      <span class="dist-bar-metrics">₹14,200 (57.1%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-blue" style="width: 57.1%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item interactive-dist-row" data-category="Food" role="button" tabindex="0">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">🍱 Food & Sustenance</span>
+                      <span class="dist-bar-metrics">₹4,340 (17.5%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-blue-subtle" style="width: 17.5%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item interactive-dist-row" data-category="Peripherals" role="button" tabindex="0">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">📦 Office Hardware & Tech</span>
+                      <span class="dist-bar-metrics">₹3,900 (15.7%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-gray" style="width: 15.7%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item interactive-dist-row" data-category="Mobility" role="button" tabindex="0">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">🚗 Urban Mobility (Cabs)</span>
+                      <span class="dist-bar-metrics">₹2,410 (9.7%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-gray-light" style="width: 9.7%;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="domain-footer-callout">
+                  <span class="callout-icon">💡</span>
+                  <p class="callout-text">
+                    <strong>Ramp Policy Optimization:</strong> Travel Logistics represents 57.1% of capital. Enabling automated arrival-time arbitration protects against carrier scheduling shifts.
+                  </p>
                 </div>
               </div>
 
-              <div class="insight-item">
-                <span class="insight-icon">📊</span>
-                <div>
-                  <div class="insight-text-title">Spending Concentration</div>
-                  <p class="insight-text-desc">Daily spend is concentrated in travel logistics (77%), governed by arrival time cutoffs.</p>
+            </div>
+
+            <!-- SECTION 7: INTERACTIVE AGENT ACTIVITY INSPECTION DRAWER (SLIDE-OVER MODAL) -->
+            <div class="analytics-drawer-backdrop" id="analyticsDrawerBackdrop">
+              <div class="analytics-drawer-panel" id="analyticsDrawerPanel">
+                <div class="analytics-drawer-header">
+                  <div>
+                    <div class="drawer-kicker" id="drawerKicker">AUDIT DRILL-DOWN</div>
+                    <h2 class="drawer-title" id="drawerTitle">Underlying Agent Activity</h2>
+                    <div class="drawer-sub" id="drawerSub">Showing audited transaction ledger records</div>
+                  </div>
+                  <button class="drawer-close-btn" id="btnCloseAnalyticsDrawer" aria-label="Close activity drawer">&times;</button>
+                </div>
+
+                <div class="analytics-drawer-filter-bar">
+                  <span class="drawer-badge-count" id="drawerBadgeCount">3 Records Found</span>
+                  <div class="drawer-filter-tags" id="drawerFilterTags">
+                    <span class="drawer-tag active">All Matches</span>
+                  </div>
+                </div>
+
+                <div class="analytics-drawer-body" id="drawerActionList">
+                  <!-- Dynamically populated via JavaScript based on what metric/segment was clicked -->
+                </div>
+
+                <div class="analytics-drawer-footer">
+                  <button class="btn-mascot-primary" id="drawerJumpFeedBtn" data-jump-view="view-stream">
+                    <span>Inspect Full Conflict Feed</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                  <button class="btn-mascot-secondary" id="drawerCloseFooterBtn">Done</button>
                 </div>
               </div>
             </div>
