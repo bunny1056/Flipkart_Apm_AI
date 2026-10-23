@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mandateFilterDomain: 'all',
     mandateFilterSearch: '',
     mandateFilterHardOnly: false,
+    expandedVaultCategories: new Set(),
     pendingRevokeMandate: null,
     mandates: [
       {
@@ -232,6 +233,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const mismatchCountChip = document.getElementById('mismatchCountChip');
 
   // Vault Elements
+  const vaultCategoriesContainer = document.getElementById('vaultCategoriesContainer');
+  const btnVaultToggleAll = document.getElementById('btnVaultToggleAll');
+  const btnVaultToggleAllText = document.getElementById('btnVaultToggleAllText');
+  const vaultCategoriesCountLabel = document.getElementById('vaultCategoriesCountLabel');
   const vaultTableBody = document.getElementById('vaultTableBody');
   const vaultMandatesCount = document.getElementById('vaultMandatesCount');
   const vaultCount = document.getElementById('vaultCount');
@@ -1685,6 +1690,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupMascotRobot();
     setupMascotModals();
     setupNavigation();
+    setupDualPaneStage();
     setupOnboarding();
     setupProfileHandlers();
     setupSidebar();
@@ -1694,10 +1700,184 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
+  // STEER DUAL-PANE ARCHITECTURE & WALKTHROUGH CONTROLLER
+  // ==========================================
+  const WALKTHROUGH_STEPS = [
+    {
+      num: '01',
+      title: 'Autonomous Overview',
+      view: 'view-overview',
+      slug: 'home',
+      hint: 'Enclave active · All 3 agent boundaries audited.'
+    },
+    {
+      num: '02',
+      title: 'Live Conflict Feed',
+      view: 'view-stream',
+      slug: 'feed',
+      hint: '1 critical flight conflict detected · Arrival breaches 18:00 cutoff.'
+    },
+    {
+      num: '03',
+      title: 'Your Rules & Mandates',
+      view: 'view-vault',
+      slug: 'rules',
+      hint: '14 active mandates cryptographically sealed in hardware Vault.'
+    },
+    {
+      num: '04',
+      title: 'Dispute Resolution',
+      view: 'view-disputes',
+      slug: 'disputes',
+      hint: 'IndiGo claim #DSP-8910 prepared with Ed25519 hash proof.'
+    },
+    {
+      num: '05',
+      title: 'Spend & Telemetry',
+      view: 'view-analytics',
+      slug: 'analytics',
+      hint: 'Telemetry nominal · Sub-200ms latency across 3 active agents.'
+    },
+    {
+      num: '06',
+      title: 'Principal Governance Hub',
+      view: 'view-profile',
+      slug: 'profile',
+      hint: 'Hardware TPM-2040 root active · Zero affiliate kickbacks.'
+    }
+  ];
+
+  const slugMap = {
+    'view-overview': 'home',
+    'view-stream': 'feed',
+    'view-vault': 'rules',
+    'view-disputes': 'disputes',
+    'view-analytics': 'analytics',
+    'view-profile': 'profile',
+    'view-governance': 'agents',
+    'view-terms': 'legal',
+    'view-privacy': 'privacy',
+    'view-guide': 'guide'
+  };
+
+  let currentStepIdx = 0;
+
+  function renderGuideSteps() {
+    const stepsList = document.getElementById('steps');
+    if (!stepsList) return;
+
+    stepsList.innerHTML = '';
+    WALKTHROUGH_STEPS.forEach((step, idx) => {
+      const li = document.createElement('li');
+      li.className = idx === currentStepIdx ? 'active' : '';
+      li.innerHTML = `
+        <span class="step-num">${step.num}</span>
+        <span class="step-label" style="flex: 1;">${step.title}</span>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.5;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      `;
+      li.addEventListener('click', () => {
+        currentStepIdx = idx;
+        switchView(step.view);
+      });
+      stepsList.appendChild(li);
+    });
+
+    const gPrev = document.getElementById('gPrev');
+    const gNext = document.getElementById('gNext');
+    if (gPrev) gPrev.style.opacity = currentStepIdx === 0 ? '0.45' : '1';
+    if (gNext) gNext.style.opacity = currentStepIdx === WALKTHROUGH_STEPS.length - 1 ? '0.45' : '1';
+  }
+
+  function triggerProtoToast(text) {
+    const toast = document.getElementById('toast');
+    const toastText = document.getElementById('toastText');
+    if (!toast) return;
+
+    if (toastText) toastText.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(toast._hideTimer);
+    toast._hideTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2400);
+  }
+  window.triggerProtoToast = triggerProtoToast;
+
+  function setupDualPaneStage() {
+    const pageEl = document.getElementById('page');
+    const btnPhone = document.querySelector('[data-view-mode="phone"]');
+    const btnDesktop = document.querySelector('[data-view-mode="desktop"]');
+    const btnRestart = document.getElementById('btnRestartPrototype');
+    const gPrev = document.getElementById('gPrev');
+    const gNext = document.getElementById('gNext');
+    const buddyBtn = document.getElementById('buddyBtn');
+    const bubble = document.getElementById('bubble');
+
+    function setViewMode(mode) {
+      if (pageEl) {
+        pageEl.setAttribute('data-view', mode);
+      }
+      document.body.setAttribute('data-view', mode);
+
+      if (btnPhone) btnPhone.setAttribute('aria-pressed', mode === 'phone' ? 'true' : 'false');
+      if (btnDesktop) btnDesktop.setAttribute('aria-pressed', mode === 'desktop' ? 'true' : 'false');
+
+      if (window.AgentRecourseRobot?.resize) {
+        setTimeout(() => window.AgentRecourseRobot.resize(), 80);
+      }
+      triggerProtoToast(mode === 'phone' ? 'Morphed into Mobile Canvas (412px)' : 'Expanded to Desktop Canvas');
+    }
+
+    if (btnPhone) {
+      btnPhone.addEventListener('click', () => setViewMode('phone'));
+    }
+    if (btnDesktop) {
+      btnDesktop.addEventListener('click', () => setViewMode('desktop'));
+    }
+
+    if (btnRestart) {
+      btnRestart.addEventListener('click', () => {
+        currentStepIdx = 0;
+        switchView('view-overview');
+        triggerProtoToast('Prototype reset to Step 1 · Overview');
+      });
+    }
+
+    if (gPrev) {
+      gPrev.addEventListener('click', () => {
+        if (currentStepIdx > 0) {
+          currentStepIdx--;
+          switchView(WALKTHROUGH_STEPS[currentStepIdx].view);
+        }
+      });
+    }
+    if (gNext) {
+      gNext.addEventListener('click', () => {
+        if (currentStepIdx < WALKTHROUGH_STEPS.length - 1) {
+          currentStepIdx++;
+          switchView(WALKTHROUGH_STEPS[currentStepIdx].view);
+        }
+      });
+    }
+
+    if (buddyBtn && bubble) {
+      buddyBtn.addEventListener('click', () => {
+        const isHidden = bubble.style.display === 'none';
+        bubble.style.display = isHidden ? 'block' : 'none';
+        if (isHidden) {
+          bubble.textContent = WALKTHROUGH_STEPS[currentStepIdx]?.hint || 'Hardware enclave active · Intent protected.';
+        }
+      });
+    }
+
+    renderGuideSteps();
+  }
+
+  // ==========================================
   // NAVIGATION CONTROLLER
   // ==========================================
   function switchView(viewId) {
-    navButtons.forEach(btn => {
+    const allNavButtons = document.querySelectorAll('.nav-btn, .tab');
+    allNavButtons.forEach(btn => {
       if (btn.getAttribute('data-view') === viewId) {
         btn.classList.add('active');
       } else {
@@ -1713,22 +1893,46 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
+    const urlPath = document.getElementById('urlPath');
+    if (urlPath) {
+      urlPath.textContent = slugMap[viewId] || 'home';
+    }
+
+    const matchedStepIdx = WALKTHROUGH_STEPS.findIndex(s => s.view === viewId);
+    if (matchedStepIdx !== -1) {
+      currentStepIdx = matchedStepIdx;
+      renderGuideSteps();
+    }
+
+    const bubble = document.getElementById('bubble');
+    if (bubble && matchedStepIdx !== -1) {
+      bubble.textContent = WALKTHROUGH_STEPS[matchedStepIdx].hint;
+    }
+
     if (window.location.hash !== '#' + viewId) {
       history.replaceState(null, '', '#' + viewId);
+    }
+
+    const screensContainer = document.getElementById('screens');
+    if (screensContainer) {
+      screensContainer.scrollTop = 0;
     }
     window.scrollTo(0, 0);
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
+
     if (viewId === 'view-overview' && window.AgentRecourseRobot?.resize) {
       setTimeout(() => window.AgentRecourseRobot.resize(), 50);
     }
   }
 
   function setupNavigation() {
-    navButtons.forEach(btn => {
+    document.querySelectorAll('.nav-btn, .tab').forEach(btn => {
       btn.addEventListener('click', () => {
         const targetView = btn.getAttribute('data-view');
-        switchView(targetView);
+        if (targetView) {
+          switchView(targetView);
+        }
       });
     });
 
@@ -2809,12 +3013,46 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ==========================================
-  // RENDER: INSTRUCTION MANDATES (VAULT)
+  // RENDER: INSTRUCTION MANDATES (VAULT - CATEGORY DIRECTORY)
   // ==========================================
+  const categoryMeta = {
+    'Travel': {
+      icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.3c.4-.2.6-.6.5-1.1z"/></svg>`,
+      description: 'Flight arrival cutoffs, urban mobility caps, airline seating preferences & transit routing',
+      theme: 'cat-theme-travel'
+    },
+    'Dining': {
+      icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>`,
+      description: 'Daily routine sustenance allowances, food delivery curfew hours & celebration exceptions',
+      theme: 'cat-theme-dining'
+    },
+    'Finance': {
+      icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>`,
+      description: 'Interactive 2FA transfer limits, FX conversion fee thresholds & overnight sweeps',
+      theme: 'cat-theme-finance'
+    },
+    'Subscriptions': {
+      icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>`,
+      description: 'Recurring SaaS software subscription disclosures & idle cloud infrastructure reclamation',
+      theme: 'cat-theme-subscriptions'
+    },
+    'Hardware': {
+      icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>`,
+      description: 'Computing peripheral purchase verification, office supply caps & warranty add-ons',
+      theme: 'cat-theme-hardware'
+    }
+  };
+
+  const defaultCategoryMeta = {
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>`,
+    description: 'Custom governance rules and autonomous operational boundaries',
+    theme: 'cat-theme-default'
+  };
+
   function renderDomainFilters() {
     if (!domainFilterPills) return;
     domainFilterPills.innerHTML = '';
-    const domains = ['all', 'Travel', 'Finance', 'Subscriptions', 'Hardware', 'Dining'];
+    const domains = ['all', 'Travel', 'Dining', 'Finance', 'Subscriptions', 'Hardware'];
 
     domains.forEach(d => {
       const count = d === 'all'
@@ -2832,6 +3070,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       btn.addEventListener('click', () => {
         state.mandateFilterDomain = d;
+        if (d !== 'all') {
+          const matchCat = [...new Set(state.mandates.map(m => m.domain))].find(c => c.toLowerCase() === d.toLowerCase()) || d;
+          state.expandedVaultCategories.add(matchCat);
+        }
         renderDomainFilters();
         renderVaultTable();
       });
@@ -2844,81 +3086,218 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function renderVaultTable() {
-    vaultTableBody.innerHTML = '';
+    if (vaultTableBody) vaultTableBody.innerHTML = '';
+    if (!vaultCategoriesContainer) return;
+    vaultCategoriesContainer.innerHTML = '';
 
     const q = (state.mandateFilterSearch || '').toLowerCase().trim();
-    const filtered = state.mandates.filter(m => {
-      // Domain filter
-      if (state.mandateFilterDomain !== 'all' && m.domain.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) {
-        return false;
+
+    // Grouping of categories in clean priority order
+    const canonicalOrder = ['Travel', 'Dining', 'Finance', 'Subscriptions', 'Hardware'];
+    const presentDomains = [...new Set(state.mandates.map(m => m.domain))];
+    const orderedCategories = [
+      ...canonicalOrder.filter(c => presentDomains.some(d => d.toLowerCase() === c.toLowerCase())),
+      ...presentDomains.filter(d => !canonicalOrder.some(c => c.toLowerCase() === d.toLowerCase()))
+    ];
+
+    if (vaultCategoriesCountLabel) {
+      vaultCategoriesCountLabel.textContent = `${orderedCategories.length} Categories`;
+    }
+
+    let categoriesRendered = 0;
+
+    orderedCategories.forEach(categoryName => {
+      // Check domain filter
+      if (state.mandateFilterDomain !== 'all' && categoryName.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) {
+        return;
       }
-      // Hard limits only filter
-      if (state.mandateFilterHardOnly && m.severity !== 'Hard Limit') {
-        return false;
+
+      // Rules in this category
+      const categoryRules = state.mandates.filter(m => m.domain.toLowerCase() === categoryName.toLowerCase());
+
+      // Filter rules within category
+      const matchingRules = categoryRules.filter(m => {
+        if (state.mandateFilterHardOnly && m.severity !== 'Hard Limit') {
+          return false;
+        }
+        if (q) {
+          const matchCode = m.code.toLowerCase().includes(q);
+          const matchText = m.text.toLowerCase().includes(q);
+          const matchDomain = m.domain.toLowerCase().includes(q);
+          if (!matchCode && !matchText && !matchDomain) return false;
+        }
+        return true;
+      });
+
+      // If searching or filtering hard-limits and this category has no matches, skip it
+      if ((q || state.mandateFilterHardOnly) && matchingRules.length === 0) {
+        return;
       }
-      // Search query
-      if (q) {
-        const matchCode = m.code.toLowerCase().includes(q);
-        const matchText = m.text.toLowerCase().includes(q);
-        const matchDomain = m.domain.toLowerCase().includes(q);
-        if (!matchCode && !matchText && !matchDomain) return false;
+
+      categoriesRendered++;
+
+      // When opening initially, expandedVaultCategories is empty so rules are hidden.
+      // If user searched, auto-expand categories that matched.
+      const isExpanded = q.length > 0
+        ? matchingRules.length > 0
+        : state.expandedVaultCategories.has(categoryName);
+
+      const meta = categoryMeta[categoryName] || defaultCategoryMeta;
+      const hardCount = matchingRules.filter(m => m.severity === 'Hard Limit').length;
+      const softCount = matchingRules.filter(m => m.severity !== 'Hard Limit').length;
+
+      const card = document.createElement('div');
+      card.className = `vault-category-card ${isExpanded ? 'expanded' : ''}`;
+      card.setAttribute('data-category', categoryName);
+
+      card.innerHTML = `
+        <button class="vault-category-header" type="button" aria-expanded="${isExpanded}">
+          <div class="category-header-left">
+            <div class="category-icon-box ${meta.theme}">
+              ${meta.icon}
+            </div>
+            <div class="category-title-wrap">
+              <div class="category-name-row">
+                <h3>${categoryName}</h3>
+                <span class="category-badge-rules">${matchingRules.length} ${matchingRules.length === 1 ? 'Rule' : 'Rules'}</span>
+              </div>
+            </div>
+          </div>
+          <div class="category-header-right">
+            <div class="cat-expand-indicator">
+              <span>${isExpanded ? 'Collapse' : 'View Rules'}</span>
+              <svg class="cat-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </div>
+          </div>
+        </button>
+        <div class="vault-category-body">
+          <table class="category-rules-table">
+            <thead>
+              <tr>
+                <th style="width: 14%;">RULE ID</th>
+                <th style="width: 52%;">RULE CONSTRAINT</th>
+                <th style="width: 18%;">SEVERITY</th>
+                <th style="width: 16%; text-align: right;">ACTION</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      `;
+
+      // Header click toggles open/close
+      const headerBtn = card.querySelector('.vault-category-header');
+      headerBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (state.expandedVaultCategories.has(categoryName)) {
+          state.expandedVaultCategories.delete(categoryName);
+        } else {
+          state.expandedVaultCategories.add(categoryName);
+        }
+        renderVaultTable();
+      });
+
+      // Populate rules inside the table
+      const tbody = card.querySelector('.category-rules-table tbody');
+      if (matchingRules.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" style="text-align: center; padding: 24px 16px; color: var(--text-muted); font-size: 11px;">
+              No rules matching criteria in this category.
+            </td>
+          </tr>
+        `;
+      } else {
+        matchingRules.forEach(m => {
+          const tr = document.createElement('tr');
+          const isHard = m.severity === 'Hard Limit';
+
+          tr.innerHTML = `
+            <td>
+              <span class="code-badge" title="Cryptographic rule ${m.code}">${m.code}</span>
+            </td>
+            <td style="line-height: 1.45; color: var(--text-lead);">
+              <span class="mandate-sentence">${formatMandateText(m.text)}</span>
+            </td>
+            <td>
+              <span class="severity-pill ${isHard ? 'pill-hard' : 'pill-soft'}">
+                <span class="severity-dot"></span>
+                <span>${m.severity}</span>
+              </span>
+            </td>
+            <td style="text-align: right;">
+              <button class="btn-ghost-revoke btn-revoke-rule" data-code="${m.code}" title="Revoke mandate">
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18"></path>
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+                <span>Revoke</span>
+              </button>
+            </td>
+          `;
+
+          const btnRevoke = tr.querySelector('.btn-revoke-rule');
+          if (btnRevoke) {
+            btnRevoke.addEventListener('click', (e) => {
+              e.stopPropagation();
+              openRevokeModal(m);
+            });
+          }
+
+          tbody.appendChild(tr);
+        });
       }
-      return true;
+
+      vaultCategoriesContainer.appendChild(card);
     });
 
-    if (filtered.length === 0) {
-      vaultTableBody.innerHTML = `
-        <tr>
-          <td colspan="6" style="text-align: center; padding: 40px 16px; color: var(--text-faint); font-family: var(--font-mono);">
-            <div style="font-weight: 600; font-size: 12px; margin-bottom: 6px; color: var(--text-lead);">NO MANDATES MATCHING FILTER CRITERIA</div>
-            <div style="font-size: 11px; color: var(--text-muted);">Try adjusting your domain tab, clearing your search query, or disabling "Hard Limits Only".</div>
-          </td>
-        </tr>
+    if (categoriesRendered === 0) {
+      vaultCategoriesContainer.innerHTML = `
+        <div class="vault-empty-state">
+          <div class="vault-empty-title">NO RULES MATCHING FILTER CRITERIA</div>
+          <div class="vault-empty-sub">Try selecting "All" domain, clearing your search query, or disabling "Hard Limits Only".</div>
+        </div>
       `;
-    } else {
-      filtered.forEach(m => {
-        const tr = document.createElement('tr');
-        const isHard = m.severity === 'Hard Limit';
-        const pseudoHash = '0x' + m.code.replace(/[^A-Za-z0-9]/g, '').toLowerCase() + 'a812e9b048';
+    }
 
-        tr.innerHTML = `
-          <td>
-            <span class="domain-badge-cell" style="font-weight: 600; font-size: 12px;">${m.domain}</span>
-          </td>
-          <td style="line-height: 1.45; color: var(--text-lead);">
-            <span class="mandate-sentence">${formatMandateText(m.text)}</span>
-          </td>
-          <td>
-            <span class="severity-pill ${isHard ? 'pill-hard' : 'pill-soft'}">
-              <span class="severity-dot"></span>
-              <span>${m.severity}</span>
-            </span>
-          </td>
-          <td style="text-align: right;">
-            <button class="btn-ghost-revoke btn-revoke-rule" data-code="${m.code}" title="Revoke mandate">
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 6h18"></path>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-              </svg>
-              <span>Revoke</span>
-            </button>
-          </td>
-        `;
-
-        const btnRevoke = tr.querySelector('.btn-revoke-rule');
-        if (btnRevoke) {
-          btnRevoke.addEventListener('click', (e) => {
-            e.stopPropagation();
-            openRevokeModal(m);
-          });
-        }
-
-        vaultTableBody.appendChild(tr);
+    // Update Toggle All Button text and state
+    if (btnVaultToggleAll && btnVaultToggleAllText) {
+      const activeCats = orderedCategories.filter(cat => {
+        if (state.mandateFilterDomain !== 'all' && cat.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) return false;
+        return true;
       });
+      const allOpen = activeCats.length > 0 && activeCats.every(cat => state.expandedVaultCategories.has(cat));
+      btnVaultToggleAll.classList.toggle('all-expanded', allOpen);
+      btnVaultToggleAllText.textContent = allOpen ? 'Collapse All' : 'Expand All';
     }
 
     if (vaultMandatesCount) vaultMandatesCount.textContent = `${state.mandates.length} RULES`;
     if (vaultCount) vaultCount.textContent = state.mandates.length;
+  }
+
+  // Toggle All button listener
+  if (btnVaultToggleAll) {
+    btnVaultToggleAll.addEventListener('click', () => {
+      const canonicalOrder = ['Travel', 'Dining', 'Finance', 'Subscriptions', 'Hardware'];
+      const presentDomains = [...new Set(state.mandates.map(m => m.domain))];
+      const orderedCategories = [
+        ...canonicalOrder.filter(c => presentDomains.some(d => d.toLowerCase() === c.toLowerCase())),
+        ...presentDomains.filter(d => !canonicalOrder.some(c => c.toLowerCase() === d.toLowerCase()))
+      ];
+      const activeCats = orderedCategories.filter(cat => {
+        if (state.mandateFilterDomain !== 'all' && cat.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) return false;
+        return true;
+      });
+      const allOpen = activeCats.length > 0 && activeCats.every(cat => state.expandedVaultCategories.has(cat));
+      if (allOpen) {
+        state.expandedVaultCategories.clear();
+      } else {
+        activeCats.forEach(cat => state.expandedVaultCategories.add(cat));
+      }
+      renderVaultTable();
+    });
   }
 
   // Search & Filter Listeners for Vault
@@ -3025,6 +3404,7 @@ document.addEventListener('DOMContentLoaded', () => {
       severity: severity,
       version: 'V14.01'
     });
+    state.expandedVaultCategories.add(domain);
     const sidebarVaultVer = document.getElementById('sidebarVaultVer');
     if (sidebarVaultVer) sidebarVaultVer.textContent = 'V14.01';
     if (vaultRootSpecLabel) vaultRootSpecLabel.textContent = 'VAULT-V14.01';
@@ -3449,16 +3829,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function showToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'ribbon-toast mono text-xs';
-    toast.innerHTML = `<span style="color: var(--moss-verified);">§</span> <span>${message}</span>`;
-    notifRibbon.appendChild(toast);
+    triggerProtoToast(message);
+    if (notifRibbon) {
+      const toast = document.createElement('div');
+      toast.className = 'ribbon-toast mono text-xs';
+      toast.innerHTML = `<span style="color: var(--moss-verified);">§</span> <span>${message}</span>`;
+      notifRibbon.appendChild(toast);
 
-    setTimeout(() => {
-      toast.style.opacity = '0';
-      toast.style.transition = 'opacity 0.2s ease';
-      setTimeout(() => toast.remove(), 200);
-    }, 3200);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.2s ease';
+        setTimeout(() => toast.remove(), 200);
+      }, 3200);
+    }
   }
   window.showToast = showToast;
 
