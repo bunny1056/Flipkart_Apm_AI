@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -7,10 +7,16 @@
   <title>Agent Recourse — Autonomous Intent Auditing & Arbitration Ledger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+    }
+  }
+  </script>
 </head>
 
 <body>
@@ -29,91 +35,23 @@
         </button>
         <span class="masthead-symbol">§</span>
         <div class="masthead-title-wrap">
-          <span class="masthead-title">AGENT RECOURSE</span>
-          <span class="masthead-subtitle">Autonomous Intent Auditing & Arbitration Ledger</span>
-        </div>
-      </div>
-
-      <div class="masthead-center">
-        <div class="attestation-indicator has-detail" data-detail-title="Cryptographic Chain Status"
-          data-detail-tag="HARDWARE TPM-2040" data-detail-highlight="Local ledger actively verified"
-          data-detail-text="48 autonomous agent records audited against active Vault V13 rules. Client-side root hashes verified with zero remote telemetry leak.">
-          <span class="live-pulse-wrapper" aria-label="Live ledger status">
-            <span class="live-pulse-core"></span>
-            <span class="live-pulse-ring"></span>
-          </span>
-          <span class="mono text-xs">LOCAL LEDGER: <strong class="text-verified">ACTIVE</strong> // CHAIN INTACT</span>
+          <span class="masthead-title">Agent Recourse</span>
+          <span class="masthead-subtitle">Autonomous Agent Protection & Intent Verification</span>
         </div>
       </div>
 
       <div class="masthead-right">
-        <!-- Interactive Profile Dropdown Component -->
-        <div class="profile-dropdown-container" id="profileDropdownContainer">
-          <button class="account-attestation-btn has-detail" id="btnMastheadProfile" aria-haspopup="true"
-            aria-expanded="false" title="Principal Profile & Enclave Status"
-            data-detail-title="Principal Identity Record" data-detail-tag="USR-2040-DEMO"
-            data-detail-highlight="Harshith · Bangalore, India"
-            data-detail-text="Hardware TPM-2040 enclave key 8F9A-2B3C-1A92-E4F1. Click to open identity drawer, spent analysis, or emergency kill-switch.">
-            <svg class="profile-nav-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-              <circle cx="12" cy="7" r="4"></circle>
-            </svg>
-            <span class="profile-nav-text">PROFILE</span>
-            <span class="live-pulse-wrapper mini" title="Active">
-              <span class="live-pulse-core"></span>
-              <span class="live-pulse-ring"></span>
-            </span>
-          </button>
-
-          <!-- Dropdown Flyout Menu -->
-          <div class="profile-dropdown-menu hidden" id="profileDropdownMenu">
-            <div class="dropdown-header">
-              <div class="dropdown-user-row">
-                <span class="profile-avatar-pill large">H</span>
-                <div>
-                  <div class="dropdown-user-name">Harshith</div>
-                  <div class="mono text-2xs text-muted">ID: USR-2040-DEMO · TPM Enclave</div>
-                </div>
-              </div>
-              <span class="dropdown-status-pill mono"><span class="status-dot-active"></span> TPM-2040 VERIFIED</span>
-            </div>
-            <div class="dropdown-divider"></div>
-            <div class="dropdown-items">
-              <button class="dropdown-item" id="menuItemProfile" data-action="view-profile">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>
-                <span>Principal Identity & Enclave Certs</span>
-              </button>
-              <button class="dropdown-item" id="menuItemSpending" data-action="view-spending">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
-                  <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
-                </svg>
-                <span>Capital Allocation & Spent Analysis</span>
-              </button>
-              <button class="dropdown-item" id="menuItemCert" data-action="export-cert">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                  <polyline points="7 10 12 15 17 10"></polyline>
-                  <line x1="12" y1="15" x2="12" y2="3"></line>
-                </svg>
-                <span>Export Hardware Cert (.json)</span>
-              </button>
-              <div class="dropdown-divider"></div>
-              <button class="dropdown-item text-danger" id="menuItemKillSwitch" data-action="kill-switch">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon>
-                  <line x1="12" y1="8" x2="12" y2="12"></line>
-                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
-                </svg>
-                <span>Emergency Delegation Kill-Switch</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        <button class="account-attestation-btn has-detail" id="btnMastheadProfile"
+          title="Principal Profile & Security" data-detail-title="Principal Identity"
+          data-detail-tag="USR-2040-DEMO" data-detail-highlight="Harshith · Bangalore"
+          data-detail-text="Hardware enclave key active. Click to view full identity, spending analytics, and security settings.">
+          <span class="profile-nav-avatar">H</span>
+          <span class="profile-nav-text">Harshith</span>
+          <span class="live-pulse-wrapper mini" title="Protected & Active">
+            <span class="live-pulse-core"></span>
+            <span class="live-pulse-ring"></span>
+          </span>
+        </button>
       </div>
     </header>
 
@@ -143,44 +81,34 @@
         </div>
 
         <nav class="index-nav" aria-label="Operational Navigation">
-          <button class="nav-btn active" data-view="view-stream" data-tooltip="Audit Ingestion Feed" title="Audit Ingestion Feed">
+          <button class="nav-btn active" data-view="view-overview" data-tooltip="Home Overview"
+            title="Home Overview">
             <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                <polyline points="9 22 9 12 15 12 15 22"></polyline>
+              </svg>
+            </span>
+            <span class="nav-text">Overview</span>
+          </button>
+
+          <button class="nav-btn" data-view="view-stream" data-tooltip="Conflict Feed"
+            title="Conflict Feed">
+            <span class="nav-icon-wrap" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
               </svg>
             </span>
-            <span class="nav-text">Audit Ingestion Feed</span>
+            <span class="nav-text">Feed</span>
             <span class="nav-flag mono" id="feedFlag">1 CONFLICT</span>
           </button>
 
-          <button class="nav-btn" data-view="view-vault" data-tooltip="Instruction Mandates" title="Instruction Mandates">
+          <button class="nav-btn" data-view="view-disputes" data-tooltip="Dispute Resolution" title="Dispute Resolution">
             <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-            </span>
-            <span class="nav-text">Instruction Mandates</span>
-            <span class="nav-count mono" id="vaultCount">14</span>
-          </button>
-
-          <button class="nav-btn" data-view="view-evidence" data-tooltip="Evidence Dossier" title="Evidence Dossier">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                <polyline points="14 2 14 8 20 8"></polyline>
-                <line x1="16" y1="13" x2="8" y2="13"></line>
-                <line x1="16" y1="17" x2="8" y2="17"></line>
-                <polyline points="10 9 9 9 8 9"></polyline>
-              </svg>
-            </span>
-            <span class="nav-text">Evidence Dossier</span>
-            <span class="nav-pip"></span>
-          </button>
-
-          <button class="nav-btn" data-view="view-disputes" data-tooltip="Arbitration Cases" title="Arbitration Cases">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"></path>
                 <path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"></path>
                 <path d="M7 21h10"></path>
@@ -188,18 +116,45 @@
                 <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
               </svg>
             </span>
-            <span class="nav-text">Arbitration Cases</span>
+            <span class="nav-text">Dispute Resolution</span>
             <span class="nav-flag mono" id="disputeFlag">PENDING</span>
           </button>
 
-          <button class="nav-btn" data-view="view-governance" data-tooltip="Agent Access & Trust" title="Agent Access & Trust">
+          <button class="nav-btn" data-view="view-analytics" data-tooltip="Analytics" title="Analytics">
             <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="20" x2="18" y2="10"></line>
+                <line x1="12" y1="20" x2="12" y2="4"></line>
+                <line x1="6" y1="20" x2="6" y2="14"></line>
+              </svg>
+            </span>
+            <span class="nav-text">Analytics</span>
+          </button>
+
+          <button class="nav-btn" data-view="view-vault" data-tooltip="Your Rules"
+            title="Your Rules">
+            <span class="nav-icon-wrap" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+              </svg>
+            </span>
+            <span class="nav-text">Your Rules</span>
+            <span class="nav-count mono" id="vaultCount">14</span>
+          </button>
+
+          <button class="nav-btn" data-view="view-governance" data-tooltip="Connected Agents"
+            title="Connected Agents">
+            <span class="nav-icon-wrap" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round">
                 <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
                 <path d="m9 12 2 2 4-4"></path>
               </svg>
             </span>
-            <span class="nav-text">Agent Access & Trust</span>
+            <span class="nav-text">Connected Agents</span>
           </button>
         </nav>
 
@@ -212,22 +167,25 @@
                   stroke="currentColor" stroke-width="2.5">
                   <polyline points="9 18 15 12 9 6"></polyline>
                 </svg>
-                <span class="nav-text">Statutory Charter</span>
+                <span class="nav-text">Legal & Policies</span>
               </div>
               <span class="statutory-count-badge mono">3</span>
             </summary>
             <div class="statutory-content">
-              <button class="nav-btn nav-btn-sub" data-view="view-terms" data-tooltip="Terms of Delegation" title="Terms of Delegation">
+              <button class="nav-btn nav-btn-sub" data-view="view-terms" data-tooltip="Terms of Delegation"
+                title="Terms of Delegation">
                 <span class="nav-code mono">§</span>
-                <span class="nav-text">Terms of Delegation</span>
+                <span class="nav-text">Delegation Terms</span>
               </button>
-              <button class="nav-btn nav-btn-sub" data-view="view-privacy" data-tooltip="Data Sovereignty Policy" title="Data Sovereignty Policy">
+              <button class="nav-btn nav-btn-sub" data-view="view-privacy" data-tooltip="Data Privacy Policy"
+                title="Data Privacy Policy">
                 <span class="nav-code mono">¶</span>
-                <span class="nav-text">Data Sovereignty Policy</span>
+                <span class="nav-text">Data Privacy Policy</span>
               </button>
-              <button class="nav-btn nav-btn-sub" data-view="view-guide" data-tooltip="How to Use Guide" title="How to Use Guide">
+              <button class="nav-btn nav-btn-sub" data-view="view-guide" data-tooltip="User Guide"
+                title="User Guide">
                 <span class="nav-code mono">?</span>
-                <span class="nav-text">How to Use Guide</span>
+                <span class="nav-text">User Guide</span>
                 <span class="nav-guide-badge mono">GUIDE</span>
               </button>
             </div>
@@ -258,11 +216,10 @@
                   stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
-                <span>Back to Ingestion Feed</span>
+                <span>Back to Overview</span>
               </button>
               <div class="pane-action-group">
-                <button class="secondary-action-btn" id="btnExportIdentityCert">Export Cert (.json)</button>
-                <button class="primary-action-btn" id="btnManageVaultFromProfile">Instruction Vault →</button>
+                <button class="primary-action-btn" id="btnExportIdentityCert">Export Cert (.json)</button>
               </div>
             </div>
 
@@ -385,33 +342,10 @@
               </div>
             </div>
 
-            <!-- 5. Hub List Section 1: Agent Mandates & Vaults -->
+            <!-- 5. Hub List Section 1: Autonomous Spending & Oversight -->
             <div class="hub-group-section-desktop">
-              <div class="hub-group-header-desktop">Agent Mandates & Vaults</div>
+              <div class="hub-group-header-desktop">Autonomous Spending & Oversight</div>
               <div class="hub-list-card-desktop">
-
-                <!-- Row: Instruction Mandates -->
-                <div class="hub-row-item-desktop" data-desktop-target="mandates"
-                  title="Open Instruction Mandates Vault">
-                  <div class="hub-row-left">
-                    <div class="hub-row-icon-box hub-tint-purple">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                        stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                      </svg>
-                    </div>
-                    <div class="hub-row-content">
-                      <span class="hub-row-title">Instruction Mandates</span>
-                    </div>
-                  </div>
-                  <div class="hub-row-right">
-                    <svg class="hub-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
-                      stroke="currentColor" stroke-width="2">
-                      <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                  </div>
-                </div>
 
                 <!-- Row: Audited Spent Analytics -->
                 <div class="hub-row-item-desktop" data-desktop-target="spending"
@@ -617,12 +551,190 @@
         </section>
 
         <!-- ==================================================== -->
-        <!-- VIEW 01: AUDIT INGESTION STREAM                      -->
+        <!-- VIEW 00-A: HOME / OVERVIEW (CALM VISUAL-FIRST)       -->
         <!-- ==================================================== -->
-        <section class="stage-pane active" id="view-stream">
+        <!-- ==================================================== -->
+        <!-- VIEW 01: HOME OVERVIEW — 3-ZONE MASCOT HERO & RISKS  -->
+        <!-- ==================================================== -->
+        <section class="stage-pane active" id="view-overview">
+          <div class="mascot-landing-stage">
+
+            <!-- 3-ZONE MASCOT HERO (COMPACT & VIEWPORT-OPTIMIZED) -->
+            <!-- GRAND MASCOT HERO STAGE (FULL-SCALE 3D CENTERPIECE WITH FLOATING OVERLAYS) -->
+            <div class="mascot-hero-stage" id="mascotHeroStage">
+
+              <!-- CENTER STAGE: FULL-SIZE 3D ROBOT MASCOT (COMMANDING CENTERPIECE) -->
+              <div class="mascot-stage-backdrop" id="mascotViewport" title="Move your cursor anywhere — 3D mascot actively tracks your gaze!">
+                <div id="robot-stage" role="img" aria-label="Interactive AI agent robot mascot that follows your cursor"></div>
+              </div>
+
+              <!-- TOP HUD: SENTINEL STATUS PILL & SPEECH BUBBLE -->
+              <div class="mascot-top-hud">
+                <div class="mascot-status-pill">
+                  <span class="mascot-status-dot"></span>
+                  <span class="mascot-status-text">GUARDIAN SENTINEL · INSPECTING AGENT ACTIONS</span>
+                </div>
+                <div class="mascot-speech-bubble" id="mascotSpeechBubble">
+                  <span class="speech-text">14 Intent Mandates enforced · Watching all agent actions</span>
+                </div>
+              </div>
+
+              <!-- LEFT OVERLAY: FLOATING 1-LINE VALUE PROP & DIRECT CTAs -->
+              <div class="mascot-overlay-left">
+                <div class="mascot-kicker">
+                  <span class="mascot-kicker-dot"></span>
+                  <span id="mascotGreetingHeader">Harshith · Active Enclave</span>
+                </div>
+
+                <h1 class="mascot-headline">YOUR AGENT.<br>YOUR RULES.</h1>
+
+                <p class="mascot-desc">
+                  Autonomous intent verification and cryptographic dispute protection for your AI agents.
+                </p>
+
+                <div class="mascot-cta-row">
+                  <button class="btn-mascot-primary" id="btnExploreFeed" data-jump-view="view-stream">
+                    <span>Explore Feed</span>
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </button>
+                  <button class="btn-mascot-secondary" id="btnMascotHowItWorks">How it works</button>
+                </div>
+
+                <div class="mascot-badge-row">
+                  <span class="mascot-pill pill-secure">✓ 100% Client Enclave</span>
+                  <span class="mascot-pill" data-jump-view="view-vault" style="cursor: pointer;" title="View Your Rules">14 Mandates Active →</span>
+                </div>
+              </div>
+
+              <!-- RIGHT OVERLAY: FLOATING TELEMETRY MINI-BLOCKS -->
+              <div class="mascot-overlay-right">
+                <!-- Metric 1: Audited Actions -->
+                <div class="mini-metric-pill" data-jump-view="view-analytics" title="Click to view full Analytics">
+                  <div class="mini-metric-header">
+                    <span class="mini-metric-name">AUDITED ACTIONS</span>
+                    <span class="mini-metric-tag tag-green">+12%</span>
+                  </div>
+                  <div class="mini-metric-num">1,284</div>
+                  <div class="mini-metric-sub">100% verified in enclave</div>
+                </div>
+
+                <!-- Metric 2: Conflicts Flagged -->
+                <div class="mini-metric-pill pill-alert" data-jump-view="view-disputes" title="Click to review active conflict">
+                  <div class="mini-metric-header">
+                    <span class="mini-metric-name name-alert">CONFLICTS FLAGGED</span>
+                    <span class="mini-metric-tag tag-red">1 Active</span>
+                  </div>
+                  <div class="mini-metric-num num-alert">18</div>
+                  <div class="mini-metric-sub">Flight 6E-2412 breach</div>
+                </div>
+
+                <!-- Metric 3: Agent Spending -->
+                <div class="mini-metric-pill" data-jump-view="view-analytics" title="Click to view Spending Analytics">
+                  <div class="mini-metric-header">
+                    <span class="mini-metric-name">AGENT SPENDING</span>
+                    <span class="mini-metric-tag">73.8% Cap</span>
+                  </div>
+                  <div class="mini-metric-num">₹24,850</div>
+                  <div class="mini-metric-sub">₹2,319 recovered via dispute</div>
+                </div>
+              </div>
+
+              <!-- BOTTOM HUD: ORBITAL GAZE RADAR READOUT -->
+              <div class="mascot-bottom-hud">
+                <div class="mascot-gaze-hud">
+                  <span class="gaze-radar-dot"></span>
+                  <span class="gaze-hud-text">AUDIT RADAR:</span>
+                  <span class="gaze-angle-tag" id="mascotGazeAngle">GAZE: 0° CENTER</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- SECTION BELOW MASCOT: 3 FOCUSED INFORMATIONAL CARDS -->
+            <div class="mascot-cards-row">
+
+              <!-- Card 1: Agent Activity (Executive Snapshot) -->
+              <div class="mascot-info-card">
+                <div class="info-card-header">
+                  <span class="info-card-badge">LIVE STREAM SNAPSHOT</span>
+                  <span class="info-card-status">● Live</span>
+                </div>
+                <h3 class="info-card-title">Agent Activity Snapshot</h3>
+                <p class="info-card-body">
+                  48 transactions evaluated in the last 24 hours across Travel Logistics, Sustenance, and Devices. 47 verified compliant with zero prompt drift.
+                </p>
+                <div class="info-card-highlight">
+                  <span class="highlight-label">LATEST CONFLICT:</span>
+                  <span class="highlight-val">Flight 6E-2412 arrives 18:45 (violates 18:00 cutoff)</span>
+                </div>
+                <div class="info-card-footer">
+                  <button class="info-card-link-btn" data-jump-view="view-stream">
+                    <span>Inspect Activity Feed</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Card 2: Emerging AI Risks (Featured: Vendor Steering) -->
+              <div class="mascot-info-card card-featured-risk">
+                <div class="info-card-header">
+                  <span class="info-card-badge badge-risk">EMERGING AI RISK</span>
+                  <span class="info-card-meta">Oct 2026</span>
+                </div>
+                <h3 class="info-card-title">Vendor Steering in AI Agents</h3>
+                <p class="info-card-body">
+                  Commercial incentives embedded in merchant aggregators can influence autonomous buying agents to prioritize affiliate partners over user constraints.
+                </p>
+                <div class="info-card-highlight highlight-risk">
+                  <span class="highlight-label">RECOURSE DEFENSE:</span>
+                  <span class="highlight-val">Signed intent hashes prove breach during arbitration</span>
+                </div>
+                <div class="info-card-footer">
+                  <button class="info-card-link-btn" id="btnOpenVendorRiskModal">
+                    <span>Read Advisory</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Card 3: Important Updates (Security & Governance) -->
+              <div class="mascot-info-card">
+                <div class="info-card-header">
+                  <span class="info-card-badge">STANDARDS & SECURITY</span>
+                  <span class="info-card-meta">W3C / IT ACT</span>
+                </div>
+                <h3 class="info-card-title">Hardware TPM Attestation</h3>
+                <p class="info-card-body">
+                  All autonomous payment tokens are cryptographically locked to client hardware keys under Indian IT Act §43A to prevent silent API parameter drift.
+                </p>
+                <div class="info-card-highlight">
+                  <span class="highlight-label">PROTECTION:</span>
+                  <span class="highlight-val">Zero cloud custody of financial signing keys</span>
+                </div>
+                <div class="info-card-footer">
+                  <button class="info-card-link-btn" data-jump-view="view-governance">
+                    <span>View Connected Agents</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </button>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 01: ACTIVITY FEED (DEDICATED WORKSPACE)         -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-stream">
+
           <div class="pane-title-row">
             <div>
-              <h1 class="pane-headline">Autonomous Ingestion Feed</h1>
+              <h1 class="pane-headline">Recent Assistant Activity</h1>
             </div>
             <div class="enterprise-stats-bar">
               <div class="stat-item has-detail" data-detail-title="Vault Mandates" data-detail-tag="ACTIVE RULES"
@@ -640,53 +752,94 @@
               </div>
               <div class="stat-divider"></div>
               <div class="stat-item stat-conflict has-detail" id="mismatchCountChip"
-                data-detail-title="Critical Conflicts" data-detail-tag="CONFLICT"
+                data-detail-title="Review Items" data-detail-tag="CONFLICT"
                 data-detail-highlight="1 Instruction Conflict Flagged"
                 data-detail-text="Flight 6E-2412 arrived after 18:00 IST, directly violating Rule SEC-TRV-102.">
                 <span class="stat-num mono text-danger font-600">1</span>
-                <span class="stat-label text-danger">Conflict</span>
+                <span class="stat-label text-danger">Review</span>
               </div>
             </div>
           </div>
 
-          <!-- The Verification Ledger Focus Card (Expandable Alert Bar) -->
+          <!-- The Verification Ledger Focus Card (Dedicated Conflict Card) -->
           <div class="enterprise-conflict-card conflict-card-highlighted" id="conflictDocket">
 
             <!-- Clickable Conflict Summary Bar -->
-            <div class="conflict-bar-toggle" id="conflictBarToggle" title="Click to view rule comparison & details">
+            <div class="conflict-bar-toggle" id="conflictBarToggle" title="Click to view full conflict details & rule comparison">
               <div class="conflict-bar-top-row">
                 <span class="conflict-alert-badge">
                   <span class="conflict-alert-icon">⚠️</span>
-                  <span class="conflict-alert-text">CRITICAL CONFLICT DETECTED</span>
+                  <span class="conflict-alert-text">Active Conflict · Disputed</span>
                 </span>
-                <span class="conflict-bar-time">Today, 10:02 AM</span>
+                <span class="conflict-bar-time">Today, 10:02 AM IST</span>
               </div>
 
               <div class="conflict-bar-title-row">
                 <h2 class="ent-card-title">IndiGo Flight 6E-2412 (Bengaluru ➔ Delhi)</h2>
+                <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                  Merchant: <strong style="color: var(--text-lead);">IndiGo Airlines</strong> · Amount: <strong class="text-danger font-600">₹14,200.00</strong> · Constraint: <strong>Arrive &lt; 18:00 IST</strong>
+                </div>
               </div>
 
               <div class="conflict-bar-action-row">
                 <div class="conflict-bar-btns">
-                  <button class="btn-conflict-dismiss" id="btnDismissConflict">Dismiss</button>
+                  <button class="btn-conflict-dismiss" id="btnDismissConflict" title="Dismiss from active feed (does not waive dispute rights)">Dismiss</button>
                   <button class="btn-conflict-dispute" id="btnInspectEvidence">
-                    <span>Review & Dispute Booking</span>
+                    <span>Review & Submit Dispute →</span>
                   </button>
                 </div>
-                <div class="conflict-chevron-wrap" title="Toggle rule comparison">
-                  <svg class="conflict-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <div class="conflict-chevron-wrap" title="Toggle conflict details">
+                  <svg class="conflict-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="9 18 15 12 9 6"></polyline>
                   </svg>
                 </div>
               </div>
             </div>
 
-            <!-- Expandable Comparison Drawer (Reveals when clicked) -->
+            <!-- Expandable Comparison Drawer (Reveals all 8 required conflict fields) -->
             <div class="conflict-expandable-drawer" id="conflictExpandableDrawer">
+              
+              <!-- 8-Field Structured Conflict Record -->
+              <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; padding: 14px 16px; background: #FFFFFF; border: 1px solid var(--rule-hairline); border-radius: 10px; margin-bottom: 14px;">
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Merchant Name</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-lead); margin-top: 2px;">IndiGo Airlines</div>
+                </div>
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Transaction Description</div>
+                  <div style="font-size: 13px; font-weight: 600; color: var(--text-lead); margin-top: 2px;">Flight 6E-2412 (BLR ➔ DEL)</div>
+                </div>
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Amount in Dispute</div>
+                  <div style="font-size: 13px; font-weight: 600; color: #DC2626; margin-top: 2px;">₹14,200.00</div>
+                </div>
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Current Conflict Status</div>
+                  <div style="font-size: 13px; font-weight: 600; color: #DC2626; margin-top: 2px;">Active Conflict · Disputed</div>
+                </div>
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Agent Action</div>
+                  <div style="font-size: 12px; color: var(--text-lead); margin-top: 2px;">Autonomous booking & ticketing via IndiGo Direct API</div>
+                </div>
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">User Authorization Context</div>
+                  <div style="font-size: 12px; color: var(--text-lead); margin-top: 2px;">Mandate SEC-TRV-102 (Arrive before 18:00 IST)</div>
+                </div>
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Conflict Reason</div>
+                  <div style="font-size: 12px; color: #DC2626; margin-top: 2px;">Arrival at 20:45 IST exceeds 18:00 cutoff by 2h 45m</div>
+                </div>
+                <div>
+                  <div style="font-size: 10.5px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">Detection Timestamp</div>
+                  <div style="font-size: 12px; color: var(--text-lead); margin-top: 2px;">Today, 10:02:14 AM IST</div>
+                </div>
+              </div>
+
               <div class="enterprise-diff-grid">
                 <!-- Column 1: Your Rule -->
-                <div class="diff-col col-expected has-detail" data-detail-title="Your Active Rule" data-detail-tag="TRAVEL RULE"
-                  data-detail-highlight="Arrive before 6:00 PM"
+                <div class="diff-col col-expected has-detail" data-detail-title="Your Active Rule"
+                  data-detail-tag="TRAVEL RULE" data-detail-highlight="Arrive before 6:00 PM"
                   data-detail-text="You set this rule to ensure you never arrive late for evening commitments.">
                   <div>
                     <div class="diff-col-head">
@@ -704,16 +857,16 @@
                 </div>
 
                 <!-- Column 2: What Happened -->
-                <div class="diff-col col-actual has-detail" data-detail-title="Actual Booking" data-detail-tag="CONFLICT"
-                  data-detail-highlight="3 Hours Late"
-                  data-detail-text="Flight lands at 9:00 PM, violating your 6:00 PM arrival cutoff.">
+                <div class="diff-col col-actual has-detail" data-detail-title="Actual Booking"
+                  data-detail-tag="CONFLICT" data-detail-highlight="2h 45m Past Cutoff"
+                  data-detail-text="Flight lands at 20:45 (8:45 PM), violating your 6:00 PM arrival cutoff.">
                   <div>
                     <div class="diff-col-head">
                       <span class="diff-col-header-label">WHAT HAPPENED</span>
-                      <span class="diff-col-badge badge-breach-clean">3 HOURS LATE</span>
+                      <span class="diff-col-badge badge-breach-clean">2h 45m LATE</span>
                     </div>
                     <div class="diff-col-statement text-breach">
-                      Flight Lands at <strong>9:00 PM</strong> at New Delhi (DEL)
+                      Flight Lands at <strong>8:45 PM (20:45 IST)</strong> at New Delhi (DEL)
                     </div>
                   </div>
                   <div class="diff-col-meta text-danger">
@@ -725,14 +878,14 @@
               <!-- Variance Alert Strip -->
               <div class="enterprise-variance-strip has-detail" data-detail-title="Conflict Summary"
                 data-detail-tag="CONFLICT" data-detail-highlight="Cutoff Exceeded"
-                data-detail-text="The flight arrives at 9:00 PM, which is 3 hours past your 6:00 PM cutoff rule.">
+                data-detail-text="The flight arrives at 20:45 IST, which is 2h 45m past your 18:00 IST cutoff rule.">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z">
                   </path>
                   <line x1="12" y1="9" x2="12" y2="13"></line>
                   <line x1="12" y1="17" x2="12.01" y2="17"></line>
                 </svg>
-                <span><strong>Conflict:</strong> Your travel assistant booked a flight arriving at 9:00 PM, exceeding your 6:00 PM arrival cutoff by 3 hours.</span>
+                <span><strong>Conflict Detected:</strong> Autonomous travel agent booked IndiGo 6E-2412 arriving at 20:45 IST, exceeding your mandatory 18:00 IST cutoff by 2 hours and 45 minutes.</span>
               </div>
             </div>
 
@@ -849,201 +1002,94 @@
         </section>
 
         <!-- ==================================================== -->
-        <!-- VIEW 03: EVIDENCE DOSSIER                            -->
-        <!-- ==================================================== -->
-        <!-- ==================================================== -->
-        <!-- VIEW 03: EVIDENCE DOSSIER                            -->
-        <!-- ==================================================== -->
-        <section class="stage-pane" id="view-evidence">
-          <div class="pane-title-row">
-            <div>
-              <h1 class="pane-headline">Evidence Dossier</h1>
-            </div>
-            <div class="pane-action-group">
-              <button class="secondary-action-btn" id="btnDownloadEvidenceJson">Download Evidence (JSON)</button>
-              <button class="primary-action-btn" id="btnProceedArbitration">Submit Dispute Claim →</button>
-            </div>
-          </div>
-
-          <!-- Bilateral Evidentiary Ledger -->
-          <div class="bilateral-grid">
-
-            <!-- Left Side: Mandate in Force -->
-            <div class="evidence-ledger-card">
-              <div class="card-bar">
-                <span>YOUR ACTIVE RULE</span>
-                <span class="text-verified font-600">ACTIVE PRIOR TO BOOKING</span>
-              </div>
-              <div class="evidence-ledger-body">
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">RULE CATEGORY</span>
-                  <span class="text-xs font-600 text-lead">Domestic Flights</span>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">TIME RULE WAS SET</span>
-                  <span class="text-xs font-600 text-lead">Today, 10:00 AM (Before Booking)</span>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">STATUS</span>
-                  <span class="text-xs font-600 text-lead">Active & Enforced</span>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">RULE TEXT</span>
-                  <p class="legal-quote">
-                    "Never book domestic flights scheduled to arrive after <strong class="text-lead font-600">6:00 PM</strong>."
-                  </p>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">VERIFICATION</span>
-                  <div class="hash-pill" style="color: #059669;">
-                    <span>✓ Confirmed active prior to checkout</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Side: Carrier Execution Payload -->
-            <div class="evidence-ledger-card card-execution">
-              <div class="card-bar">
-                <span class="text-danger font-600">WHAT WAS BOOKED</span>
-                <span class="text-danger font-600">RULE VIOLATED</span>
-              </div>
-              <div class="evidence-ledger-body">
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">BOOKING REFERENCE</span>
-                  <span class="text-xs font-600 text-lead">IndiGo Flight 6E-2412 (PNR IND-6E-88910)</span>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">TIME BOOKED</span>
-                  <span class="text-xs font-600 text-danger">Today, 10:02 AM (2.5 minutes after rule set)</span>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">BOOKING DETAILS</span>
-                  <span class="text-xs font-600 text-lead">Flight 6E-2412 (BLR ➔ DEL), Arrival: <strong
-                      class="text-danger">9:00 PM (3 hours late)</strong></span>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">AMOUNT CHARGED</span>
-                  <span class="text-xs font-600 text-lead">₹7,850.00 (Autonomous Debit)</span>
-                </div>
-                <div class="entry-row">
-                  <span class="text-2xs text-muted">RESULT</span>
-                  <div class="hash-pill" style="color: #DC2626;">
-                    <span>⚠️ Arrives 3 hours past your cutoff</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-
-          <!-- Legal Attestation Disclaimer Footer -->
-          <div class="evidence-legal-disclaimer">
-            <span class="text-2xs text-muted font-600">DISPUTE RECOURSE POLICY</span>
-            <p class="text-2xs" style="margin-top: 4px; line-height: 1.45;">
-              Notice: Dispute resolution and refunds are processed in accordance with merchant cancellation policies and consumer protection regulations.
-            </p>
-          </div>
-        </section>
-
-        <!-- ==================================================== -->
-        <!-- VIEW 04: ARBITRATION & DISPUTES                      -->
+        <!-- VIEW 04: DISPUTE RESOLUTION                         -->
         <!-- ==================================================== -->
         <section class="stage-pane" id="view-disputes">
           <div class="pane-title-row">
             <div>
-              <h1 class="pane-headline">Merchant Dispute Claims</h1>
+              <h1 class="pane-headline">Dispute Resolution</h1>
             </div>
-            <span class="metric-chip" id="arbitrationStateChip">EVIDENCE READY</span>
-          </div>
-
-          <!-- Visible Notice / Disclaimer Banner -->
-          <div class="dispute-disclaimer-banner">
-            <div class="disclaimer-icon">⚠️</div>
-            <div class="disclaimer-content">
-              <strong>Notice:</strong> Dispute resolution and refunds are subject to the merchant's official policies. Select a claim below to track progress or submit evidence.
+            <div class="pane-action-group">
+              <button class="secondary-action-btn" id="btnMerchantTerms">
+                <span>Merchant Dispute Terms (IndiGo) ↗</span>
+              </button>
+              <span class="metric-chip mono" id="arbitrationStateChip">STAGE 2 · EVIDENCE READY</span>
             </div>
           </div>
 
-          <!-- Claims Layout: List of Claims + Dynamic Stepper & Statement -->
-          <div class="disputes-split-layout">
-            <!-- Left Panel: Selectable Claims List -->
-            <div class="disputes-list-card">
-              <div class="claims-list-header">
-                <span class="text-xs font-600">DISPUTE CLAIMS</span>
-                <span class="claims-count-badge">3 Total</span>
-              </div>
-              <div class="claims-nav-list" id="claimsNavList">
-                <div class="claim-list-item active" data-claim-id="claim-1">
-                  <div class="claim-item-top">
-                    <span class="claim-item-merchant">IndiGo Airlines</span>
-                    <span class="claim-item-status status-step-2">Step 2 of 4 · Ready</span>
-                  </div>
-                  <div class="claim-item-title">Flight 6E-2412 (BLR ➔ DEL)</div>
-                  <div class="claim-item-sub">Arrives 9:00 PM · Disputed: ₹7,850.00</div>
+          <div class="dispute-stage-wrapper">
+
+            <!-- Primary Active Issue: IndiGo Airlines (Flight 6E-2412) -->
+            <div class="enterprise-conflict-card conflict-card-highlighted dispute-issue-card expanded" id="disputeCardIndigo">
+              
+              <!-- Clickable Issue Bar (Header with chevron arrow) -->
+              <div class="conflict-bar-toggle dispute-issue-toggle" id="toggleDisputeIndigo" title="Click to expand/collapse dispute details">
+                <div class="conflict-bar-top-row">
+                  <span class="conflict-alert-badge">
+                    <span class="conflict-alert-icon">⚠️</span>
+                    <span class="conflict-alert-text">Active Conflict · Disputed</span>
+                  </span>
+                  <span class="conflict-bar-time">Today, 10:02 AM IST</span>
                 </div>
 
-                <div class="claim-list-item" data-claim-id="claim-2">
-                  <div class="claim-item-top">
-                    <span class="claim-item-merchant">Croma Electronics</span>
-                    <span class="claim-item-status status-step-4">Step 4 of 4 · Resolved</span>
+                <div class="conflict-bar-title-row">
+                  <h2 class="ent-card-title">IndiGo Flight 6E-2412 (Bengaluru ➔ Delhi)</h2>
+                  <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                    Merchant: <strong style="color: var(--text-lead);">IndiGo Airlines</strong> · Amount: <strong class="text-danger font-600">₹14,200.00</strong> · Constraint: <strong>Arrive &lt; 18:00 IST</strong>
                   </div>
-                  <div class="claim-item-title">Smart Display Warranty Add-on</div>
-                  <div class="claim-item-sub">Unauthorized Plan · ₹1,299.00 Refunded</div>
                 </div>
 
-                <div class="claim-list-item" data-claim-id="claim-3">
-                  <div class="claim-item-top">
-                    <span class="claim-item-merchant">Uber Premier</span>
-                    <span class="claim-item-status status-step-3">Step 3 of 4 · Under Review</span>
+                <div class="conflict-bar-action-row">
+                  <span class="step-status-tag tag-active" id="disputeCard1Tag" style="font-size: 11px;">STEP 2 OF 4 · EVIDENCE READY</span>
+                  <div class="conflict-chevron-wrap" title="Toggle dispute details">
+                    <svg class="conflict-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                      <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
                   </div>
-                  <div class="claim-item-title">Airport Transit Surge Peak</div>
-                  <div class="claim-item-sub">Exceeded ₹800 Cap · Disputed: ₹650.00</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Right Panel: Dynamic Stepper + Claim Statement -->
-            <div class="arbitration-container">
-              <!-- Progression Stepper (4 Steps) -->
-              <div class="archival-stepper" id="claimStepperContainer">
-                <div class="step-cell done" id="step1Cell">
-                  <span class="step-num">01</span>
-                  <span class="step-name">Conflict Detected</span>
-                  <span class="step-meta" id="step1Meta">10:02 AM · Rule Breach</span>
-                </div>
-                <div class="step-cell current" id="step2Cell">
-                  <span class="step-num">02</span>
-                  <span class="step-name">Evidence Sealed</span>
-                  <span class="step-meta" id="step2Meta">10:03 AM · Ready</span>
-                </div>
-                <div class="step-cell" id="step3Cell">
-                  <span class="step-num">03</span>
-                  <span class="step-name">Merchant Review</span>
-                  <span class="step-meta" id="step3Meta">Pending Action</span>
-                </div>
-                <div class="step-cell" id="step4Cell">
-                  <span class="step-num">04</span>
-                  <span class="step-name">Resolution / Refund</span>
-                  <span class="step-meta" id="step4Meta">Pending Review</span>
                 </div>
               </div>
 
-              <!-- Selected Claim Detail & Formal Statement Card -->
-              <div class="arbitration-filing" id="claimDetailCard">
-                <!-- High-Level Claim Overview Grid -->
-                <div class="claim-overview-grid" id="claimOverviewGrid">
+              <!-- Expandable Content Drawer (Reveals all of Image 1 at the bottom on click) -->
+              <div class="conflict-expandable-drawer dispute-issue-drawer" id="drawerDisputeIndigo">
+                
+                <!-- 1. Progression Stepper (Image 1 design) -->
+                <div class="archival-stepper" id="claimStepperContainer">
+                  <div class="step-cell done" id="step1Cell">
+                    <span class="step-num">01</span>
+                    <span class="step-name">Conflict Detected</span>
+                    <span class="step-meta" id="step1Meta">10:02 AM · Rule Breach</span>
+                  </div>
+                  <div class="step-cell current" id="step2Cell">
+                    <span class="step-num">02</span>
+                    <span class="step-name">Evidence Sealed</span>
+                    <span class="step-meta" id="step2Meta">10:03 AM · Ready</span>
+                  </div>
+                  <div class="step-cell" id="step3Cell">
+                    <span class="step-num">03</span>
+                    <span class="step-name">Merchant Review</span>
+                    <span class="step-meta" id="step3Meta">Pending Action</span>
+                  </div>
+                  <div class="step-cell" id="step4Cell">
+                    <span class="step-num">04</span>
+                    <span class="step-name">Resolution / Refund</span>
+                    <span class="step-meta" id="step4Meta">Pending Review</span>
+                  </div>
+                </div>
+
+                <!-- 2. Dispute Overview Info Card (Image 1 design) -->
+                <div class="claim-overview-grid" id="claimOverviewGrid" style="margin-top: 14px;">
                   <div class="claim-overview-cell">
                     <span class="claim-overview-k">MERCHANT</span>
                     <span class="claim-overview-v" id="claimMerchantDisplay">IndiGo Airlines</span>
                   </div>
                   <div class="claim-overview-cell">
                     <span class="claim-overview-k">CONFLICT</span>
-                    <span class="claim-overview-v text-danger font-600" id="claimConflictDisplay">Arrives 9:00 PM (Rule: &lt; 6:00 PM)</span>
+                    <span class="claim-overview-v text-danger font-600" id="claimConflictDisplay">Arrives 8:45 PM (Rule: &lt; 6:00 PM)</span>
                   </div>
                   <div class="claim-overview-cell">
                     <span class="claim-overview-k">AMOUNT IN DISPUTE</span>
-                    <span class="claim-overview-v text-danger font-600" id="claimAmountDisplay">₹7,850.00</span>
+                    <span class="claim-overview-v text-danger font-600" id="claimAmountDisplay">₹14,200.00</span>
                   </div>
                   <div class="claim-overview-cell">
                     <span class="claim-overview-k">RULE STATUS</span>
@@ -1051,35 +1097,631 @@
                   </div>
                 </div>
 
-                <!-- Formal Statement of Claim (comes under one) -->
+                <!-- 3. Statement of Claim (Image 1 design) -->
                 <div class="statement-claim-box">
                   <div class="statement-claim-title">STATEMENT OF CLAIM</div>
-                  <div class="statement-claim-text" id="claimStatementText">
-                    On October 21 at 10:02 AM, your Travel Assistant booked IndiGo flight 6E-2412 from Bengaluru to New Delhi arriving at 9:00 PM. Prior to this purchase, an active rule was set at 10:00 AM requiring all domestic flights to arrive before 6:00 PM.
+                  <div class="statement-claim-text" id="claimStatementText" contenteditable="true" title="Click to edit statement if needed">
+                    On October 21 at 10:02 AM, your Travel Assistant booked IndiGo flight 6E-2412 from Bengaluru to New Delhi arriving at 8:45 PM (20:45 IST). Prior to this purchase, an active rule was set at 10:00 AM requiring all domestic flights to arrive before 6:00 PM.
                     <br><br>
-                    Because the assistant booked a ticket arriving 3 hours after your specified cutoff time, this dispute package has been generated to submit to IndiGo for review and reimbursement.
+                    Because the assistant booked a ticket arriving 2 hours and 45 minutes after your specified cutoff time, this dispute package has been generated to submit to IndiGo for review and reimbursement.
                   </div>
                 </div>
 
-                <div class="filing-actions" style="margin-top: 14px;" id="claimActionsWrap">
-                  <button class="secondary-action-btn" id="btnPreviewFilingJson">Inspect Evidence</button>
-                  <button class="primary-action-btn" id="btnTransmitArbitration">Submit Dispute Claim to IndiGo</button>
+                <!-- 4. Action Row (Inspect Evidence to the left of Submit Claim, exactly as in Image 1) -->
+                <div class="filing-actions" style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px;">
+                  <button class="secondary-action-btn" id="btnToggleInspectEvidence" style="padding: 9px 18px; font-size: 13px; font-weight: 500; border-radius: 8px;">
+                    Inspect Evidence
+                  </button>
+                  <button class="primary-action-btn" id="btnTransmitArbitration" style="padding: 9px 20px; font-size: 13px; font-weight: 600; border-radius: 8px; background: #18181B; color: #FFFFFF;">
+                    Submit Dispute Claim to IndiGo
+                  </button>
                 </div>
 
-                <!-- Settlement Result Box (Hidden until action) -->
-                <div class="settlement-declaration hidden" id="settlementBox">
+                <!-- 5. In-Place Evidence Inspection Interface (Toggled by Inspect Evidence) -->
+                <div class="dispute-evidence-box hidden" id="claimEvidenceBox" style="margin-top: 16px;">
+                  <div class="evidence-box-header">
+                    <div>
+                      <span class="evidence-box-title">Inspect Evidence</span>
+                      <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">Dossier #DSP-8910 · 5 Verified Categories Sealed in Hardware Enclave</div>
+                    </div>
+                    <button class="secondary-action-btn" id="btnExportEvidenceJson" style="font-size: 11.5px; padding: 4px 10px;">Download Dossier (JSON)</button>
+                  </div>
+
+                  <!-- Categorized Expandable Evidence Items -->
+                  <div class="evidence-category-list">
+                    <!-- Category 1: User Authorization Records & Applicable Constraints -->
+                    <div class="evidence-category-item" data-ev-item="1">
+                      <div class="evidence-category-header">
+                        <div class="evidence-cat-left">
+                          <span class="step-badge-num">1</span>
+                          <span class="evidence-cat-name">User Authorization Records & Applicable Constraints</span>
+                          <span class="evidence-cat-badge">TPM Vault · Rule SEC-TRV-102</span>
+                        </div>
+                        <div class="step-bar-right">
+                          <span class="step-status-tag tag-done">VERIFIED PRE-MANDATE</span>
+                          <svg class="step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                      </div>
+                      <div class="evidence-cat-drawer">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                          <div>
+                            <strong>Mandate Identifier:</strong> <code>SEC-TRV-102 (Domestic Flights)</code><br>
+                            <strong>Source:</strong> Client Hardware TPM Security Enclave<br>
+                            <strong>Rule Text:</strong> "Never book domestic flights scheduled to arrive after 18:00 IST."
+                          </div>
+                          <div>
+                            <strong>Established Timestamp:</strong> Oct 21, 2026 10:00:00 IST<br>
+                            <strong>Constraint Severity:</strong> Hard Limit (Deterministic Reject)<br>
+                            <strong>Precedence:</strong> Active 2m 14s before agent initiated checkout.
+                          </div>
+                        </div>
+                        <div style="font-size: 11.5px; color: #52525B; background: #F4F4F5; padding: 8px 12px; border-radius: 6px;">
+                          Cryptographic attestation confirms that the user explicitly forbade arrival times past 18:00 IST. The agent possessed no discretion or waiver to override this rule.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Category 2: Agent Action Logs -->
+                    <div class="evidence-category-item" data-ev-item="2">
+                      <div class="evidence-category-header">
+                        <div class="evidence-cat-left">
+                          <span class="step-badge-num">2</span>
+                          <span class="evidence-cat-name">Agent Action Logs</span>
+                          <span class="evidence-cat-badge">Travel Assistant · Autonomous Ingest</span>
+                        </div>
+                        <div class="step-bar-right">
+                          <span class="step-status-tag tag-done">HASHED & LOGGED</span>
+                          <svg class="step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                      </div>
+                      <div class="evidence-cat-drawer">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                          <div>
+                            <strong>Actor ID:</strong> <code>travel-concierge-v4.2</code><br>
+                            <strong>Action Type:</strong> <code>ORDER_SETTLEMENT_EXECUTE</code><br>
+                            <strong>API Destination:</strong> <code>https://api.goindigo.in/v2/bookings/issue</code>
+                          </div>
+                          <div>
+                            <strong>Execution Timestamp:</strong> Oct 21, 2026 10:02:14 IST<br>
+                            <strong>Execution Status:</strong> Bypassed constraint warning<br>
+                            <strong>Audit Sequence:</strong> Event #4819 in daily journal
+                          </div>
+                        </div>
+                        <div style="font-size: 11.5px; color: #52525B; background: #F4F4F5; padding: 8px 12px; border-radius: 6px;">
+                          Log excerpt: <code>[10:02:14.218] WARNING: Flight 6E-2412 arrival at 20:45 exceeds Vault threshold (18:00). Attempted autonomous price optimization override. Transaction submitted without principal biometric signature.</code>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Category 3: Conflict Detection Records -->
+                    <div class="evidence-category-item" data-ev-item="3">
+                      <div class="evidence-category-header">
+                        <div class="evidence-cat-left">
+                          <span class="step-badge-num">3</span>
+                          <span class="evidence-cat-name">Conflict Detection Records</span>
+                          <span class="evidence-cat-badge">Recourse Policy Engine</span>
+                        </div>
+                        <div class="step-bar-right">
+                          <span class="step-status-tag tag-active">BREACH CONFIRMED</span>
+                          <svg class="step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                      </div>
+                      <div class="evidence-cat-drawer">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                          <div>
+                            <strong>Engine:</strong> Deterministic Intent Verification Core<br>
+                            <strong>Evaluated Constraint:</strong> Maximum arrival cutoff 18:00 IST<br>
+                            <strong>Actual Value:</strong> 20:45 IST (Delta: +165 minutes)
+                          </div>
+                          <div>
+                            <strong>Detection Timestamp:</strong> Oct 21, 2026 10:02:14.412 IST<br>
+                            <strong>Incident Category:</strong> Constraint Incompatibility<br>
+                            <strong>Determination:</strong> <code>UNAUTHORIZED_AGENT_ACTION</code>
+                          </div>
+                        </div>
+                        <div style="font-size: 11.5px; color: #52525B; background: #F4F4F5; padding: 8px 12px; border-radius: 6px;">
+                          The automated audit intercept intercepted the settlement webhook within 200ms of transaction generation and flagged the debit as an actionable violation.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Category 4: Transaction Information -->
+                    <div class="evidence-category-item" data-ev-item="4">
+                      <div class="evidence-category-header">
+                        <div class="evidence-cat-left">
+                          <span class="step-badge-num">4</span>
+                          <span class="evidence-cat-name">Transaction Information & Booking Details</span>
+                          <span class="evidence-cat-badge">IndiGo · PNR: X89Q42</span>
+                        </div>
+                        <div class="step-bar-right">
+                          <span class="step-status-tag tag-done">CONFIRMED CHARGE</span>
+                          <svg class="step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                      </div>
+                      <div class="evidence-cat-drawer">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                          <div>
+                            <strong>Merchant:</strong> InterGlobe Aviation Ltd. (IndiGo)<br>
+                            <strong>Flight:</strong> 6E-2412 (BLR Kempegowda ➔ DEL Indira Gandhi)<br>
+                            <strong>Route Times:</strong> Dep: 17:40 IST | Arr: 20:45 IST
+                          </div>
+                          <div>
+                            <strong>Disputed Amount:</strong> <span class="text-danger font-600">₹14,200.00 INR</span><br>
+                            <strong>Booking Reference (PNR):</strong> <code>X89Q42</code><br>
+                            <strong>Payment Instrument:</strong> HDFC Direct Debit (•••• 4012)
+                          </div>
+                        </div>
+                        <div style="font-size: 11.5px; color: #52525B; background: #F4F4F5; padding: 8px 12px; border-radius: 6px;">
+                          Passenger: Harshith. Seat: 14D (Standard Economy). Fare class: Regular Corporate.
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Category 5: Evidence Verification & Hardware Attestation -->
+                    <div class="evidence-category-item" data-ev-item="5">
+                      <div class="evidence-category-header">
+                        <div class="evidence-cat-left">
+                          <span class="step-badge-num">5</span>
+                          <span class="evidence-cat-name">Evidence Verification & Hardware Attestation</span>
+                          <span class="evidence-cat-badge">SHA-256 Merkle Root</span>
+                        </div>
+                        <div class="step-bar-right">
+                          <span class="step-status-tag tag-done">CRYPTOGRAPHICALLY INTACT</span>
+                          <svg class="step-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </div>
+                      </div>
+                      <div class="evidence-cat-drawer">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 8px;">
+                          <div>
+                            <strong>Sealed Merkle Root:</strong> <code>0x7d91e843b02c89f2a71de44a9c10f823</code><br>
+                            <strong>Signing Key ID:</strong> <code>USR-2040-DEMO (TPM Root)</code><br>
+                            <strong>Sealing Timestamp:</strong> Today, 10:03:01 IST
+                          </div>
+                          <div>
+                            <strong>Verification Status:</strong> Signed & Tamper-Evident<br>
+                            <strong>Statutory Standard:</strong> DGCA Passenger Charter / IT Act 2000 §43A<br>
+                            <strong>Audit Integrity:</strong> 100% Passed
+                          </div>
+                        </div>
+                        <div style="font-size: 11.5px; color: #52525B; background: #F4F4F5; padding: 8px 12px; border-radius: 6px;">
+                          Dossier payload is hashed and digitally signed. Any alteration by either party invalidates the cryptographic checksum.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- 6. Settlement Result Box (Revealed on submission) -->
+                <div class="settlement-declaration hidden" id="settlementBox" style="margin-top: 16px;">
                   <div class="settlement-head">
                     <span>MERCHANT RESOLUTION ACKNOWLEDGEMENT</span>
-                    <span class="text-verified font-600">DISPUTE TRANSMITTED 🟢 // UNDER REVIEW ⏳</span>
+                    <span class="text-verified font-600">CLAIM TRANSMITTED 🟢 // UNDER MERCHANT REVIEW ⏳</span>
                   </div>
                   <div class="settlement-body">
-                    <p style="font-size: 13px; color: var(--text-lead); line-height: 1.5;">
-                      IndiGo dispute gateway acknowledged receipt of your dispute package. Claim <strong>#DSP-8910</strong> is currently under <strong>Merchant Review</strong> (Estimated 24-48h).
+                    <p style="font-size: 13px; color: var(--text-lead); line-height: 1.55; margin: 0;">
+                      IndiGo dispute gateway acknowledged receipt of your dispute package. Claim
+                      <strong>#DSP-8910</strong> is currently under <strong>Merchant Review</strong> (Estimated 24-48h).
+                      Your statutory recourse under Rule <strong>SEC-TRV-102</strong> is preserved and active.
                     </p>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- Secondary Issue Card: Croma Electronics (Resolved) -->
+            <div class="enterprise-conflict-card dispute-issue-card" id="disputeCardCroma">
+              <div class="conflict-bar-toggle dispute-issue-toggle" id="toggleDisputeCroma">
+                <div class="conflict-bar-top-row">
+                  <span class="pillar-badge badge-green">RESOLVED · REFUND COMPLETED</span>
+                  <span class="conflict-bar-time">Yesterday, 09:41 AM</span>
+                </div>
+                <div class="conflict-bar-title-row">
+                  <h2 class="ent-card-title">Croma Electronics — Smart Display Warranty Add-on</h2>
+                  <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                    Merchant: <strong>Croma Electronics</strong> · Amount: <strong class="text-verified font-600">₹1,299.00 Refunded</strong> · Rule: <strong>Hardware Spec Required</strong>
+                  </div>
+                </div>
+                <div class="conflict-bar-action-row">
+                  <span class="step-status-tag tag-done" style="font-size: 11px;">STEP 4 OF 4 · RESOLVED</span>
+                  <div class="conflict-chevron-wrap">
+                    <svg class="conflict-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="conflict-expandable-drawer dispute-issue-drawer" id="drawerDisputeCroma">
+                <div class="archival-stepper">
+                  <div class="step-cell done"><span class="step-num">01</span><span class="step-name">Conflict Detected</span><span class="step-meta">Yesterday, 09:41 AM</span></div>
+                  <div class="step-cell done"><span class="step-num">02</span><span class="step-name">Evidence Sealed</span><span class="step-meta">Yesterday, 09:42 AM</span></div>
+                  <div class="step-cell done"><span class="step-num">03</span><span class="step-name">Merchant Review</span><span class="step-meta">Accepted by Croma</span></div>
+                  <div class="step-cell done"><span class="step-num">04</span><span class="step-name">Resolution / Refund</span><span class="step-meta">₹1,299.00 Refunded</span></div>
+                </div>
+                <div class="claim-overview-grid" style="margin-top: 14px;">
+                  <div class="claim-overview-cell"><span class="claim-overview-k">MERCHANT</span><span class="claim-overview-v">Croma Electronics</span></div>
+                  <div class="claim-overview-cell"><span class="claim-overview-k">CONFLICT</span><span class="claim-overview-v">Unauthorized Plan (Rule: Spec Required)</span></div>
+                  <div class="claim-overview-cell"><span class="claim-overview-k">REFUNDED AMOUNT</span><span class="claim-overview-v text-verified font-600">₹1,299.00</span></div>
+                  <div class="claim-overview-cell"><span class="claim-overview-k">STATUS</span><span class="claim-overview-v text-verified font-600">Reversal Completed</span></div>
+                </div>
+                <div class="statement-claim-box">
+                  <div class="statement-claim-title">STATEMENT OF CLAIM</div>
+                  <div class="statement-claim-text">
+                    On October 20 at 09:41 AM, an unauthorized 2-year warranty was attached during hardware checkout. Croma customer care accepted the verified dossier and credited ₹1,299.00 back to your original payment method.
                   </div>
                 </div>
               </div>
             </div>
+
+            <!-- Secondary Issue Card: Uber Premier (Under Review) -->
+            <div class="enterprise-conflict-card dispute-issue-card" id="disputeCardUber">
+              <div class="conflict-bar-toggle dispute-issue-toggle" id="toggleDisputeUber">
+                <div class="conflict-bar-top-row">
+                  <span class="pillar-badge badge-blue">IN VENDOR REVIEW</span>
+                  <span class="conflict-bar-time">Oct 19, 19:12 IST</span>
+                </div>
+                <div class="conflict-bar-title-row">
+                  <h2 class="ent-card-title">Uber Premier — Airport Transit Surge Peak</h2>
+                  <div style="font-size: 12px; color: var(--text-muted); margin-top: 2px;">
+                    Merchant: <strong>Uber Premier</strong> · Disputed: <strong class="text-danger font-600">₹650.00</strong> · Constraint: <strong>Surge Cap ₹800.00</strong>
+                  </div>
+                </div>
+                <div class="conflict-bar-action-row">
+                  <span class="step-status-tag tag-active" style="font-size: 11px;">STEP 3 OF 4 · UNDER REVIEW</span>
+                  <div class="conflict-chevron-wrap">
+                    <svg class="conflict-chevron-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                  </div>
+                </div>
+              </div>
+              <div class="conflict-expandable-drawer dispute-issue-drawer" id="drawerDisputeUber">
+                <div class="archival-stepper">
+                  <div class="step-cell done"><span class="step-num">01</span><span class="step-name">Conflict Detected</span><span class="step-meta">Oct 19, 19:12 IST</span></div>
+                  <div class="step-cell done"><span class="step-num">02</span><span class="step-name">Evidence Sealed</span><span class="step-meta">Oct 19, 19:15 IST</span></div>
+                  <div class="step-cell current"><span class="step-num">03</span><span class="step-name">Merchant Review</span><span class="step-meta">In Review (Est. 24h)</span></div>
+                  <div class="step-cell"><span class="step-num">04</span><span class="step-name">Resolution / Refund</span><span class="step-meta">Pending Determination</span></div>
+                </div>
+                <div class="claim-overview-grid" style="margin-top: 14px;">
+                  <div class="claim-overview-cell"><span class="claim-overview-k">MERCHANT</span><span class="claim-overview-v">Uber Premier</span></div>
+                  <div class="claim-overview-cell"><span class="claim-overview-k">CONFLICT</span><span class="claim-overview-v text-danger font-600">Surge fare ₹1,450 exceeded ₹800 Cap</span></div>
+                  <div class="claim-overview-cell"><span class="claim-overview-k">AMOUNT IN DISPUTE</span><span class="claim-overview-v text-danger font-600">₹650.00</span></div>
+                  <div class="claim-overview-cell"><span class="claim-overview-k">STATUS</span><span class="claim-overview-v text-verified font-600">Dossier Transmitted</span></div>
+                </div>
+                <div class="statement-claim-box">
+                  <div class="statement-claim-title">STATEMENT OF CLAIM</div>
+                  <div class="statement-claim-text">
+                    On October 19 at 19:12, an urban mobility ride was debited at ₹1,450.00 INR without required surge pre-authorization above your ₹800.00 INR ceiling. The excess delta of ₹650.00 INR was filed with Uber customer resolution. Currently awaiting partner response.
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Return Navigation Button -->
+            <div style="margin-top: 12px; margin-bottom: 24px;">
+              <button class="btn-conflict-dismiss" id="btnReturnToFeed" data-jump-view="view-stream" style="font-size: 13px;">
+                ← Back to Activity Feed
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==================================================== -->
+        <!-- VIEW 04-A: DEDICATED ANALYTICS & TELEMETRY           -->
+        <!-- ==================================================== -->
+        <section class="stage-pane" id="view-analytics">
+          <div class="overview-dashboard analytics-dashboard">
+
+            <!-- SECTION 1: HEADER & IDENTITY BADGES -->
+            <div class="analytics-header-section">
+              <div class="analytics-header-main">
+                <div class="analytics-header-kicker">
+                  <span class="analytics-header-dot"></span>
+                  <span>Autonomous Agent Intelligence · Telemetry & Ledger Audit</span>
+                </div>
+                <h1 class="analytics-header-title">Agent Analytics & Financial Telemetry</h1>
+                <p class="analytics-header-body">
+                  Comprehensive performance audit, conflict rates, category expenditures, and financial policy adherence across all delegated autonomous assistants.
+                </p>
+              </div>
+              <div class="analytics-header-badges">
+                <div class="overview-pill-badge pill-secure">
+                  <span>✓ Enclave Cryptographic Attestation</span>
+                </div>
+                <div class="overview-pill-badge">
+                  <span>3 Connected Agents Active</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SECTION 2: ANALYTICS FILTER TOOLBAR -->
+            <div class="overview-analytics-toolbar">
+              <div class="analytics-filter-group" id="analyticsPeriodSelector">
+                <button class="analytics-filter-btn active" data-period="7d">Last 7 Days</button>
+                <button class="analytics-filter-btn" data-period="30d">Last 30 Days</button>
+                <button class="analytics-filter-btn" data-period="90d">Last 90 Days</button>
+                <button class="analytics-filter-btn" data-period="all">All Time</button>
+              </div>
+              <div class="analytics-toolbar-meta">
+                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #16A34A;"></span>
+                <span>Audited Ledger Data · Synced with Hardware Enclave</span>
+              </div>
+            </div>
+
+            <!-- SECTION 3: KEY METRICS CARDS GRID (6 DATA-DRIVEN METRICS) -->
+            <div class="overview-metrics-grid">
+              
+              <!-- Metric 1: Total Audited Actions -->
+              <div class="overview-metric-card">
+                <span class="metric-card-label">Total Audited Actions</span>
+                <span class="metric-card-val" id="metricAuditedCount">48</span>
+                <span class="metric-card-sub" id="metricAuditedMeta">+12% vs prior period · 100% verified</span>
+              </div>
+
+              <!-- Metric 2: Total Conflicts -->
+              <div class="overview-metric-card">
+                <span class="metric-card-label">Total Conflicts</span>
+                <span class="metric-card-val val-conflict" id="metricConflictsCount">1</span>
+                <span class="metric-card-sub" id="metricConflictsMeta">2.1% conflict rate · 1 Active</span>
+              </div>
+
+              <!-- Metric 3: Secure Actions -->
+              <div class="overview-metric-card">
+                <span class="metric-card-label">Secure Actions</span>
+                <span class="metric-card-val val-secure" id="metricSecureCount">47</span>
+                <span class="metric-card-sub" id="metricSecureMeta">97.9% compliant with Vault Rules</span>
+              </div>
+
+              <!-- Metric 4: Total Agent Spending -->
+              <div class="overview-metric-card">
+                <span class="metric-card-label">Total Agent Spending</span>
+                <span class="metric-card-val" id="metricSpendCount">₹18,450.00</span>
+                <span class="metric-card-sub" id="metricSpendMeta">73.8% of daily cap (₹25,000)</span>
+              </div>
+
+              <!-- Metric 5: Pending Reviews -->
+              <div class="overview-metric-card">
+                <span class="metric-card-label">Pending Reviews</span>
+                <span class="metric-card-val val-conflict" id="metricPendingCount">1</span>
+                <span class="metric-card-sub" id="metricPendingMeta">Flight 6E-2412 (Arrives &gt; 18:00)</span>
+              </div>
+
+              <!-- Metric 6: Resolved Conflicts -->
+              <div class="overview-metric-card">
+                <span class="metric-card-label">Resolved Conflicts</span>
+                <span class="metric-card-val" id="metricResolvedCount">2</span>
+                <span class="metric-card-sub" id="metricResolvedMeta">₹2,319 recovered via dispute</span>
+              </div>
+
+            </div>
+
+            <!-- SECTION 4: ACTIVITY & FINANCIAL ANALYTICS CHARTS (ROW 1) -->
+            <div class="overview-charts-grid">
+              
+              <!-- Chart 1: Agent Activity Over Time -->
+              <div class="overview-chart-card">
+                <div class="chart-card-header">
+                  <div>
+                    <h3 class="chart-card-title">Agent Activity Over Time</h3>
+                    <div class="chart-card-sub">Daily count of audited agent actions across delegated assistants</div>
+                  </div>
+                  <span class="chart-card-badge" id="activityChartBadge">7-Day Trend</span>
+                </div>
+                <div class="chart-svg-container" id="activityChartContainer">
+                  <svg id="overviewActivitySvg" width="100%" height="180" viewBox="0 0 500 180" preserveAspectRatio="none">
+                    <!-- Axes & Grid -->
+                    <line x1="40" y1="20" x2="40" y2="150" stroke="#E4E4E7" stroke-width="1"></line>
+                    <line x1="40" y1="150" x2="490" y2="150" stroke="#E4E4E7" stroke-width="1"></line>
+                    <line x1="40" y1="85" x2="490" y2="85" stroke="#F4F4F5" stroke-dasharray="3 3" stroke-width="1"></line>
+                    
+                    <!-- Trend Line -->
+                    <polyline id="activityChartLine" fill="none" stroke="#18181B" stroke-width="2.5" points="50,135 115,120 180,95 245,110 310,70 375,55 440,35"></polyline>
+                    
+                    <!-- Data Points -->
+                    <circle cx="50" cy="135" r="4" fill="#18181B"></circle>
+                    <circle cx="115" cy="120" r="4" fill="#18181B"></circle>
+                    <circle cx="180" cy="95" r="4" fill="#18181B"></circle>
+                    <circle cx="245" cy="110" r="4" fill="#18181B"></circle>
+                    <circle cx="310" cy="70" r="4" fill="#18181B"></circle>
+                    <circle cx="375" cy="55" r="4" fill="#18181B"></circle>
+                    <circle cx="440" cy="35" r="4" fill="#16A34A"></circle>
+
+                    <!-- X-Axis Labels -->
+                    <text x="50" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Thu</text>
+                    <text x="115" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Fri</text>
+                    <text x="180" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Sat</text>
+                    <text x="245" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Sun</text>
+                    <text x="310" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Mon</text>
+                    <text x="375" y="170" font-size="10.5" fill="#71717A" text-anchor="middle">Tue</text>
+                    <text x="440" y="170" font-size="10.5" fill="#18181B" font-weight="600" text-anchor="middle">Today</text>
+
+                    <!-- Y-Axis Labels -->
+                    <text x="30" y="152" font-size="10" fill="#71717A" text-anchor="end">0</text>
+                    <text x="30" y="88" font-size="10" fill="#71717A" text-anchor="end">25</text>
+                    <text x="30" y="24" font-size="10" fill="#71717A" text-anchor="end">50</text>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Chart 2: Conflict & Compliance Distribution -->
+              <div class="overview-chart-card">
+                <div class="chart-card-header">
+                  <div>
+                    <h3 class="chart-card-title">Conflict Distribution</h3>
+                    <div class="chart-card-sub">Classification breakdown of all audited decisions</div>
+                  </div>
+                  <span class="chart-card-badge" id="distTotalBadge">48 Total</span>
+                </div>
+                <div class="distribution-bars-list">
+                  
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Secure & Compliant</span>
+                      <span class="dist-bar-metrics" id="distSecureVal">47 (97.9%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-secure" id="distSecureFill" style="width: 97.9%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Active Conflicts</span>
+                      <span class="dist-bar-metrics text-danger" id="distConflictVal">1 (2.1%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-conflict" id="distConflictFill" style="width: 2.1%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Pending Merchant Review</span>
+                      <span class="dist-bar-metrics" id="distPendingVal">1 Action</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-pending" id="distPendingFill" style="width: 2.1%;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Resolved via Recourse</span>
+                      <span class="dist-bar-metrics" id="distResolvedVal">2 Actions</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill fill-resolved" id="distResolvedFill" style="width: 4.2%;"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- SECTION 4 (CONT.): SPENDING & ACTION BREAKDOWN (ROW 2) -->
+            <div class="overview-charts-grid">
+              
+              <!-- Chart 3: Spending Analytics Over Time -->
+              <div class="overview-chart-card">
+                <div class="chart-card-header">
+                  <div>
+                    <h3 class="chart-card-title">Spending Analytics</h3>
+                    <div class="chart-card-sub">Daily autonomous expenditures against configured policy cap</div>
+                  </div>
+                  <span class="chart-card-badge">Daily Cap: ₹25,000</span>
+                </div>
+                <div class="chart-svg-container" id="spendingChartContainer">
+                  <svg id="overviewSpendSvg" width="100%" height="180" viewBox="0 0 500 180" preserveAspectRatio="none">
+                    <!-- Baseline and Grid -->
+                    <line x1="40" y1="150" x2="490" y2="150" stroke="#E4E4E7" stroke-width="1"></line>
+                    <line x1="40" y1="50" x2="490" y2="50" stroke="#FEE2E2" stroke-dasharray="4 4" stroke-width="1"></line>
+                    <text x="485" y="44" font-size="9.5" fill="#DC2626" text-anchor="end">₹25,000 Policy Cap</text>
+
+                    <!-- Solid Bars (Thu - Today) -->
+                    <rect x="55" y="110" width="30" height="40" fill="#E4E4E7" rx="3"></rect>
+                    <rect x="120" y="95" width="30" height="55" fill="#E4E4E7" rx="3"></rect>
+                    <rect x="185" y="125" width="30" height="25" fill="#E4E4E7" rx="3"></rect>
+                    <rect x="250" y="105" width="30" height="45" fill="#E4E4E7" rx="3"></rect>
+                    <rect x="315" y="80" width="30" height="70" fill="#E4E4E7" rx="3"></rect>
+                    <rect x="380" y="90" width="30" height="60" fill="#E4E4E7" rx="3"></rect>
+                    <rect x="445" y="65" width="30" height="85" fill="#18181B" rx="3"></rect>
+
+                    <!-- X-Axis Labels -->
+                    <text x="70" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Thu</text>
+                    <text x="135" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Fri</text>
+                    <text x="200" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Sat</text>
+                    <text x="265" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Sun</text>
+                    <text x="330" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Mon</text>
+                    <text x="395" y="168" font-size="10.5" fill="#71717A" text-anchor="middle">Tue</text>
+                    <text x="460" y="168" font-size="10.5" fill="#18181B" font-weight="600" text-anchor="middle">Today</text>
+
+                    <!-- Values on top of bars -->
+                    <text x="460" y="58" font-size="10" font-weight="600" fill="#18181B" text-anchor="middle">₹18.4k</text>
+                  </svg>
+                </div>
+              </div>
+
+              <!-- Chart 4: Agent Action Breakdown by Domain -->
+              <div class="overview-chart-card">
+                <div class="chart-card-header">
+                  <div>
+                    <h3 class="chart-card-title">Agent Action Breakdown</h3>
+                    <div class="chart-card-sub">Expenditure distribution across delegated domains</div>
+                  </div>
+                  <span class="chart-card-badge">4 Domains</span>
+                </div>
+                <div class="distribution-bars-list">
+                  
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Travel & Flight Logistics</span>
+                      <span class="dist-bar-metrics">₹14,200 (77.0%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill" style="width: 77%; background: #18181B;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Food & Sustenance</span>
+                      <span class="dist-bar-metrics">₹2,340 (12.7%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill" style="width: 12.7%; background: #52525B;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Hardware & Peripherals</span>
+                      <span class="dist-bar-metrics">₹1,500 (8.1%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill" style="width: 8.1%; background: #71717A;"></div>
+                    </div>
+                  </div>
+
+                  <div class="dist-bar-item">
+                    <div class="dist-bar-header">
+                      <span class="dist-bar-name">Urban Mobility (Rides)</span>
+                      <span class="dist-bar-metrics">₹410 (2.2%)</span>
+                    </div>
+                    <div class="dist-bar-track">
+                      <div class="dist-bar-fill" style="width: 2.2%; background: #A1A1AA;"></div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <!-- SECTION 5: OPERATIONAL INSIGHTS (DATA-BACKED) -->
+            <div class="overview-insights-section">
+              <div class="insight-item">
+                <span class="insight-icon">⚡</span>
+                <div>
+                  <div class="insight-text-title">200ms Conflict Intercept</div>
+                  <p class="insight-text-desc">100% of rule breaches were intercepted and flagged within 200ms of transaction generation before settlement cleared.</p>
+                </div>
+              </div>
+
+              <div class="insight-item">
+                <span class="insight-icon">🛡️</span>
+                <div>
+                  <div class="insight-text-title">97.9% Mandate Adherence</div>
+                  <p class="insight-text-desc">47 out of 48 audited actions strictly satisfied your 14 personal Vault Mandates.</p>
+                </div>
+              </div>
+
+              <div class="insight-item">
+                <span class="insight-icon">📊</span>
+                <div>
+                  <div class="insight-text-title">Spending Concentration</div>
+                  <p class="insight-text-desc">Daily spend is concentrated in travel logistics (77%), governed by arrival time cutoffs.</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </section>
 
@@ -2057,6 +2699,94 @@
       </div>
     </div>
 
+    <!-- Merchant Dispute Terms Modal (IndiGo) -->
+    <div class="terms-modal-overlay" id="merchantTermsModal" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+      <div class="terms-modal-card">
+        <div class="terms-modal-head">
+          <span class="terms-modal-title" id="termsModalTitle">IndiGo Airlines — Autonomous Dispute Terms</span>
+          <button class="terms-modal-close-btn" id="btnCloseTermsModal" aria-label="Close terms modal">✕</button>
+        </div>
+        <div class="terms-modal-body">
+          <h4 style="font-size: 13px; margin: 0 0 6px 0; color: var(--text-lead);">1. Autonomous Agent Order Protocol</h4>
+          <p style="margin: 0 0 12px 0;">Where an autonomous software agent issues ticketing instructions without explicit biometric principal authorization exceeding recorded passenger constraint boundaries, InterGlobe Aviation Ltd. (IndiGo) provides direct recourse under the Automated Commercial Delegation Standard.</p>
+          
+          <h4 style="font-size: 13px; margin: 0 0 6px 0; color: var(--text-lead);">2. Evidentiary Requirements</h4>
+          <p style="margin: 0 0 12px 0;">To qualify for full fare reversal without cancellation penalty, the dispute must include a tamper-evident hardware enclave signature verifying that the intent rule was in active effect prior to ticket issuance.</p>
+
+          <h4 style="font-size: 13px; margin: 0 0 6px 0; color: var(--text-lead);">3. Response SLA & Resolution</h4>
+          <p style="margin: 0 0 12px 0;">IndiGo Dispute Operations evaluates signed dossiers within 24–48 hours of API transmittal. Approved claims trigger an automated refund of ₹14,200.00 to the original corporate debit account within 3 business days.</p>
+
+          <h4 style="font-size: 13px; margin: 0 0 6px 0; color: var(--text-lead);">4. Statutory Escalation</h4>
+          <p style="margin: 0;">Unresolved claims remain eligible for binding arbitration under DGCA Air Passenger Charter Section 3, Series M, Part IV.</p>
+        </div>
+        <div class="terms-modal-footer">
+          <button class="primary-action-btn" id="btnCloseTermsModalBtn" style="padding: 8px 16px; font-size: 12.5px;">Close & Return to Dispute</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Modal -->
+    <div class="terms-modal-overlay hidden" id="mascotHowItWorksModal" role="dialog" aria-modal="true" aria-labelledby="howItWorksTitle">
+      <div class="terms-modal-card" style="max-width: 600px;">
+        <div class="terms-modal-head">
+          <span class="terms-modal-title" id="howItWorksTitle">How Agent Recourse Protects Autonomous Commerce</span>
+          <button class="terms-modal-close-btn" id="btnCloseMascotModal" aria-label="Close modal">✕</button>
+        </div>
+        <div class="terms-modal-body">
+          <div style="display: flex; flex-direction: column; gap: 16px;">
+            <div style="border-left: 3px solid #18181B; padding-left: 14px;">
+              <h4 style="font-size: 13.5px; margin: 0 0 4px 0; font-weight: 700; color: #09090B;">1. Pre-Execution Mandate Binding</h4>
+              <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #52525B;">Before your AI agents execute tasks (like purchasing tickets, rides, or supplies), they bind to strict user rules stored in your local hardware enclave (budget caps, time cutoffs, refundability policies).</p>
+            </div>
+            <div style="border-left: 3px solid #2563EB; padding-left: 14px;">
+              <h4 style="font-size: 13.5px; margin: 0 0 4px 0; font-weight: 700; color: #09090B;">2. Sub-200ms Intercept & Conflict Detection</h4>
+              <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #52525B;">When an agent is steered by an external aggregator or merchant API to book an unapproved option (e.g. Flight 6E-2412 arriving after your 18:00 cutoff), Recourse detects the mismatch in real-time.</p>
+            </div>
+            <div style="border-left: 3px solid #16A34A; padding-left: 14px;">
+              <h4 style="font-size: 13.5px; margin: 0 0 4px 0; font-weight: 700; color: #09090B;">3. Cryptographic Evidence & Dispute Arbitration</h4>
+              <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #52525B;">Recourse automatically compiles a tamper-evident audit dossier (intent hash, API response log, vendor commission token) and transmits it to the merchant for 100% fare reversal.</p>
+            </div>
+          </div>
+        </div>
+        <div class="terms-modal-footer">
+          <button class="primary-action-btn" id="btnCloseMascotModalBtn" style="padding: 8px 16px; font-size: 12.5px;">Got It</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vendor Steering Risk Advisory Modal -->
+    <div class="terms-modal-overlay hidden" id="vendorRiskModal" role="dialog" aria-modal="true" aria-labelledby="vendorRiskTitle">
+      <div class="terms-modal-card" style="max-width: 640px;">
+        <div class="terms-modal-head">
+          <span class="terms-modal-title" id="vendorRiskTitle">Advisory · Vendor Steering in Autonomous AI Agents</span>
+          <button class="terms-modal-close-btn" id="btnCloseVendorRiskModal" aria-label="Close modal">✕</button>
+        </div>
+        <div class="terms-modal-body">
+          <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 12px 14px; margin-bottom: 16px;">
+            <div style="font-weight: 700; font-size: 12px; color: #92400E; margin-bottom: 4px; text-transform: uppercase;">Threat Model Analysis · Commerce Autonomy</div>
+            <div style="font-size: 12.5px; line-height: 1.5; color: #78350F;">
+              Aggregators and ticketing platforms are beginning to deploy AI-tailored endpoints that subtly encourage autonomous agents to choose partner inventory offering higher affiliate margins.
+            </div>
+          </div>
+          <h4 style="font-size: 13px; margin: 0 0 6px 0; color: #09090B;">The Mechanism of Vendor Steering</h4>
+          <p style="margin: 0 0 12px 0; font-size: 12.5px; line-height: 1.55; color: #52525B;">
+            Unlike human shoppers who visually cross-reference travel times and price differences, autonomous agents evaluate search response payloads computationally. When a booking API injects subtle weighting or omitted parameter sorting, agents can inadvertently prioritize non-optimal fares (such as Indigo Flight 6E-2412 landing at 18:45 despite the user's hard 18:00 cutoff).
+          </p>
+          <h4 style="font-size: 13px; margin: 0 0 6px 0; color: #09090B;">Statutory & Enclave Protection</h4>
+          <p style="margin: 0 0 12px 0; font-size: 12.5px; line-height: 1.55; color: #52525B;">
+            Under the DGCA Air Passenger Charter and Indian IT Act §43A, commercial software agents cannot execute financial settlement if constraint parameters signed by the principal were explicitly overridden by merchant intermediaries without express real-time consent.
+          </p>
+          <h4 style="font-size: 13px; margin: 0 0 6px 0; color: #09090B;">Enforcement in Agent Recourse</h4>
+          <p style="margin: 0; font-size: 12.5px; line-height: 1.55; color: #52525B;">
+            Agent Recourse cryptographically seals your 14 personal Vault Mandates. Any vendor response that steers the agent into non-compliant bookings is instantly frozen in the Feed and routed to the Dispute Resolution chamber.
+          </p>
+        </div>
+        <div class="terms-modal-footer">
+          <button class="primary-action-btn" id="btnCloseVendorRiskBtn" style="padding: 8px 16px; font-size: 12.5px;">Close Advisory</button>
+        </div>
+      </div>
+    </div>
+
     <!-- Notification Ribbon -->
     <div class="notification-ribbon" id="notifRibbon"></div>
 
@@ -2074,6 +2804,612 @@
   </div>
 
   <script src="app.js"></script>
+  <script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+
+/* ------------------------------------------------------------------ */
+/*  Agent Recourse — Interactive 3D AI Robot Mascot                   */
+/*  Faithfully incorporated from downloaded reference specification   */
+/* ------------------------------------------------------------------ */
+
+const CONFIG = {
+  head: { yaw: 32, pitch: 16, tilt: 6 },        // max degrees (horizontal / vertical / roll)
+  eyeMax: 0.42,                                 // max pupil travel (radians on the eyeball)
+  body: { yaw: 0.14, pitch: 0.05, roll: 0.02 }, // radians, subtle
+  holdMs: 2000,                                 // keep gaze this long after the cursor stops
+  // damping rates (higher = faster). Eyes > head > body
+  rate: { eye: 16, head: 6, body: 2.4, attention: 7, release: 1.0, close: 4 },
+};
+
+/* ------------------------------------------------------------------ */
+/*  Helpers                                                            */
+/* ------------------------------------------------------------------ */
+const deg = (d) => (d * Math.PI) / 180;
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const damp = (cur, target, lambda, dt) => cur + (target - cur) * (1 - Math.exp(-lambda * dt));
+const soft = (v, k = 1.6) => clamp(Math.tanh(v * k) / Math.tanh(k), -1, 1);
+const smoothstep = (a, b, x) => { const t = clamp((x - a) / (b - a), 0, 1); return t * t * (3 - 2 * t); };
+const rand = (a, b) => a + Math.random() * (b - a);
+
+/* ------------------------------------------------------------------ */
+/*  Mount Robot into Container                                         */
+/* ------------------------------------------------------------------ */
+export function mountRobot(container) {
+  if (!container) return { dispose() {} };
+
+  let renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+  } catch (err) {
+    console.warn('[Agent Recourse Robot] WebGL unavailable:', err);
+    return { dispose() {} };
+  }
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  const canvas = renderer.domElement;
+  container.appendChild(canvas);
+
+  const scene = new THREE.Scene();
+
+  // Soft studio reflections (no external HDRI needed)
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envTex = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+  scene.environment = envTex;
+  scene.environmentIntensity = 0.55;
+  pmrem.dispose();
+
+  const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 60);
+
+  /* ---------------- Lights ---------------- */
+  scene.add(new THREE.HemisphereLight(0xffffff, 0xb9c0c8, 0.4));
+
+  const key = new THREE.DirectionalLight(0xffffff, 1.85);
+  key.position.set(3.5, 7, 6);
+  key.castShadow = true;
+  key.shadow.mapSize.set(1024, 1024);
+  key.shadow.camera.left = -4; key.shadow.camera.right = 4;
+  key.shadow.camera.top = 5;   key.shadow.camera.bottom = -2;
+  key.shadow.camera.near = 1;  key.shadow.camera.far = 20;
+  key.shadow.bias = -0.0005;
+  key.shadow.normalBias = 0.02;
+  key.shadow.radius = 4;
+  scene.add(key);
+
+  const fill = new THREE.DirectionalLight(0xe8eef5, 0.55);
+  fill.position.set(-4, 2.5, 4);
+  scene.add(fill);
+
+  const rim = new THREE.DirectionalLight(0xffffff, 0.95);
+  rim.position.set(0, 3, -5);
+  scene.add(rim);
+
+  /* ---------------- Materials (Clean Enterprise Neutral Palette) ---------------- */
+  const mats = {
+    white:   new THREE.MeshPhysicalMaterial({ color: 0xf3f5f7, roughness: 0.3, metalness: 0.0, clearcoat: 0.7, clearcoatRoughness: 0.3 }),
+    silver:  new THREE.MeshStandardMaterial({ color: 0xc4cad1, roughness: 0.35, metalness: 0.75 }),
+    dark:    new THREE.MeshStandardMaterial({ color: 0x2b3139, roughness: 0.55, metalness: 0.3 }),
+    visor:   new THREE.MeshPhysicalMaterial({ color: 0x14181e, roughness: 0.15, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.08 }),
+    eyeball: new THREE.MeshPhysicalMaterial({ color: 0xf7f8fa, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.05 }),
+    iris:    new THREE.MeshStandardMaterial({ color: 0x56677a, roughness: 0.4, side: THREE.DoubleSide }),
+    pupil:   new THREE.MeshStandardMaterial({ color: 0x07090c, roughness: 0.2, side: THREE.DoubleSide }),
+    glint:   new THREE.MeshBasicMaterial({ color: 0xffffff }),
+  };
+
+  const mesh = (geo, mat, { cast = true, receive = false } = {}) => {
+    const m = new THREE.Mesh(geo, mat);
+    m.castShadow = cast;
+    m.receiveShadow = receive;
+    return m;
+  };
+
+  /* ---------------- Robot Hierarchy ----------------
+     root
+      ├─ feet
+      └─ rig            (body orientation pivot, at ground level)
+          ├─ shell      (breathing scale)  → body, chest plate
+          ├─ neck
+          ├─ arms
+          └─ headPivot  (hinge at the neck; yaw / pitch / tilt)
+              └─ headGroup → head, visor, ears, antenna, eyes
+  ---------------------------------------------------- */
+  const root = new THREE.Group();
+  scene.add(root);
+
+  const rig = new THREE.Group();
+  rig.rotation.order = 'YXZ';
+  root.add(rig);
+
+  const shell = new THREE.Group();
+  rig.add(shell);
+
+  // Body
+  const body = mesh(new THREE.SphereGeometry(1, 48, 32), mats.white);
+  body.scale.set(0.72, 0.74, 0.62);
+  body.position.y = 0.82;
+  shell.add(body);
+
+  // Chest plate (subtle mechanical detail)
+  const plate = new THREE.Group();
+  plate.position.set(0, 0.95, 0.6);
+  plate.rotation.x = -0.15;
+  const plateBox = mesh(new RoundedBoxGeometry(0.46, 0.26, 0.05, 4, 0.025), mats.dark);
+  plate.add(plateBox);
+  for (const x of [-0.1, 0, 0.1]) {
+    const dot = mesh(new THREE.SphereGeometry(0.022, 12, 8), mats.silver, { cast: false });
+    dot.position.set(x, 0, 0.028);
+    plate.add(dot);
+  }
+  shell.add(plate);
+
+  // Neck
+  const neck = mesh(new THREE.CylinderGeometry(0.2, 0.22, 0.4, 24), mats.dark);
+  neck.position.y = 1.64;
+  rig.add(neck);
+
+  // Arms
+  const arms = [];
+  for (const s of [-1, 1]) {
+    const pivot = new THREE.Group();
+    pivot.position.set(s * 0.6, 1.2, 0.02);
+    const arm = mesh(new THREE.CapsuleGeometry(0.1, 0.3, 6, 16), mats.white);
+    arm.position.y = -0.25;
+    const hand = mesh(new THREE.SphereGeometry(0.115, 20, 14), mats.silver);
+    hand.position.y = -0.5;
+    pivot.add(arm, hand);
+    rig.add(pivot);
+    arms.push({ pivot, s });
+  }
+
+  // Feet (static)
+  for (const s of [-1, 1]) {
+    const foot = mesh(new THREE.SphereGeometry(1, 24, 16), mats.silver);
+    foot.scale.set(0.3, 0.13, 0.4);
+    foot.position.set(s * 0.32, 0.1, 0.1);
+    root.add(foot);
+  }
+
+  /* ---------------- Head ---------------- */
+  const HEAD_PIVOT_Y = 1.66;
+  const headPivot = new THREE.Group();
+  headPivot.position.y = HEAD_PIVOT_Y;
+  headPivot.rotation.order = 'YXZ';
+  rig.add(headPivot);
+
+  const headGroup = new THREE.Group();
+  headGroup.position.y = 0.95;
+  headPivot.add(headGroup);
+
+  const head = mesh(new THREE.SphereGeometry(1, 64, 48), mats.white);
+  head.scale.set(1.15, 0.95, 1.0);
+  headGroup.add(head);
+
+  // Face visor (dark glossy ellipsoid poking out of the front of the head)
+  const visor = mesh(new THREE.SphereGeometry(1, 48, 32), mats.visor, { cast: false });
+  visor.scale.set(0.95, 0.62, 0.7);
+  visor.position.set(0, 0.02, 0.35);
+  headGroup.add(visor);
+
+  // Ears
+  for (const s of [-1, 1]) {
+    const earOuter = mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.14, 32), mats.silver);
+    earOuter.rotation.z = Math.PI / 2;
+    earOuter.position.set(s * 1.12, 0, 0);
+    const earInner = mesh(new THREE.CylinderGeometry(0.15, 0.15, 0.15, 24), mats.dark, { cast: false });
+    earInner.rotation.z = Math.PI / 2;
+    earInner.position.set(s * 1.14, 0, 0);
+    headGroup.add(earOuter, earInner);
+  }
+
+  // Antenna (lags slightly behind head motion)
+  const antenna = new THREE.Group();
+  antenna.position.set(0.3, 0.9, 0);
+  antenna.rotation.z = -0.18;
+  const stalk = mesh(new THREE.CylinderGeometry(0.03, 0.03, 0.3, 12), mats.dark);
+  stalk.position.y = 0.15;
+  const tip = mesh(new THREE.SphereGeometry(0.07, 16, 12), mats.silver);
+  tip.position.y = 0.32;
+  antenna.add(stalk, tip);
+  headGroup.add(antenna);
+
+  /* ---------------- Eyes ----------------
+     Each eye: socket ring + eyeball + iris/pupil caps that live ON the
+     eyeball surface (they rotate around the eyeball centre), so pupils can
+     never leave the eye or clip into the face. */
+  const EYE_R = 0.22;
+  const capGeo = (radius, halfAngleSin) => {
+    const g = new THREE.SphereGeometry(radius, 32, 16, 0, Math.PI * 2, 0, Math.asin(halfAngleSin));
+    g.rotateX(Math.PI / 2); // pole → +Z
+    return g;
+  };
+  const irisGeo  = capGeo(EYE_R + 0.0015, 0.11 / EYE_R);
+  const pupilGeo = capGeo(EYE_R + 0.0030, 0.06 / EYE_R);
+  const eyeballGeo = new THREE.SphereGeometry(EYE_R, 40, 28);
+  const glintGeoA = new THREE.SphereGeometry(0.03, 12, 8);
+  const glintGeoB = new THREE.SphereGeometry(0.016, 10, 6);
+  const ringGeo = new THREE.TorusGeometry(0.205, 0.03, 16, 48);
+
+  const eyes = [];
+  for (const s of [-1, 1]) {
+    const group = new THREE.Group();
+    group.position.set(s * 0.4, 0.04, 0.9);
+
+    const ball = mesh(eyeballGeo, mats.eyeball, { cast: false });
+    const pivot = new THREE.Group();
+    pivot.rotation.order = 'YXZ';
+    pivot.add(mesh(irisGeo, mats.iris, { cast: false }), mesh(pupilGeo, mats.pupil, { cast: false }));
+
+    // Fixed reflections (stay put while the pupil moves → reads as glossy)
+    const gA = mesh(glintGeoA, mats.glint, { cast: false });
+    gA.position.set(-0.38, 0.42, 0.82).normalize().multiplyScalar(EYE_R + 0.002);
+    const gB = mesh(glintGeoB, mats.glint, { cast: false });
+    gB.position.set(0.4, -0.35, 0.85).normalize().multiplyScalar(EYE_R + 0.002);
+
+    group.add(ball, pivot, gA, gB);
+    headGroup.add(group);
+
+    // Socket ring follows the curvature of the visor
+    const ring = mesh(ringGeo, mats.silver, { cast: false });
+    ring.position.set(s * 0.4, 0.04, 0.975);
+    ring.rotation.y = s * 0.33;
+    headGroup.add(ring);
+
+    eyes.push({ group, pivot, yaw: 0, pitch: 0 });
+  }
+
+  /* ---------------- Ground Shadow ---------------- */
+  const ground = new THREE.Mesh(
+    new THREE.PlaneGeometry(24, 24),
+    new THREE.ShadowMaterial({ opacity: 0.14 })
+  );
+  ground.rotation.x = -Math.PI / 2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  const blobCanvas = document.createElement('canvas');
+  blobCanvas.width = blobCanvas.height = 128;
+  {
+    const c = blobCanvas.getContext('2d');
+    const g = c.createRadialGradient(64, 64, 0, 64, 64, 64);
+    g.addColorStop(0, 'rgba(0,0,0,0.32)');
+    g.addColorStop(0.55, 'rgba(0,0,0,0.10)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    c.fillStyle = g;
+    c.fillRect(0, 0, 128, 128);
+  }
+  const blobTex = new THREE.CanvasTexture(blobCanvas);
+  const blob = new THREE.Mesh(
+    new THREE.PlaneGeometry(3.2, 2.4),
+    new THREE.MeshBasicMaterial({ map: blobTex, transparent: true, depthWrite: false })
+  );
+  blob.rotation.x = -Math.PI / 2;
+  blob.position.set(0, 0.004, 0.05);
+  scene.add(blob);
+
+  /* ---------------- Camera Framing ---------------- */
+  const LOOK_AT = new THREE.Vector3(0, 1.8, 0);
+  function fitCamera() {
+    const fov = THREE.MathUtils.degToRad(camera.fov);
+    const halfH = 2.15, halfW = 1.85;                // content half-extent to keep in frame
+    const t = Math.tan(fov / 2);
+    const dist = Math.max(halfH / t, halfW / (t * camera.aspect));
+    camera.position.set(0, LOOK_AT.y + dist * 0.2, dist * 0.98); // slightly elevated, front-facing
+    camera.lookAt(LOOK_AT);
+    camera.updateProjectionMatrix();
+    camera.updateMatrixWorld();
+  }
+
+  function resize() {
+    const w = container.clientWidth, h = container.clientHeight;
+    if (!w || !h) return;
+    renderer.setSize(w, h, false);
+    camera.aspect = w / h;
+    fitCamera();
+  }
+  const ro = new ResizeObserver(resize);
+  ro.observe(container);
+  resize();
+
+  /* ---------------- Pointer Tracking ---------------- */
+  const P = { x: 0, y: 0, has: false, inside: false, lastMove: 0 };
+  const setPointer = (x, y) => {
+    P.x = x; P.y = y; P.has = true; P.inside = true; P.lastMove = performance.now();
+  };
+  const onPointer = (e) => setPointer(e.clientX, e.clientY);
+  const onTouch = (e) => { const t = e.touches[0]; if (t) setPointer(t.clientX, t.clientY); };
+  const onLeave = () => { P.inside = false; };
+
+  window.addEventListener('pointermove', onPointer, { passive: true });
+  window.addEventListener('pointerdown', onPointer, { passive: true });
+  window.addEventListener('touchstart', onTouch, { passive: true });
+  window.addEventListener('touchmove', onTouch, { passive: true });
+  document.documentElement.addEventListener('mouseleave', onLeave);
+  window.addEventListener('blur', onLeave);
+
+  /* ---------------- Reduced Motion ---------------- */
+  const mq = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let reduced = mq.matches;
+  const onMq = (e) => { reduced = e.matches; };
+  mq.addEventListener('change', onMq);
+
+  /* ---------------- Animation State ---------------- */
+  const S = {
+    headYaw: 0, headPitch: 0, headTilt: 0,
+    bodyYaw: 0, bodyPitch: 0, bodyRoll: 0,
+    att: 0,      // 0 = idle, 1 = inspecting cursor
+    close: 0,    // 0..1 cursor proximity
+    glX: 0, glY: 0, antLag: 0,
+  };
+  const glance = { x: 0, y: 0, next: 1.5 };
+  const blink = { next: rand(2, 4), start: -1 };
+
+  const tmp = new THREE.Vector3();
+  const toClient = (obj3d, rect) => {
+    obj3d.getWorldPosition(tmp);
+    tmp.project(camera);
+    return {
+      x: rect.left + (tmp.x * 0.5 + 0.5) * rect.width,
+      y: rect.top + (-tmp.y * 0.5 + 0.5) * rect.height,
+    };
+  };
+
+  const R = CONFIG.rate;
+  const EM = CONFIG.eyeMax;
+  const gazeAngleEl = document.getElementById('mascotGazeAngle');
+
+  function update(dt, now) {
+    const t = now / 1000;
+    const motion = reduced ? 0.5 : 1;
+    const idleAmt = reduced ? 0 : 1;
+    const W = window.innerWidth, H = window.innerHeight;
+    const rect = canvas.getBoundingClientRect();
+
+    /* attention: inspecting vs idle */
+    const active = P.inside && P.has && (now - P.lastMove) < CONFIG.holdMs;
+    S.att = damp(S.att, active ? 1 : 0, active ? R.attention : (P.inside ? R.release : R.release * 1.8), dt);
+
+    /* cursor relative to the face */
+    const hs = toClient(headGroup, rect);
+    const dx = P.x - hs.x, dy = P.y - hs.y;
+    const nx = P.has ? soft(dx / (W * 0.45)) : 0;
+    const ny = P.has ? soft(dy / (H * 0.45)) : 0;
+
+    /* close-cursor state */
+    const headR = rect.height * 0.2;
+    const dist = Math.hypot(dx, dy);
+    const closeT = (active && P.has) ? 1 - smoothstep(headR * 0.9, headR * 2.8, dist) : 0;
+    S.close = damp(S.close, closeT, R.close, dt);
+
+    /* idle: glances, drift, breathing */
+    if (t >= glance.next) {
+      glance.x = rand(-0.8, 0.8);
+      glance.y = rand(-0.5, 0.5);
+      if (Math.random() < 0.35) { glance.x = 0; glance.y = 0; }
+      glance.next = t + rand(2, 5);
+    }
+    S.glX = damp(S.glX, glance.x, 3, dt);
+    S.glY = damp(S.glY, glance.y, 3, dt);
+
+    const iYaw   = idleAmt * (Math.sin(t * 0.37) * 0.06 + Math.sin(t * 0.91) * 0.025 + S.glX * 0.12);
+    const iPitch = idleAmt * (Math.sin(t * 0.5 + 1) * 0.035 + S.glY * 0.08);
+    const iTilt  = idleAmt * Math.sin(t * 0.29) * 0.025;
+
+    /* cursor targets (clamped by construction) */
+    const cYaw   = nx * deg(CONFIG.head.yaw) * motion;
+    const cPitch = ny * deg(CONFIG.head.pitch) * motion;
+    const cTilt  = (-nx * deg(CONFIG.head.tilt) - nx * deg(3) * S.close) * motion;
+
+    const tYaw   = iYaw   + (cYaw   - iYaw)   * S.att;
+    const tPitch = iPitch + (cPitch - iPitch) * S.att;
+    const tTilt  = iTilt  + (cTilt  - iTilt)  * S.att;
+
+    S.headYaw   = damp(S.headYaw,   tYaw,   R.head, dt);
+    S.headPitch = damp(S.headPitch, tPitch, R.head, dt);
+    S.headTilt  = damp(S.headTilt,  tTilt,  R.head, dt);
+
+    /* body: subtle + delayed */
+    const bYawI = idleAmt * Math.sin(t * 0.23) * 0.03;
+    const bRollI = idleAmt * Math.sin(t * 0.31) * 0.008;
+    const bYawC = nx * CONFIG.body.yaw * motion;
+    const bPitchC = (ny * CONFIG.body.pitch + 0.045 * S.close) * motion; // forward lean when close
+    const bRollC = -nx * CONFIG.body.roll * motion;
+
+    S.bodyYaw   = damp(S.bodyYaw,   bYawI + (bYawC - bYawI) * S.att, R.body, dt);
+    S.bodyPitch = damp(S.bodyPitch, bPitchC * S.att + 0.045 * S.close * (1 - S.att) * 0, R.body, dt);
+    S.bodyRoll  = damp(S.bodyRoll,  bRollI + (bRollC - bRollI) * S.att, R.body, dt);
+
+    rig.rotation.set(S.bodyPitch, S.bodyYaw, S.bodyRoll);
+    // head angles are partly compensated so total stays inside the limits
+    headPivot.rotation.set(
+      S.headPitch - S.bodyPitch * 0.6,
+      S.headYaw - S.bodyYaw * 0.6,
+      S.headTilt
+    );
+
+    /* breathing */
+    const br = idleAmt * Math.sin(t * 1.6);
+    shell.scale.set(1 - 0.006 * br, 1 + 0.012 * br, 1 - 0.006 * br);
+    headPivot.position.y = HEAD_PIVOT_Y + 0.019 * br;
+
+    /* arms */
+    for (const a of arms) {
+      a.pivot.rotation.z = a.s * (0.2 + idleAmt * Math.sin(t * 1.6 + a.s) * 0.015) - S.bodyRoll * 2;
+    }
+
+    /* antenna lag */
+    S.antLag = damp(S.antLag, S.headYaw, 3, dt);
+    antenna.rotation.z = -0.18 - (S.headYaw - S.antLag) * 1.2;
+
+    /* blinking */
+    if (t >= blink.next && blink.start < 0) {
+      blink.start = t;
+      blink.next = t + (Math.random() < 0.15 ? 0.3 : rand(2.5, 6));
+    }
+    let blinkAmt = 0;
+    if (blink.start >= 0) {
+      const p = (t - blink.start) / 0.16;
+      if (p >= 1) blink.start = -1; else blinkAmt = Math.sin(Math.PI * p);
+    }
+
+    /* eyes: fast + precise, each eye aims at the cursor independently */
+    const Re = Math.max(260, Math.min(W, H) * 0.32);
+    for (const e of eyes) {
+      const es = toClient(e.group, rect);
+      const ex = P.has ? Math.tanh((P.x - es.x) / Re) : 0;
+      const ey = P.has ? Math.tanh((P.y - es.y) / Re) : 0;
+
+      // the head already turned part of the way → eyes cover the remainder
+      const cy = clamp(ex * EM - (S.headYaw / deg(CONFIG.head.yaw)) * EM * 0.5, -EM, EM);
+      const cp = clamp(-ey * EM + (S.headPitch / deg(CONFIG.head.pitch)) * EM * 0.5, -EM, EM);
+      const iy = S.glX * EM * 0.6 * idleAmt;
+      const ip = S.glY * EM * 0.5 * idleAmt;
+
+      e.yaw   = damp(e.yaw,   iy + (cy - iy) * S.att, R.eye, dt);
+      e.pitch = damp(e.pitch, ip + (cp - ip) * S.att, R.eye, dt);
+
+      // hard safety clamp: pupils can never leave the eyeball's visible cap
+      e.yaw = clamp(e.yaw, -EM, EM);
+      e.pitch = clamp(e.pitch, -EM, EM);
+      e.pivot.rotation.set(-e.pitch, e.yaw, 0);
+
+      // slightly narrowed when the cursor is close (focused), plus blinking
+      e.group.scale.y = (1 - 0.06 * S.close) * (1 - 0.92 * blinkAmt);
+    }
+
+    /* Live Orbital Gaze Radar HUD update */
+    if (gazeAngleEl) {
+      const degYaw = Math.round((S.headYaw * 180) / Math.PI);
+      let dirText = '0° CENTER';
+      if (degYaw > 3) {
+        dirText = `${degYaw}° RIGHT`;
+      } else if (degYaw < -3) {
+        dirText = `${Math.abs(degYaw)}° LEFT`;
+      }
+      gazeAngleEl.textContent = `GAZE: ${dirText}`;
+    }
+  }
+
+  /* ---------------- Interactive Mascot Messages ---------------- */
+  const bubble = document.getElementById('mascotSpeechBubble');
+  const speechText = bubble ? bubble.querySelector('.speech-text') : null;
+  const messages = [
+    "14 Intent Mandates enforced · Watching all agent actions",
+    "Cryptographic audit log verified · 0 unauthorized breaches",
+    "Active Enclave Guard: Real-time autonomous oversight",
+    "Flight 6E-2412 breach isolated · Dispute recourse ready",
+    "Tracking cursor with precision optical gaze sensor"
+  ];
+  let msgIdx = 0;
+
+  const onMascotClick = () => {
+    if (bubble && speechText) {
+      msgIdx = (msgIdx + 1) % messages.length;
+      speechText.textContent = messages[msgIdx];
+      bubble.classList.add('visible');
+      clearTimeout(bubble._timer);
+      bubble._timer = setTimeout(() => {
+        bubble.classList.remove('visible');
+      }, 3500);
+    }
+    if (typeof window.showToast === 'function') {
+      window.showToast("Sentinel Guardian: Optical scan verified 14 active mandates");
+    }
+  };
+  container.addEventListener('click', onMascotClick);
+
+  /* ---------------- Render loop (paused when hidden) ---------------- */
+  let raf = 0, last = 0, running = false, visible = true;
+
+  function frame(now) {
+    raf = requestAnimationFrame(frame);
+    const dt = Math.min((now - last) / 1000, 0.05);
+    last = now;
+    update(dt, now);
+    renderer.render(scene, camera);
+  }
+  function start() {
+    if (running || !visible || document.hidden) return;
+    running = true;
+    last = performance.now();
+    raf = requestAnimationFrame(frame);
+  }
+  function stop() {
+    running = false;
+    cancelAnimationFrame(raf);
+  }
+
+  const io = new IntersectionObserver((entries) => {
+    visible = entries[0].isIntersecting;
+    visible ? start() : stop();
+  }, { threshold: 0.01 });
+  io.observe(container);
+
+  const onVis = () => (document.hidden ? stop() : start());
+  document.addEventListener('visibilitychange', onVis);
+
+  // Recheck layout when window changes or tabs switch
+  window.addEventListener('resize', resize, { passive: true });
+
+  start();
+
+  /* ---------------- Cleanup ---------------- */
+  let disposed = false;
+  function dispose() {
+    if (disposed) return;
+    disposed = true;
+    stop();
+    io.disconnect();
+    ro.disconnect();
+    window.removeEventListener('pointermove', onPointer);
+    window.removeEventListener('pointerdown', onPointer);
+    window.removeEventListener('touchstart', onTouch);
+    window.removeEventListener('touchmove', onTouch);
+    document.documentElement.removeEventListener('mouseleave', onLeave);
+    window.removeEventListener('blur', onLeave);
+    document.removeEventListener('visibilitychange', onVis);
+    window.removeEventListener('resize', resize);
+    container.removeEventListener('click', onMascotClick);
+    mq.removeEventListener('change', onMq);
+
+    scene.traverse((o) => {
+      if (o.geometry) o.geometry.dispose();
+      if (o.material) {
+        const list = Array.isArray(o.material) ? o.material : [o.material];
+        list.forEach((m) => { if (m.map) m.map.dispose(); m.dispose(); });
+      }
+    });
+    envTex.dispose();
+    blobTex.dispose();
+    renderer.dispose();
+    canvas.remove();
+  }
+  window.addEventListener('pagehide', dispose, { once: true });
+
+  return { dispose, resize };
+}
+
+/* Auto-mount when DOM is ready */
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => {
+    const stage = document.getElementById('robot-stage');
+    if (stage) {
+      window.AgentRecourseRobot = mountRobot(stage);
+    }
+  });
+} else {
+  const stage = document.getElementById('robot-stage');
+  if (stage) {
+    window.AgentRecourseRobot = mountRobot(stage);
+  }
+}
+
+</script>
 </body>
 
 </html>
