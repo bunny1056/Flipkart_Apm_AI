@@ -23,37 +23,46 @@ $mimeTypes = @{
 
 try {
     while ($listener.IsListening) {
-        $context = $listener.GetContext()
-        $request = $context.Request
-        $response = $context.Response
+        try {
+            $context = $listener.GetContext()
+            $request = $context.Request
+            $response = $context.Response
 
-        $urlPath = $request.Url.LocalPath
-        if ($urlPath -eq "/" -or [string]::IsNullOrWhiteSpace($urlPath)) {
-            $urlPath = "/index.html"
-        }
-
-        $localPath = Join-Path $baseDir ($urlPath.TrimStart('/').Replace('/', '\'))
-
-        if (Test-Path $localPath -PathType Leaf) {
-            $ext = [System.IO.Path]::GetExtension($localPath).ToLower()
-            $mime = "application/octet-stream"
-            if ($mimeTypes.ContainsKey($ext)) {
-                $mime = $mimeTypes[$ext]
+            $urlPath = $request.Url.LocalPath
+            if ($urlPath -eq "/" -or [string]::IsNullOrWhiteSpace($urlPath)) {
+                $urlPath = "/index.html"
             }
 
-            $response.ContentType = $mime
-            $response.AddHeader("Access-Control-Allow-Origin", "*")
-            $response.AddHeader("Cache-Control", "no-cache")
+            $localPath = Join-Path $baseDir ($urlPath.TrimStart('/').Replace('/', '\'))
 
-            $bytes = [System.IO.File]::ReadAllBytes($localPath)
-            $response.ContentLength64 = $bytes.Length
-            $response.OutputStream.Write($bytes, 0, $bytes.Length)
-        } else {
-            $response.StatusCode = 404
-            $msg = [System.Text.Encoding]::UTF8.GetBytes("404 Not Found")
-            $response.OutputStream.Write($msg, 0, $msg.Length)
+            if (Test-Path $localPath -PathType Leaf) {
+                $ext = [System.IO.Path]::GetExtension($localPath).ToLower()
+                $mime = "application/octet-stream"
+                if ($mimeTypes.ContainsKey($ext)) {
+                    $mime = $mimeTypes[$ext]
+                }
+
+                $response.ContentType = $mime
+                $response.AddHeader("Access-Control-Allow-Origin", "*")
+                $response.AddHeader("Cache-Control", "no-cache")
+
+                $bytes = [System.IO.File]::ReadAllBytes($localPath)
+                $response.ContentLength64 = $bytes.Length
+                if ($request.HttpMethod -ne "HEAD") {
+                    $response.OutputStream.Write($bytes, 0, $bytes.Length)
+                }
+            } else {
+                $response.StatusCode = 404
+                $msg = [System.Text.Encoding]::UTF8.GetBytes("404 Not Found")
+                $response.ContentLength64 = $msg.Length
+                if ($request.HttpMethod -ne "HEAD") {
+                    $response.OutputStream.Write($msg, 0, $msg.Length)
+                }
+            }
+            $response.Close()
+        } catch {
+            Write-Warning "Request error: $_"
         }
-        $response.Close()
     }
 } finally {
     $listener.Stop()

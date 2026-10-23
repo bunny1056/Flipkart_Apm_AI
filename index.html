@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Agent Recourse — Autonomous Intent Auditing & Arbitration Ledger</title>
+  <title>AEGIS — Autonomous Intent Auditing & Arbitration Ledger</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,185 +19,55 @@
   </script>
 </head>
 
-<body>
-  <div class="institutional-frame">
+<body data-view="desktop">
+  <div class="page" id="page" data-view="desktop">
 
-    <!-- Top Archival Masthead -->
-    <header class="masthead">
-      <div class="masthead-left">
-        <button class="mobile-sidebar-toggle" id="btnMobileSidebarOpen" aria-label="Open sidebar directory">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
-        <span class="masthead-symbol">§</span>
-        <div class="masthead-title-wrap">
-          <span class="masthead-title">Agent Recourse</span>
-          <span class="masthead-subtitle">Autonomous Agent Protection & Intent Verification</span>
+    <!-- Left: Live Interactive Device Stage -->
+    <section class="stage" aria-label="AEGIS prototype stage">
+
+      <!-- 1. Top Stage Control Bar -->
+      <div class="stagebar">
+        <span class="wordmark">aegis.</span>
+        <div class="stagectl">
+          <div class="viewtoggle" role="group" aria-label="Choose view">
+            <button type="button" data-view-mode="phone" aria-pressed="false">Phone</button>
+            <button type="button" data-view-mode="desktop" aria-pressed="true">Desktop</button>
+          </div>
+          <button class="restart" id="btnRestartPrototype" data-act="restart" type="button">
+            <svg class="ic" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3"/><path d="M4.5 4.5v4h4"/></svg>
+            Restart
+          </button>
         </div>
       </div>
 
-      <div class="masthead-right">
-        <button class="account-attestation-btn has-detail" id="btnMastheadProfile"
-          title="Principal Profile & Security" data-detail-title="Principal Identity"
-          data-detail-tag="USR-2040-DEMO" data-detail-highlight="Harshith · Bangalore"
-          data-detail-text="Hardware enclave key active. Click to view full identity, spending analytics, and security settings.">
-          <span class="profile-nav-avatar">H</span>
-          <span class="profile-nav-text">Harshith</span>
-          <span class="live-pulse-wrapper mini" title="Protected & Active">
-            <span class="live-pulse-core"></span>
-            <span class="live-pulse-ring"></span>
-          </span>
-        </button>
-      </div>
-    </header>
+      <!-- 2. Device Canvas (.phone / .app) -->
+      <div class="phone" id="deviceFrame">
+        <div class="app" id="app">
 
-    <!-- Global Layout: Left Functional Directory + Right Work Area -->
-    <div class="frame-body">
-
-      <!-- Primary Navigation Bar (Vertical Archival Index) -->
-      <aside class="ledger-index" id="ledgerSidebar">
-        <div class="sidebar-header-bar">
-          <span class="sidebar-brand-code">Agent Recourse</span>
-          <button class="sidebar-toggle-btn" id="btnSidebarToggle" aria-label="Collapse sidebar"
-            title="Collapse sidebar (Ctrl+B)">
-            <svg class="toggle-icon-collapse" width="14" height="14" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="9" y1="3" x2="9" y2="21"></line>
-              <path d="M16 15l-3-3 3-3"></path>
-            </svg>
-            <svg class="toggle-icon-expand" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-              stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-              <line x1="9" y1="3" x2="9" y2="21"></line>
-              <path d="M13 9l3 3-3 3"></path>
-            </svg>
-          </button>
-          <button class="sidebar-mobile-close-btn" id="btnMobileSidebarClose" aria-label="Close sidebar">✕</button>
-        </div>
-
-        <nav class="index-nav" aria-label="Operational Navigation">
-          <button class="nav-btn active" data-view="view-overview" data-tooltip="Home Overview"
-            title="Home Overview">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                <polyline points="9 22 9 12 15 12 15 22"></polyline>
-              </svg>
+          <!-- Simulated Browser Bar -->
+          <div class="browserbar" aria-hidden="true">
+            <span class="bdots"><i></i><i></i><i></i></span>
+            <span class="url">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              aegis.ledger/<b id="urlPath">home</b>
             </span>
-            <span class="nav-text">Overview</span>
-          </button>
-
-          <button class="nav-btn" data-view="view-stream" data-tooltip="Conflict Feed"
-            title="Conflict Feed">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-              </svg>
+            <span class="bpad">
+              <span class="live-pulse-wrapper mini" title="Protected & Active">
+                <span class="live-pulse-core"></span>
+                <span class="live-pulse-ring"></span>
+              </span>
             </span>
-            <span class="nav-text">Feed</span>
-            <span class="nav-flag mono" id="feedFlag">1 CONFLICT</span>
-          </button>
+          </div>
 
-          <button class="nav-btn" data-view="view-disputes" data-tooltip="Dispute Resolution" title="Dispute Resolution">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"></path>
-                <path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"></path>
-                <path d="M7 21h10"></path>
-                <path d="M12 3v18"></path>
-                <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
-              </svg>
-            </span>
-            <span class="nav-text">Dispute Resolution</span>
-            <span class="nav-flag mono" id="disputeFlag">PENDING</span>
-          </button>
+          <!-- Simulated Mobile Status Bar (Active in Phone Mode) -->
+          <div class="statusbar" aria-hidden="true">
+            <span class="num">9:41</span>
+            <span class="notch"></span>
+            <span class="sig"><i style="height:5px"></i><i style="height:8px"></i><i style="height:11px"></i><span style="margin-left:6px; font-size:11px;">88%</span></span>
+          </div>
 
-          <button class="nav-btn" data-view="view-analytics" data-tooltip="Analytics" title="Analytics">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="20" x2="18" y2="10"></line>
-                <line x1="12" y1="20" x2="12" y2="4"></line>
-                <line x1="6" y1="20" x2="6" y2="14"></line>
-              </svg>
-            </span>
-            <span class="nav-text">Analytics</span>
-          </button>
-
-          <button class="nav-btn" data-view="view-vault" data-tooltip="Your Rules"
-            title="Your Rules">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-            </span>
-            <span class="nav-text">Your Rules</span>
-            <span class="nav-count mono" id="vaultCount">14</span>
-          </button>
-
-          <button class="nav-btn" data-view="view-governance" data-tooltip="Connected Agents"
-            title="Connected Agents">
-            <span class="nav-icon-wrap" aria-hidden="true">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round">
-                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
-                <path d="m9 12 2 2 4-4"></path>
-              </svg>
-            </span>
-            <span class="nav-text">Connected Agents</span>
-          </button>
-        </nav>
-
-        <!-- Statutory Section: Integrated Nav List Item with simple disclosure arrow -->
-        <div class="sidebar-statutory-wrap">
-          <details class="statutory-accordion" id="statutoryAccordion">
-            <summary class="statutory-nav-item">
-              <div class="statutory-summary-title">
-                <svg class="accordion-disclosure-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2.5">
-                  <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-                <span class="nav-text">Legal & Policies</span>
-              </div>
-              <span class="statutory-count-badge mono">3</span>
-            </summary>
-            <div class="statutory-content">
-              <button class="nav-btn nav-btn-sub" data-view="view-terms" data-tooltip="Terms of Delegation"
-                title="Terms of Delegation">
-                <span class="nav-code mono">§</span>
-                <span class="nav-text">Delegation Terms</span>
-              </button>
-              <button class="nav-btn nav-btn-sub" data-view="view-privacy" data-tooltip="Data Privacy Policy"
-                title="Data Privacy Policy">
-                <span class="nav-code mono">¶</span>
-                <span class="nav-text">Data Privacy Policy</span>
-              </button>
-              <button class="nav-btn nav-btn-sub" data-view="view-guide" data-tooltip="User Guide"
-                title="User Guide">
-                <span class="nav-code mono">?</span>
-                <span class="nav-text">User Guide</span>
-                <span class="nav-guide-badge mono">GUIDE</span>
-              </button>
-            </div>
-          </details>
-        </div>
-      </aside>
-
-      <!-- Mobile Backdrop Overlay -->
-      <div class="sidebar-overlay" id="sidebarOverlay"></div>
-
-      <!-- Main Operational Canvas -->
-      <main class="ledger-stage">
+          <!-- Active Screens Container -->
+          <div class="screens" id="screens">
 
         <!-- ==================================================== -->
         <!-- VIEW 00: PRINCIPAL PROFILE (PERSONALIZED)            -->
@@ -216,7 +86,7 @@
                   stroke-linecap="round" stroke-linejoin="round">
                   <polyline points="15 18 9 12 15 6"></polyline>
                 </svg>
-                <span>Back to Overview</span>
+                <span>Back to Home</span>
               </button>
               <div class="pane-action-group">
                 <button class="primary-action-btn" id="btnExportIdentityCert">Export Cert (.json)</button>
@@ -937,8 +807,8 @@
                 <!-- Sleek Integrated Key-Value Metadata Pills -->
               </div>
             </div>
-            <!-- High-Contrast Obsidian Dark Primary CTA Button -->
-            <button class="btn-primary-obsidian" id="btnAppendRule">
+            <!-- Solid Blue Primary CTA Button -->
+            <button class="btn-primary-blue" id="btnAppendRule">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -961,12 +831,16 @@
                 <button class="search-clear-btn hidden" id="mandatesSearchClear" aria-label="Clear search">✕</button>
               </div>
 
-              <!-- Severity Toggle (Hard Limits Only) -->
-              <button class="severity-toggle-btn" id="btnSeverityToggle" role="switch" aria-checked="false"
-                title="Filter hard limits only">
-                <span class="severity-toggle-icon">⚡</span>
-                <span>Hard Limits Only</span>
-              </button>
+              <div class="mandates-actions-wrap" style="display: flex; align-items: center; gap: 8px;">
+                <!-- Expand/Collapse All Categories Toggle -->
+                <button class="vault-toggle-all-btn" id="btnVaultToggleAll" title="Expand or collapse all categories">
+                  <svg class="toggle-all-icon" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="7 13 12 18 17 13"></polyline>
+                    <polyline points="7 6 12 11 17 6"></polyline>
+                  </svg>
+                  <span id="btnVaultToggleAllText">Expand All</span>
+                </button>
+              </div>
             </div>
 
             <!-- Domain Category Filter Tabs -->
@@ -975,19 +849,14 @@
             </div>
           </div>
 
-          <!-- Mandates Data Table -->
-          <table class="ledger-table vault-table" id="vaultTable">
-            <thead>
-              <tr>
-                <th style="width: 16%;">CATEGORY</th>
-                <th style="width: 52%;">RULE CONSTRAINT</th>
-                <th style="width: 16%;">SEVERITY</th>
-                <th style="width: 16%; text-align: right;">ACTION</th>
-              </tr>
-            </thead>
-            <tbody id="vaultTableBody">
-              <!-- Rendered via JavaScript -->
-            </tbody>
+          <!-- Interactive Categories Container (Collapsed by Default) -->
+          <div class="vault-categories-container" id="vaultCategoriesContainer">
+            <!-- Dynamically populated via app.js -->
+          </div>
+
+          <!-- Hidden fallback table for legacy queries -->
+          <table class="ledger-table vault-table" id="vaultTable" style="display: none;">
+            <tbody id="vaultTableBody"></tbody>
           </table>
         </section>
 
@@ -1399,26 +1268,10 @@
         <section class="stage-pane" id="view-analytics">
           <div class="overview-dashboard analytics-dashboard">
 
-            <!-- SECTION 1: HEADER & IDENTITY BADGES (GRAFANA / DATADOG STYLE) -->
+            <!-- SECTION 1: HEADER -->
             <div class="analytics-header-section">
               <div class="analytics-header-main">
-                <div class="analytics-header-kicker">
-                  <span class="analytics-header-dot"></span>
-                  <span>Agent Recourse Intelligence · Enterprise Telemetry & Spend Audit</span>
-                </div>
                 <h1 class="analytics-header-title">Agent Analytics & Financial Telemetry</h1>
-                <p class="analytics-header-body">
-                  Unified analytics suite combining <strong>Ramp</strong> corporate spending governance, <strong>Datadog</strong> real-time operational monitoring, <strong>Stripe</strong> financial ledger summaries, and <strong>Mixpanel</strong> behavioral intent tracking across all autonomous agents.
-                </p>
-              </div>
-              <div class="analytics-header-badges">
-                <div class="overview-pill-badge pill-secure">
-                  <span class="pill-dot-green"></span>
-                  <span>Hardware TPM Attestation Active</span>
-                </div>
-                <div class="overview-pill-badge">
-                  <span>3 Delegated Agents Streaming</span>
-                </div>
               </div>
             </div>
 
@@ -2578,8 +2431,100 @@
           </div>
         </section>
 
-      </main>
-    </div>
+          </div><!-- /.screens -->
+
+          <!-- 3. Persistent Navigation Tab Bar (.tabbar) -->
+          <nav class="tabbar" id="tabbar" aria-label="App sections">
+            <span class="navbrand wordmark">aegis.</span>
+            <button class="tab nav-btn active" data-view="view-overview" data-slug="home" type="button" title="Home">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+              Home
+            </button>
+            <button class="tab nav-btn" data-view="view-stream" data-slug="feed" type="button" title="Conflict Feed">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              Feed
+            </button>
+            <button class="tab nav-btn" data-view="view-vault" data-slug="rules" type="button" title="Your Rules">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+              Rules
+            </button>
+            <button class="tab nav-btn" data-view="view-disputes" data-slug="disputes" type="button" title="Dispute Resolution">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"></path><path d="M2 16l3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1z"></path><path d="M7 21h10"></path><path d="M12 3v18"></path><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path></svg>
+              Disputes
+            </button>
+            <button class="tab nav-btn" data-view="view-analytics" data-slug="analytics" type="button" title="Spend & Telemetry Analytics">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              Analytics
+            </button>
+            <button class="tab nav-btn" data-view="view-profile" data-slug="profile" type="button" title="Principal Profile">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M6 20c0-3.3 2.7-6 6-6s6 2.7 6 6"></path></svg>
+              Profile
+            </button>
+
+            <!-- Desktop-Only Extended Tabs -->
+            <button class="tab nav-btn deskonly" data-view="view-governance" data-slug="agents" type="button" title="Connected Agents">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="12" rx="2"></rect><circle cx="9" cy="13" r="1"></circle><circle cx="15" cy="13" r="1"></circle><path d="M10 17h4"></path><path d="M12 4v4"></path></svg>
+              Agents
+            </button>
+            <button class="tab nav-btn deskonly" data-view="view-terms" data-slug="legal" type="button" title="Legal & Policies">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              Legal
+            </button>
+          </nav>
+
+          <!-- 4. Floating AI Buddy (.buddy) -->
+          <div class="buddy" id="buddy">
+            <div class="bubble" id="bubble" role="status" aria-live="polite">Enclave active · All agent boundaries verified</div>
+            <button class="mintbadge" id="buddyBtn" type="button" aria-label="Ask AEGIS Sentinel" title="AEGIS Sentinel Assistant">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="8" width="14" height="12" rx="2"></rect><circle cx="9" cy="13" r="1"></circle><circle cx="15" cy="13" r="1"></circle><path d="M10 17h4"></path><path d="M12 4v4"></path></svg>
+            </button>
+          </div>
+
+          <!-- 5. Toast Feedback (#toast) -->
+          <div class="toast" id="toast" role="status" aria-live="polite">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span id="toastText">Hardware enclave attestation active</span>
+          </div>
+
+        </div><!-- /.app -->
+      </div><!-- /.phone -->
+    </section><!-- /.stage -->
+
+    <!-- Right: Persistent Narrative Walkthrough Dossier Guide -->
+    <aside class="guide" aria-label="AEGIS Walkthrough Dossier">
+      <div>
+        <div class="eyebrow">Flipkart APM '29 · Autonomous Ledger Prototype</div>
+        <h1 class="guide-brand">aegis.</h1>
+        <p class="lede">Autonomous agents drive purchases, bookings, and commitments. AEGIS audits intent drift in real time, intercepts non-compliant execution, and generates tamper-evident dossiers for full commercial recourse.</p>
+        <p class="lede-note">Click through the live device stage or step through the audit trail below. Toggle between Phone and Desktop view modes. Persona: Harshith, 24, Technology Lead in Bengaluru.</p>
+
+        <div class="legend" aria-label="Colour key">
+          <div><i style="background:#10B981"></i><span><b>Green</b> = Cryptographic attestation, verified intent & compliant runs</span></div>
+          <div><i style="background:#2563EB"></i><span><b>Blue</b> = AEGIS core: hardware enclave, append mandate, arbitration</span></div>
+          <div><i style="background:#EF4444"></i><span><b>Coral / Red</b> = Runaway intent, policy violations, conflicts & hard blocks</span></div>
+          <div><i style="background:#F59E0B"></i><span><b>Amber</b> = Capital: delegated spend caps, ledger balances, disputed amounts</span></div>
+          <div><i style="background:#71717A"></i><span><b>Grey</b> = Neutral records, statutory legal clauses, locked specs</span></div>
+          <div><i style="background:#09090B;box-shadow:inset 0 0 0 2px #fff,0 0 0 1px #09090B"></i><span><b>Black & White</b> = Crisp hairline boundaries, surface data</span></div>
+        </div>
+      </div>
+
+      <ol class="steps" id="steps"></ol>
+
+      <div class="guide-nav">
+        <button class="prev" id="gPrev" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+          Previous
+        </button>
+        <button class="next" id="gNext" type="button">
+          Next step
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </button>
+      </div>
+
+      <p class="guide-foot">Cryptographic hardware attestation active. Zero affiliate kickbacks, neutral deterministic adjudication under non-commercial charter.</p>
+    </aside>
+
+  </div><!-- /.page -->
 
     <!-- Slide-Out Action Detail Drawer -->
     <div class="drawer-backdrop hidden" id="actionDrawer">

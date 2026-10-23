@@ -4,3 +4,8 @@ Thumbs.db
 *.log
 .vscode/
 .idea/
+
+# Local reference snapshots
+*_ref.html
+*reference*.html
+downloads_*.html

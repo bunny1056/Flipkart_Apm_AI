@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mandateFilterDomain: 'all',
     mandateFilterSearch: '',
     mandateFilterHardOnly: false,
+    expandedVaultCategories: new Set(),
     pendingRevokeMandate: null,
     mandates: [
       {
@@ -504,10 +505,19 @@ document.addEventListener('DOMContentLoaded', () => {
       .replace(/under ₹500 INR/g, '<strong class="text-lead font-600">under ₹500 INR</strong>');
   }
 
+  const mCategoryMeta = {
+    'Travel': { icon: '✈️', description: 'Flight arrivals, cab fares & flight seat preferences' },
+    'Dining': { icon: '🍽️', description: 'Food delivery hours & routine sustenance budgets' },
+    'Finance': { icon: '💳', description: 'Interactive 2FA transfer limits & FX fee caps' },
+    'Subscriptions': { icon: '🔄', description: 'Recurring subscriptions & cloud instance rules' },
+    'Hardware': { icon: '💻', description: 'Office supplies, peripherals & hardware warranties' }
+  };
+  const mDefaultCategoryMeta = { icon: '🛡️', description: 'Operational rules & policy boundaries' };
+
   function renderMDomainFilters() {
     if (!mDomainFilterPills) return;
     mDomainFilterPills.innerHTML = '';
-    const domains = ['all', 'Travel', 'Finance', 'Subscriptions', 'Hardware', 'Dining'];
+    const domains = ['all', 'Travel', 'Dining', 'Finance', 'Subscriptions', 'Hardware'];
 
     domains.forEach(d => {
       const count = d === 'all'
@@ -524,6 +534,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
       btn.addEventListener('click', () => {
         state.mandateFilterDomain = d;
+        if (d !== 'all') {
+          const matchCat = [...new Set(state.mandates.map(m => m.domain))].find(c => c.toLowerCase() === d.toLowerCase()) || d;
+          state.expandedVaultCategories.add(matchCat);
+        }
         renderMDomainFilters();
         renderRules();
       });
@@ -540,42 +554,98 @@ document.addEventListener('DOMContentLoaded', () => {
     mRulesContainer.innerHTML = '';
 
     const q = (state.mandateFilterSearch || '').toLowerCase().trim();
-    const filtered = state.mandates.filter(m => {
-      if (state.mandateFilterDomain !== 'all' && m.domain.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) {
-        return false;
-      }
-      if (state.mandateFilterHardOnly && m.severity !== 'Hard Limit') {
-        return false;
-      }
-      if (q) {
-        const matchCode = m.code.toLowerCase().includes(q);
-        const matchText = m.text.toLowerCase().includes(q);
-        const matchDomain = m.domain.toLowerCase().includes(q);
-        if (!matchCode && !matchText && !matchDomain) return false;
-      }
-      return true;
-    });
 
-    if (filtered.length === 0) {
-      mRulesContainer.innerHTML = `
-        <div style="text-align: center; padding: 32px 14px; color: var(--text-faint); font-family: var(--font-mono); font-size: 11px;">
-          <div style="font-weight: 600; margin-bottom: 4px; color: var(--text-lead);">NO RULES MATCH CRITERIA</div>
-          <div style="color: var(--text-muted); font-size: 10px;">Adjust search, clear domain, or toggle off Hard Limits.</div>
-        </div>
+    const canonicalOrder = ['Travel', 'Dining', 'Finance', 'Subscriptions', 'Hardware'];
+    const presentDomains = [...new Set(state.mandates.map(m => m.domain))];
+    const orderedCategories = [
+      ...canonicalOrder.filter(c => presentDomains.some(d => d.toLowerCase() === c.toLowerCase())),
+      ...presentDomains.filter(d => !canonicalOrder.some(c => c.toLowerCase() === d.toLowerCase()))
+    ];
+
+    let categoriesRendered = 0;
+
+    orderedCategories.forEach(categoryName => {
+      if (state.mandateFilterDomain !== 'all' && categoryName.toLowerCase() !== state.mandateFilterDomain.toLowerCase()) {
+        return;
+      }
+
+      const categoryRules = state.mandates.filter(m => m.domain.toLowerCase() === categoryName.toLowerCase());
+      const matchingRules = categoryRules.filter(m => {
+        if (state.mandateFilterHardOnly && m.severity !== 'Hard Limit') {
+          return false;
+        }
+        if (q) {
+          const matchCode = m.code.toLowerCase().includes(q);
+          const matchText = m.text.toLowerCase().includes(q);
+          const matchDomain = m.domain.toLowerCase().includes(q);
+          if (!matchCode && !matchText && !matchDomain) return false;
+        }
+        return true;
+      });
+
+      if ((q || state.mandateFilterHardOnly) && matchingRules.length === 0) {
+        return;
+      }
+
+      categoriesRendered++;
+
+      const isExpanded = q.length > 0
+        ? matchingRules.length > 0
+        : state.expandedVaultCategories.has(categoryName);
+
+      const meta = mCategoryMeta[categoryName] || mDefaultCategoryMeta;
+      const hardCount = matchingRules.filter(m => m.severity === 'Hard Limit').length;
+
+      const card = document.createElement('div');
+      card.className = `m-cat-card ${isExpanded ? 'expanded' : ''}`;
+      card.setAttribute('data-category', categoryName);
+
+      card.innerHTML = `
+        <button class="m-cat-header" type="button" aria-expanded="${isExpanded}">
+          <div class="m-cat-header-left">
+            <div class="m-cat-icon">
+              ${meta.icon}
+            </div>
+            <div class="m-cat-title-wrap">
+              <div class="m-cat-title-row">
+                <span class="m-cat-title">${categoryName}</span>
+                <span class="m-cat-count">${matchingRules.length}</span>
+              </div>
+            </div>
+          </div>
+          <div class="m-cat-header-right">
+            <svg class="m-cat-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+          </div>
+        </button>
+        <div class="m-cat-body"></div>
       `;
-    } else {
-      filtered.forEach(m => {
+
+      const headerBtn = card.querySelector('.m-cat-header');
+      headerBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (state.expandedVaultCategories.has(categoryName)) {
+          state.expandedVaultCategories.delete(categoryName);
+        } else {
+          state.expandedVaultCategories.add(categoryName);
+        }
+        renderRules();
+      });
+
+      const body = card.querySelector('.m-cat-body');
+      matchingRules.forEach(m => {
         const isHard = m.severity === 'Hard Limit';
-        const pseudoHash = '0x' + m.code.replace(/[^A-Za-z0-9]/g, '').toLowerCase() + 'a812e9b048';
-        const item = document.createElement('div');
-        item.className = 'm-card';
-        item.style.marginBottom = '8px';
-        item.innerHTML = `
+        const ruleItem = document.createElement('div');
+        ruleItem.className = 'm-card';
+        ruleItem.style.marginBottom = '4px';
+        ruleItem.style.background = '#FFFFFF';
+        ruleItem.innerHTML = `
           <div class="diff-m-item" style="margin-bottom: 6px; align-items: center;">
-            <span class="domain-badge-cell" style="font-weight: 600; font-size: 11px;">${m.domain}</span>
+            <span class="code-badge-m" style="font-size: 10px;">${m.code}</span>
             <span class="status-pill-m ${isHard ? 'pill-hard' : 'pill-soft'}">${m.severity}</span>
           </div>
-          <div style="font-size: 12px; line-height: 1.45; color: var(--text-lead); display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;">
+          <div style="font-size: 12px; line-height: 1.45; color: var(--text-lead);">
             <span class="mandate-sentence">${highlightConstraint(m.text)}</span>
           </div>
           <div class="diff-m-item" style="margin-top: 8px; font-size: 11px; color: var(--text-muted); align-items: center;">
@@ -590,16 +660,26 @@ document.addEventListener('DOMContentLoaded', () => {
           </div>
         `;
 
-        const btnRevoke = item.querySelector('.btn-m-revoke');
+        const btnRevoke = ruleItem.querySelector('.btn-m-revoke');
         if (btnRevoke) {
           btnRevoke.addEventListener('click', (e) => {
             e.stopPropagation();
             openMRevokeSheet(m);
           });
         }
-
-        mRulesContainer.appendChild(item);
+        body.appendChild(ruleItem);
       });
+
+      mRulesContainer.appendChild(card);
+    });
+
+    if (categoriesRendered === 0) {
+      mRulesContainer.innerHTML = `
+        <div style="text-align: center; padding: 32px 14px; color: var(--text-faint); font-family: var(--font-mono); font-size: 11px;">
+          <div style="font-weight: 600; margin-bottom: 4px; color: var(--text-lead);">NO RULES MATCH CRITERIA</div>
+          <div style="color: var(--text-muted); font-size: 10px;">Adjust search, clear domain, or toggle off Hard Limits.</div>
+        </div>
+      `;
     }
 
     if (mVaultRulesCount) mVaultRulesCount.textContent = `${state.mandates.length} RULES`;
